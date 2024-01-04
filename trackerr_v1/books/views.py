@@ -33,6 +33,6 @@ class AuthorViewSet(ModelViewSet):
 
     def get_queryset(self):
 
-        author = Authors.objects.all()
+        author = Author.objects.all()
 
         return author
