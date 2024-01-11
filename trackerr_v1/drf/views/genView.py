@@ -12,6 +12,8 @@ class GenView(generics.ListAPIView):
     def list(self, request):
 
         query = self.get_queryset()
+        m = self.http_method_names.remove('get')
+        print(self.http_method_names)
 
         serializer = UsersSerializer(query, many=True)
         return Response(serializer.data)
