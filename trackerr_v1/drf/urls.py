@@ -1,8 +1,8 @@
 from django.urls import path, include
 from .views import views, APIView, genView, viewset
-from rest_framework.routers import DefaultRouter
+from rest_framework.routers import DefaultRouter, SimpleRouter
 
-router = DefaultRouter()
+router = SimpleRouter()
 router.register('new-list', viewset.UserViewSet, basename='viewset')
 router.register('myviewset', viewset.MyViewSet, basename='myviewset')
 
