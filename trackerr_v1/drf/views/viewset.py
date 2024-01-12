@@ -4,28 +4,31 @@ from django.shortcuts import get_object_or_404
 from drf.serializer import UsersSerializer, BookSerializer
 from rest_framework.viewsets import ModelViewSet, ViewSet
 from rest_framework.response import Response
+from rest_framework.parsers import JSONParser
+
 
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UsersSerializer
 
 class MyViewSet(ViewSet):
+    parser_class = [JSONParser]
+    def list(self, request):
+        data = Books.objects.all()
+        serializer = BookSerializer(data, many=True)
 
-#    def list(self, request):
-#        data = User.objects.all()
-#        serializer = UsersSerializer(data, many=True)
+        return Response(serializer.data)
 
-#        return Response(serializer.data)
+    def create(self, request):
 
-#    def create(self, request):
+        data = request.data
+        serializer = BookSerializer(data=data)
+        print(serializer.is_valid())
+        if serializer.is_valid():
+            serializer.save()
 
-#        data = request.data
-#        serializer = UsersSerializer(data=data)
-#        if serializer.is_valid():
-#            serializer.save()
-
-#            return Response(serializer.data)
-#        return Response('Bad request', status=400)
+            return Response(serializer.data)
+        return Response('Bad request', status=400)
     
     def update(self, request, pk=None):
         user = Books.objects.get(pk=pk)
