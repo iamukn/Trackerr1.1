@@ -23,16 +23,16 @@ class PersonView(APIView):
         return HttpResponse(data, content_type='application/json')
 
     def post(self, request, *arg, **kwargs):
-
-        data = json.dumps(request.data)
-        data = {'name': request.data.get('name'), 'age': request.data.get('age'), 'color': request.data.get('color')}
-
-        d = json.dumps(data).encode('utf-8')
+        print(request.data)
+       # data = json.dumps(request.data)
+       # data = {'name': request.data.get('name'), 'age': request.data.get('age'), 'color': request.data.get('color')}
+    
+        d = json.dumps(request.data).encode('utf-8')
         d = io.BytesIO(d)    
         new_d = JSONParser().parse(d)
 
         ser = PersonSerializer(data=new_d)
-        if ser.is_valid() and ser.validate_color(request.data.get('color')):
+        if ser.is_valid() and ser.validate(request.data):
             ser.save()
 
             return Response('200')
