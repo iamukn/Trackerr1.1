@@ -17,7 +17,7 @@ class PersonView(APIView):
     
     def get(self, request, *arg, **kwargs):
         global person
-        serializer = PersonSerializer(person)
+        serializer = PersonSerializer(Person.objects.all(), many=True)
         serializer.data
         data = JSONRenderer().render(serializer.data)
         return HttpResponse(data, content_type='application/json')
@@ -32,10 +32,11 @@ class PersonView(APIView):
         new_d = JSONParser().parse(d)
 
         ser = PersonSerializer(data=new_d)
-        if ser.is_valid():
-            print('Valid')
+        if ser.is_valid() and ser.validate_color(request.data.get('color')):
             ser.save()
+
+            return Response('200')
         
         
 
-        return Response('Hello world')
+        return Response('400')
