@@ -22,4 +22,5 @@ urlpatterns = (
     path('drf/', include('drf.urls')),
     path('', include('books.urls')),
     path('', include('tracking.urls')),
+    path('api/', include('serializer.urls')),
 )

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'books',
     'tracking',
     'drf',
+    'serializer',
 ]
 
 MIDDLEWARE = [
