@@ -11,9 +11,9 @@ class PostView(APIView):
     # Cache page for the requested url
     @method_decorator(cache_page(60 * 60 * 2))
     def get(self, request, format=None):
-        data = ['Hello', 'World']
+        name = ['dan', 'david']
         content = {
-            "title": randint(0, 1),
+            "title": data[randint(0, 1)],
             "body": "Post content",
         }
         return Response(content)
