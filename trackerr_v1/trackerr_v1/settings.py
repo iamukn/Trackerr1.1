@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'tracking',
     'drf',
     'serializer',
+    'cache',
 ]
 
 MIDDLEWARE = [
@@ -93,7 +94,22 @@ DATABASES = {
 REST_FRAMEWORK = {
             'DEFAULT_PARSER_CLASSES': [
                         'rest_framework.parsers.JSONParser',
-                            ]
+                            ],
+            'DEFAULT_THROTTLE_CLASSES': [
+                        'rest_framework.throttling.AnonRateThrottle',
+                        'rest_framework.throttling.UserRateThrottle'
+                        ],
+            'DEFAULT_THROTTLE_RATES': {
+                        'anon': '12/min',
+                        'user': '1000/day'
+                        },
+            
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+    'PAGE_SIZE': 2,
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema'
+
+    ,
+
             }
 
 # Password validation

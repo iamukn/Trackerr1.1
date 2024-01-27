@@ -14,8 +14,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from rest_framework.schemas import get_schema_view
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework.documentation import include_docs_urls
+
 
 urlpatterns = (
     path("admin/", admin.site.urls),
@@ -23,4 +26,13 @@ urlpatterns = (
     path('', include('books.urls')),
     path('', include('tracking.urls')),
     path('api/', include('serializer.urls')),
+    path('', include('cache.urls')),
+    path('docs/', include_docs_urls(title='TrackerrAPI')),
+    path(
+        "Trackerr/",
+        get_schema_view(
+            title="Trackerr official schema", description="API for all things in trackerr", version="1.0.0"
+        ),
+        name="Trackerrapi-schema",
+    ),
 )
