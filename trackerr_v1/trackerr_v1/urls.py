@@ -14,13 +14,28 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from rest_framework.schemas import get_schema_view
+#from rest_framework.schemas import get_schema_view
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.documentation import include_docs_urls
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+from rest_framework import permissions
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title = 'API trackerr',
+        default_version='v1',
+        description = 'Test',
+        ),
+    public = True,
+    permission_classes = [permissions.AllowAny]
+        )
+
 
 
 urlpatterns = (
+    path('swag/', schema_view.with_ui('swagger', cache_timeout=0), name='schema_swagger_ui'),
     path("admin/", admin.site.urls),
     path('drf/', include('drf.urls')),
     path('', include('books.urls')),
@@ -28,11 +43,11 @@ urlpatterns = (
     path('api/', include('serializer.urls')),
     path('', include('cache.urls')),
     path('docs/', include_docs_urls(title='TrackerrAPI')),
-    path(
-        "Trackerr/",
-        get_schema_view(
-            title="Trackerr official schema", description="API for all things in trackerr", version="1.0.0"
-        ),
-        name="Trackerrapi-schema",
-    ),
+#    path(
+#        "trackerr/",
+#        get_schema_view(
+#            title="Trackerr official schema", description="API for all things in trackerr", version="1.0.0"
+#        ),
+#        name="Trackerrapi-schema",
+#    ),
 )
