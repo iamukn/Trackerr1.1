@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics
 from rest_framework.decorators import api_view
-from rest_framework.reverse import reverse
+from rest_framework.reverse import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie, vary_on_headers
@@ -41,8 +41,11 @@ class PostView(APIView):
 def reverser(request):
     url1 = reverse('cache', request=request)
     url2 = reverse('caches', request=request)
+    
+    url3 = reverse_lazy('cache', request=request)
+    url4 = reverse_lazy('caches', request=request)
 
-    data = "{} and {}".format(url1, url2)
+    data = "reverse_lazy() yields {} and {}".format(url3, url4)
 
     return Response(data)
 
