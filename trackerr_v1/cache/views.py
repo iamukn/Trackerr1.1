@@ -2,7 +2,8 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import generics
-
+from rest_framework.decorators import api_view
+from rest_framework.reverse import reverse
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from django.views.decorators.vary import vary_on_cookie, vary_on_headers
@@ -35,3 +36,13 @@ class PostView(APIView):
         page = paginator.paginate_queryset(queryset, request, view=self)
         ser = PhoneSerializer(page, many=True)
         return Response(ser.data)
+
+@api_view(['GET'])
+def reverser(request):
+    url1 = reverse('cache', request=request)
+    url2 = reverse('caches', request=request)
+
+    data = "{} and {}".format(url1, url2)
+
+    return Response(data)
+
