@@ -11,7 +11,8 @@ class TestBook(APITestCase):
         data = Books.objects.create(author='Daniel', message='Hello there')
         update_data = { "author": "IkpaMor"}
         req = self.client.patch(f'/drf/myviewset/{data.id}/', update_data, format='json')
-
+        
+        # check to see if the status_code was within the success code
         self.assertTrue(req.status_code <= 300)
 
 
