@@ -3,7 +3,7 @@ from rest_framework.test import APITestCase
 from .models import Books
 
 class TestBook(APITestCase):
-    
+    """Inherited from APITestCase class"""    
 
     def test_patch(self):
         data = Books.objects.create(author='Daniel', message='Hello there')
