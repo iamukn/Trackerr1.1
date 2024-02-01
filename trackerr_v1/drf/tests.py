@@ -7,7 +7,7 @@ class TestBook(APITestCase):
 
     def test_patch(self):
         data = Books.objects.create(author='Daniel', message='Hello there')
-        update_data = {"message": "BabaNla", "author": "Ikpa"}
+        update_data = { "author": "IkpaMor"}
         req = self.client.patch(f'/drf/myviewset/{data.id}/', update_data, format='json')
 
         print(req)
