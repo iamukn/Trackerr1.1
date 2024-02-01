@@ -10,8 +10,6 @@ class TestBook(APITestCase):
         update_data = { "author": "IkpaMor"}
         req = self.client.patch(f'/drf/myviewset/{data.id}/', update_data, format='json')
 
-        print(req)
-
         self.assertTrue(req.status_code <= 300)
 
 
