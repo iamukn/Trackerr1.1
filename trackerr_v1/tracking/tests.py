@@ -17,8 +17,13 @@ class Tester(APITestCase):
 class Testers(Tester):
 
     def test_get(self):
-        url = '/tracking/1/'
+        url = '/tracking/'
         data = self.client.get(url) 
         self.assertEqual(data.status_code, 200)
 
+    def test_geht(self):
+        data = Tracking.objects.create(tracking_num=['Daniella'])
 
+        req = self.client.get(f'/tracking/{data.id}/')
+
+        self.assertEqual(req.status_code, 200)
