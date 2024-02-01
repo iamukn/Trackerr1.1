@@ -6,6 +6,8 @@ class TestBook(APITestCase):
     """Inherited from APITestCase class"""    
 
     def test_patch(self):
+        # created a test object in the database
+       
         data = Books.objects.create(author='Daniel', message='Hello there')
         update_data = { "author": "IkpaMor"}
         req = self.client.patch(f'/drf/myviewset/{data.id}/', update_data, format='json')
