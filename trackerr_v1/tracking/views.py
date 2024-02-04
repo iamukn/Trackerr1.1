@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Tracking
+from .models import Trackings
 from .serializer import TrackingSerializer
 from rest_framework.viewsets import ModelViewSet
 
@@ -8,7 +8,7 @@ class Track(ModelViewSet):
 
 
     def get_queryset(self):
-        return Tracking.objects.all()
+        return Trackings.objects.all()
 
 
 # Create your views here.

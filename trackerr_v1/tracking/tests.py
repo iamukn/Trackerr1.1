@@ -27,3 +27,11 @@ class Testers(Tester):
         req = self.client.get(f'/tracking/{data.id}/')
 
         self.assertEqual(req.status_code, 200)
+
+    def test_delete(self):
+        data = Tracking.objects.create(tracking_num=['Daniella'])
+         
+        req = self.client.delete(f'/tracking/{data.id}/')
+
+        self.assertEqual(req.status_code, 204)
+
