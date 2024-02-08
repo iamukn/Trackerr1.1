@@ -8,6 +8,6 @@ from .serializer import (DepartmentSerializer, EmployeeSerializer)
 class Dept_Reg(APIView):
     permission_classes = [AllowAny]
 
-    def get(self):
+    def get(self, request):
         return Response('Hello From Dept_REGAPI')
 
