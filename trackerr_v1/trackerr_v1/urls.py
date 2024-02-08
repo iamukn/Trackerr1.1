@@ -45,6 +45,7 @@ urlpatterns = (
     path('', include('cache.urls')),
     path('docs/', include_docs_urls(title='TrackerrAPI')),
     path('', include('oneToOne.route')),
+    path('', include('arrayfield.urls')),
 #    path(
 #        "trackerr/",
 #        get_schema_view(
