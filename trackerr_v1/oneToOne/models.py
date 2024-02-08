@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 class Department(models.Model):
     name = models.CharField(max_length=50, null=False, blank=False)
@@ -17,9 +18,20 @@ class Employee(models.Model):
 
 class Animal(models.Model):
     name = models.CharField(max_length=50, null=False, blank=False)
+    def __str__(self):
+        return self.name
 
 
-class Species(models.Model):
+class Specie(models.Model):
     name = models.CharField(max_length=35, null=False, blank=False)
     age = models.IntegerField(default=0)
+    kinds = ArrayField(models.CharField(max_length=10), default=list) 
     animal = models.ForeignKey(Animal, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.name
+
+class Species(models.Model):
+    kinds = ArrayField(models.CharField(max_length=10), default=list)
+    species = models.ForeignKey(Specie, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.name
