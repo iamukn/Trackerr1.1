@@ -20,7 +20,7 @@ from django.urls import path, include
 from rest_framework.documentation import include_docs_urls
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-from OnetooneConfig import views as one_view
+from oneToOne import views as one_view
 from rest_framework import permissions
 
 schema_view = get_schema_view(
@@ -44,6 +44,7 @@ urlpatterns = (
     path('api/', include('serializer.urls')),
     path('', include('cache.urls')),
     path('docs/', include_docs_urls(title='TrackerrAPI')),
+
 #    path(
 #        "trackerr/",
 #        get_schema_view(
