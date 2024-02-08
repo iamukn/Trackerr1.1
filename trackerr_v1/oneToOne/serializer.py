@@ -1,4 +1,4 @@
-from .models import (Department, Employee)
+from .models import (Department, Employee, Species)
 from rest_framework.serializers import ModelSerializer
 
 class DepartmentSerializer(ModelSerializer):
@@ -13,3 +13,9 @@ class EmployeeSerializer(ModelSerializer):
         model = Employee
         fields = '__all__'
         depth = 0
+
+
+class SpeciesSerializer(ModelSerializer):
+    class Meta:
+        model = Species
+        fields = '__all__'
