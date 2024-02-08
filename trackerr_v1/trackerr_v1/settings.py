@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'serializer',
     'cache',
     'drf_yasg',
+    'oneToOne.apps.OnetooneConfig',
 ]
 
 MIDDLEWARE = [
