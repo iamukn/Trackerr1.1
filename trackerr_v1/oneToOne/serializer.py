@@ -19,3 +19,4 @@ class SpeciesSerializer(ModelSerializer):
     class Meta:
         model = Species
         fields = '__all__'
+        depth = 1
