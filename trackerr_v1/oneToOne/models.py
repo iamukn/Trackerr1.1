@@ -15,4 +15,11 @@ class Employee(models.Model):
     def __str__(self):
         return self.name
 
+class Animal(models.Model):
+    name = models.CharField(max_length=50, null=False, blank=False)
 
+
+class Species(models.Model):
+    name = models.CharField(max_length=35, null=False, blank=False)
+    age = models.IntegerField(default=0)
+    animal = models.ForeignKey(Animal, on_delete=models.CASCADE)
