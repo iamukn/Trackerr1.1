@@ -1,10 +1,5 @@
-from .models import (Department, Employee, Arr, Species)
+from .models import (Department, Employee, Species)
 from rest_framework.serializers import ModelSerializer
-
-class ArrSerializer(ModelSerializer):
-    class Meta:
-        model = Arr
-        fields = ['tracking']
 
 class DepartmentSerializer(ModelSerializer):
     class Meta:

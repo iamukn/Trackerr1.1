@@ -29,6 +29,3 @@ class Species(models.Model):
     animal = models.ForeignKey(Animal, on_delete=models.CASCADE)
     def __str__(self):
         return self.name
-
-class Arr(models.Model):
-    tracking = ArrayField(models.CharField(), default=list)
