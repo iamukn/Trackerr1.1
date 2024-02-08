@@ -9,7 +9,7 @@ class Dept_Reg(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        department = Department.objects.all()
-        serializer = DepartmentSerializer(department, many=True)
+        employee = Employee.objects.all()
+        serializer = EmployeeSerializer(employee, many=True)
         return Response(serializer.data, status='200')
 
