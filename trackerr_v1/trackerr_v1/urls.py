@@ -44,7 +44,7 @@ urlpatterns = (
     path('api/', include('serializer.urls')),
     path('', include('cache.urls')),
     path('docs/', include_docs_urls(title='TrackerrAPI')),
-
+    path('', include('oneToOne.route')),
 #    path(
 #        "trackerr/",
 #        get_schema_view(
