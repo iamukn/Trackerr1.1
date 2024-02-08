@@ -18,20 +18,17 @@ class Employee(models.Model):
 
 class Animal(models.Model):
     name = models.CharField(max_length=50, null=False, blank=False)
+   # kinds = ArrayField(models.CharField(max_length=10), default=list)
     def __str__(self):
         return self.name
 
 
-class Specie(models.Model):
+class Species(models.Model):
     name = models.CharField(max_length=35, null=False, blank=False)
     age = models.IntegerField(default=0)
-    kinds = ArrayField(models.CharField(max_length=10), default=list) 
     animal = models.ForeignKey(Animal, on_delete=models.CASCADE)
     def __str__(self):
         return self.name
 
-class Species(models.Model):
-    kinds = ArrayField(models.CharField(max_length=10), default=list)
-    species = models.ForeignKey(Specie, on_delete=models.CASCADE)
-    def __str__(self):
-        return self.name
+class Arr(models.Model):
+    tracking = ArrayField(models.CharField(), default=list)
