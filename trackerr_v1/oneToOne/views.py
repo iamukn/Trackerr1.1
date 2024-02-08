@@ -10,6 +10,6 @@ class Dept_Reg(APIView):
 
     def get(self, request):
         department = Department.objects.all()
-        serializer = DepartmentSerializer(employees, many=True)
+        serializer = DepartmentSerializer(department, many=True)
         return Response(serializer.data, status='200')
 
