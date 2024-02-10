@@ -46,7 +46,7 @@ INSTALLED_APPS = [
     'cache',
     'drf_yasg',
     'oneToOne.apps.OnetooneConfig',
-   # 'relate.apps.RelateConfig',
+    'relate.apps.RelateConfig',
 ]
 
 MIDDLEWARE = [
