@@ -9,6 +9,12 @@ class TrackingSerializer(ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        del data['user']['password'], data['user']['email']
+        del data['user']['password'], data['user']['email'] 
         return data
+
+
+class UniqueTrackingSerializer(ModelSerializer):
+    class Meta:
+        model = Tracking
+        fields = ['tracking_num']
 
