@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from .models import Tracking
 from .serializer import TrackingSerializer
+from django.contrib.auth.models import User
 
 class Home(APIView):
     permission_classes = [AllowAny]
@@ -16,8 +17,8 @@ class Home(APIView):
 
     def post(self, request):
         serializer = TrackingSerializer(data=request.data)
-        serializer.user = request.user
+        user = User.objects.get(username=request.user)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(user=user)
             return Response('200:OKKK')
         return Response('Error Occured')
