@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
 from .models import Tracking
-from .serializer import TrackingSerializer
+from .serializer import UniqueTrackingSerializer, TrackingSerializer
 from django.contrib.auth.models import User
 
 class Home(APIView):
@@ -22,3 +22,12 @@ class Home(APIView):
             serializer.save(user=user)
             return Response('200:OKKK')
         return Response('Error Occured')
+
+class Unique(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        queryset = Tracking.objects.filter(user__username=request.user)
+        serializer = UniqueTrackingSerializer(queryset, many=True)
+
+        return Response(serializer.data, status=200)
