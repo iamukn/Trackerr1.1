@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
+from .models import Tracking
 
 class Home(APIView):
     permission_classes = [AllowAny]
