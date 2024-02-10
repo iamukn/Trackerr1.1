@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class ArrayfieldConfig(AppConfig):
+class RelateConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "arrayfield"
+    name = "relate"
