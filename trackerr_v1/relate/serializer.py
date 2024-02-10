@@ -7,4 +7,8 @@ class TrackingSerializer(ModelSerializer):
         fields = '__all__'
         depth = 1
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        del data['user']['password'], data['user']['email']
+        return data
 
