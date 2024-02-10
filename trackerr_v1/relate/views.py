@@ -14,3 +14,10 @@ class Home(APIView):
 
         return Response(ser.data, status=200)
 
+    def post(self, request):
+        serializer = TrackingSerializer(data=request.data)
+        serializer.user = request.user
+        if serializer.is_valid():
+            serializer.save()
+            return Response('200:OKKK')
+        return Response('Error Occured')
