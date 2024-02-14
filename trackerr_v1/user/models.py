@@ -12,7 +12,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     and Logistics partner
     """
     name = models.CharField(max_length=500, null=False, blank=False, verbose_name=_('Name'))
-    email = models.EmailField(max_length=255, unique=True, verbose_name=_('Email Address'))
+    email = models.EmailField(max_length=255, null=False, blank=False, unique=True, verbose_name=_('Email Address'))
     phone_number = models.CharField(max_length=20, null=False, blank=False, unique=True, verbose_name=_('Phone'))
     address = models.CharField(max_length=500, null=False, blank=False, verbose_name=_('Address'))
     account_type = models.CharField(max_length=15, null=False, blank=False, verbose_name=_('account_type'))
