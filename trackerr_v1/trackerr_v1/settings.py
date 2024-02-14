@@ -11,21 +11,29 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import environ
+
+
+env = environ.Env(
+    DEBUG=(bool, False)
+        )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
+environ.Env.read_env(BASE_DIR / '.env')
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-_)muk%of+l$!+k2@=wd5n1o*@g@_p^i!o@i9prjb2k(c427aus"
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [env('ALLOWED_HOST')]
 
 
 # Application definition
@@ -37,9 +45,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "user",
     "rest_framework",
     "corsheaders",
-    "user",
 ]
 
 MIDDLEWARE = [
@@ -53,6 +61,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
 
 CORS_ALLOW_ALL_ORIGINS: True
 
@@ -85,7 +94,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'mydb',
         'USER': 'eyen',
-        'PASSWORD': 'password',
+        'PASSWORD': env('PASSWORD'),
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -127,7 +136,12 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 
+MEDIA_ROOT = '/media/'
+MEDIA_ROOT = BASE_DIR / 'media'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+AUTH_USER_MODEL = 'user.User'
