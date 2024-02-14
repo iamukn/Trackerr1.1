@@ -11,14 +11,14 @@ class UserManager(BaseUserManager):
         except ValidationError:
             raise ValueError(_('Please enter a valid email address!'))
 
-    def create_user(self, email, name, phone_number, address, account_type, **extra_fields):
+    def create_user(self, email, name, phone_number, address, account_type, password, **extra_fields):
         if email:
             email=self.normalize_email(email)
             self.email_validator(email)
         else:
             raise ValueError(_('An email address is required!'))
 
-        if not name or phone_number:
+        if not name or not phone_number:
             raise ValueError(_('name or phone number is missing!'))
 
         user = self.model(email=email, name=name, phone_number=phone_number, address=address, account_type=account_type, **extra_fields)
@@ -26,11 +26,11 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(email, name, phone_number, address, account_type, **extra_fields):
-        extra_fields.set_default('is_admin', True)
-        extra_fields.set_default('is_staff', True)
-        extra_fields.set_default('is_superuser', True)
-        extra_fields.set_default('is_verified', True)
+    def create_superuser(self, email, name, phone_number, address, account_type, password, **extra_fields):
+        extra_fields.setdefault('is_admin', True)
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        extra_fields.setdefault('is_verified', True)
 
         if extra_fields.get('is_staff') is not True:
             raise ValueError(_('admin user must also be a staff'))
@@ -42,7 +42,7 @@ class UserManager(BaseUserManager):
             raise ValueError(_('is admin must be true for admin user'))
 
         user=self.create_user(
-            email, name, phone_number, address, account_type, password, **extra_fields    
+            email=email, name=name, phone_number=phone_number, address=address, account_type=account_type, password=password, **extra_fields    
                 )
 
         user.save(using=self._db)
