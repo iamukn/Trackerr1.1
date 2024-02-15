@@ -35,21 +35,25 @@ class UserView(UsersView):
     """ Endpoint to handle individual user data update 
         The parser_class helps to handle the image field in the serializer
     """
-    parser_classes = (MultiPartParser, JSONParser)
+    parser_classes = (JSONParser,)
 
     def get(self, request, pk,  *args, **kwargs):
-        user = self.queryset().get(id=pk)
-        serializer = UsersSerializer(instance=user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        try:
+            user = self.queryset().get(id=pk)
+            serializer = UsersSerializer(instance=user)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, pk,  *args, **kwargs):
-
-        user = self.queryset().get(id=pk)
-        serializer = UsersSerializer(user, data=request.data, partial=True)
+        try:
+            user = self.queryset().get(id=pk)
+            serializer = UsersSerializer(user, data=request.data, partial=True)
+        except User.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
         if serializer.is_valid():
             serializer.save()
 
             return Response(serializer.data, status.HTTP_206_PARTIAL_CONTENT)
-
         return Response(status.HTTP_404_NOT_FOUND)
 
