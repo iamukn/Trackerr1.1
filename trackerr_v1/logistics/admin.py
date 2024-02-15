@@ -1,3 +1,4 @@
 from django.contrib import admin
+from .models import Logistics_partner
 
-# Register your models here.
+admin.site.register(Logistics_partner)
