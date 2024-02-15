@@ -37,4 +37,15 @@ class UserTests(APITestCase):
         res = self.client.get(url)
         
         self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(type(res.data), ReturnDict)
 
+
+    def test_can_edit_a_user_data_using_put(self):
+        """
+        Ensure we can edit a user data using put
+        """
+        url = reverse('user', kwargs={'pk':self.user.pk})
+        res = self.client.put(url, data={'name':'Duke', 'email':'9ice@gmail.com', 'phone_number':'0707', 'address':'Gidi', 'account_type': 'business'})
+        
+        self.assertEqual(res.status_code, status.HTTP_206_PARTIAL_CONTENT)
+        self.assertEqual(type(res.data), ReturnDict)
