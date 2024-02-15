@@ -1,14 +1,30 @@
 from django.shortcuts import render
 from rest_framework.response import Response
-from .models import Business_owner
-from .serializers import Business_ownerSerializer
-from rest_framework.decorators import renderer_classes, api_view
+from .models import User
+from .serializers import UsersSerializer
+from rest_framework.views import APIView
 from rest_framework.renderers import JSONRenderer
+"""
+Views for the user application
+"""
 
-# Create your views here.
-@api_view(['GET'])
-#@renderer_classes([JSONRenderer])
-def home(request):
-    query_set = Business_owner.objects.all()
-    serializer = Business_ownerSerializer(query_set, many=True)
-    return Response(serializer.data)
+class UsersView(APIView):
+    ''' Method to handle all the http methods on the
+    User model
+    '''
+
+    def queryset(self):
+        """Method that gets the User models datas
+        """
+        return User.objects.all()
+
+    def get(self, request, *args, **kwargs):
+
+        """ Handles the get requests on the users endpoint
+        """
+
+        users = self.queryset()
+        serializer = UsersSerializer(users, many=True)
+
+        return Response(serializer.data, status='200')
+
