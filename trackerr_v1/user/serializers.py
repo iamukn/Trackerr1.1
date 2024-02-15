@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, SerializerMethodField
 from .models import (User, Logistics_partner, Business_owner)
 
 """ 
@@ -7,9 +7,16 @@ from .models import (User, Logistics_partner, Business_owner)
 """
 
 class UsersSerializer(ModelSerializer):
+    logo = SerializerMethodField()
     class Meta:
         model = User
         exclude = ['password']
+
+    def get_logo(self, obj):
+        if obj.logo:  # If logo field is not empty
+            return obj.logo.url  # Assuming logo is a FileField or ImageField
+        else:
+            return None
 
 class Logistics_partnerSerializer(ModelSerializer):
     class Meta:
