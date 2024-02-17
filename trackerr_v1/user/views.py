@@ -49,7 +49,7 @@ class UsersView(APIView):
             business_serializer = Business_ownerSerializer(data={'business_name': request.data.get('business_name')})
             if business_serializer.is_valid():
                 business_serializer.save(user=user)
-                return Response(status=status.HTTP_200_OK)
+                return Response(business_serializer.data, status=status.HTTP_201_CREATED)
             
         elif request.data.get('account_type') == 'logistics':
             pass
