@@ -6,6 +6,9 @@ from .serializers import UsersSerializer
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.renderers import JSONRenderer
+from business.serializers import Business_ownerSerializer
+
+
 """
 Views for the user application
 """
@@ -14,6 +17,7 @@ class UsersView(APIView):
     ''' Method to handle all the http methods on the
     User model
     '''
+    parser_classes = (JSONParser,)
 
     def queryset(self):
         """Method that gets the User models datas
@@ -29,7 +33,29 @@ class UsersView(APIView):
         serializer = UsersSerializer(users, many=True)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def post(self, request, *args, **kwargs):
+        try:
 
+            user_serializer = UsersSerializer(data=request.data)
+            if user_serializer.is_valid():
+                user_serializer.save()
+
+        except Exception:
+            raise ValueError
+
+        if request.data.get('account_type') == 'business':
+            user = User.objects.get(email=request.data.get('email'))
+            business_serializer = Business_ownerSerializer(data={'business_name': request.data.get('business_name')})
+            if business_serializer.is_valid():
+                business_serializer.save(user=user)
+                return Response(status=status.HTTP_200_OK)
+            
+        elif request.data.get('account_type') == 'logistics':
+            pass
+
+        else:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 class UserView(UsersView):
     """ Endpoint to handle individual user data update 
