@@ -55,7 +55,7 @@ class UsersView(APIView):
             pass
 
         else:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 class UserView(UsersView):
     """ Endpoint to handle individual user data update 
