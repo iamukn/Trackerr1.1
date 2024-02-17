@@ -24,11 +24,11 @@ class UsersView(APIView):
 
         """ Handles the get requests on the users endpoint
         """
-
+            
         users = self.queryset()
         serializer = UsersSerializer(users, many=True)
 
-        return Response(serializer.data, status='200')
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class UserView(UsersView):
