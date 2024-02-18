@@ -75,3 +75,17 @@ class Business_ownerRoute(Business_ownerRegistration):
         serializer = Business_ownerSerializer(user)
 
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def put(self, request, id, *args, **kwargs):
+        """
+            Modifies the existing data of a single business user
+        """
+
+        user = self.query_set(Business_owner, id)
+        serializer = Business_ownerSerializer(user, data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=status.HTTP_206_PARTIAL_CONTENT)
+
+        return Response(status=status.HTTP_400_BAD_REQUEST)
