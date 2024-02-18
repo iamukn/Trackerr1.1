@@ -7,4 +7,5 @@ from . import views
 
 urlpatterns = [
     path('business-owners/', views.Business_ownerRegistration.as_view(), name='busines-owners'),
+    path('business-owners/<int:id>/', views.Business_ownerRoute.as_view(), name='busines-owners-route'),
         ]

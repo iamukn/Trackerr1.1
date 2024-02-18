@@ -21,9 +21,9 @@ class Business_ownerRegistration(APIView):
 
     parser_classes = [JSONParser,]
 
-    def query_set(self, id, *args, **kwargs):
+    def query_set(self,instance, id, *args, **kwargs):
         # Get the user object or return a 404    
-        user = get_object_or_404(User, pk=id)
+        user = get_object_or_404(instance, pk=id)
         return user
 
     def get(self,request, *args, **kwargs):
@@ -46,7 +46,7 @@ class Business_ownerRegistration(APIView):
 
             if business_owner.is_valid() and user.is_valid():
                 user.save()
-                business_owner.save(user=self.query_set(user.instance.id))
+                business_owner.save(user=self.query_set(User, user.instance.id))
                 return Response(business_owner.data, status=status.HTTP_201_CREATED)
 
             else:
@@ -54,3 +54,24 @@ class Business_ownerRegistration(APIView):
 
         except ValueError:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+"""
+  Class to retrieve, modify and delete a business_owner
+"""
+
+class Business_ownerRoute(Business_ownerRegistration):
+    """ 
+    Method that returns information 
+    about a single business user
+    """
+
+    def get(self, request, id, *args, **kwargs):
+
+        """ Returns information of a single
+            Business owner
+        """
+        user = self.query_set(Business_owner, id)
+        serializer = Business_ownerSerializer(user)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
