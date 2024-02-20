@@ -55,7 +55,7 @@ class Business_ownerRegistration(APIView):
                 raise ValueError
 
         except ValueError:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(business_owner.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 """
