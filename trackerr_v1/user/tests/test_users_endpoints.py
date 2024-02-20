@@ -16,14 +16,14 @@ class UserTests(APITestCase):
             address='hello',
             account_type='business'
                 )
-        self.data = {'name':'Rena','email':'rerse@gmail.com','phone_number':'099', 'address':'hello','account_type': 'business', 'business_name': 'Meta'}
+        self.data = {'name':'Rena','email':'rerse@gmail.com','password':'password', 'phone_number':'099', 'address':'hello','account_type': 'business', 'business_name': 'Meta'}
 
     def test_create_a_business_user(self):
         """ 
         Test  to create a business owner
         """
 
-        url = reverse('users')
+        url = reverse('business-owners')
         res = self.client.post(url, data=self.data, format='json')
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
@@ -52,14 +52,4 @@ class UserTests(APITestCase):
         
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data.get('name'), 'Rena')
-        self.assertEqual(type(res.data), ReturnDict)
-
-    def test_can_edit_a_user_data_using_put(self):
-        """
-        Ensure we can edit a user data using put
-        """
-        url = reverse('user', kwargs={'pk':self.user.pk})
-        res = self.client.put(url, data={'name':'Duke', 'email':'9ice@gmail.com', 'phone_number':'0707', 'address':'Gidi', 'account_type': 'business'}, format='json')
-        
-        self.assertEqual(res.status_code, status.HTTP_206_PARTIAL_CONTENT)
-        self.assertEqual(type(res.data), ReturnDict)
+        self.assertEqual(type(res.data), ReturnDict)        

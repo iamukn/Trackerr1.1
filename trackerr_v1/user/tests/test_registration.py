@@ -16,7 +16,10 @@ class RegistrationTest(TestCase):
     def test_can_register(self):
         # test to see if the registration functionality for the user model works
         user = User.objects.create(name="Jane Doe", email='janedoe@gmail.com', phone_number='+2347037******', address='Lagos', account_type='Business', password='helloworld')
+        
         if user.full_clean():
             user.save()
-
-        self.assertEqual(type(user.name), str)
+        
+        data = User.objects.get(id=user.id)
+        
+        self.assertEqual(data.name, 'Jane Doe')     
