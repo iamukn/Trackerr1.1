@@ -88,14 +88,16 @@ class Business_ownerRoute(Business_ownerRegistration):
         
         try:
             user_data = request.data.pop('user')
-            password = user_data.get('password')
-            print(password)
+            password = user_data.pop('password')
         except Exception:
             return Response('all user profile data is required!', status=status.HTTP_400_BAD_REQUEST)
         user_serializer = UsersSerializer(user, data=user_data, partial=True)
+#        user_serializer.instance.set_password(password)
         business_serializer = Business_ownerSerializer(business, data=request.data, partial=True)
                 
         if user_serializer.is_valid() and business_serializer.is_valid():
+ #           user_serializer.instance.set_password(password)
+            user_serializer.save()
             user_serializer.instance.set_password(password)
             user_serializer.save()
             business_serializer.save()
