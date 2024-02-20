@@ -29,7 +29,6 @@ class Business_ownerRegistration(APIView):
     def get(self,request, *args, **kwargs):
         # This will return all Business owners information
         # That exist in the database
-
         # Fetch business owners model from the database
         # Serializer it and return a json response
         business_owner = get_list_or_404(Business_owner)
