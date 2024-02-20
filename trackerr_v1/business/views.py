@@ -91,11 +91,11 @@ class Business_ownerRoute(Business_ownerRegistration):
         except Exception:
             return Response('all user profile data is required!', status=status.HTTP_400_BAD_REQUEST)
         user_serializer = UsersSerializer(user, data=user_data, partial=True)
-#        user_serializer.instance.set_password(password)
+
         business_serializer = Business_ownerSerializer(business, data=request.data, partial=True)
                 
         if user_serializer.is_valid() and business_serializer.is_valid():
- #           user_serializer.instance.set_password(password)
+ 
             user_serializer.save()
             user_serializer.instance.set_password(password)
             user_serializer.save()
@@ -111,11 +111,25 @@ class Business_ownerRoute(Business_ownerRegistration):
            patch request
         """
 
-        user = self.query_set(Business_owner, id)
-        serializer = Business_ownerSerializer(user, data=request.data, partial=True)
+        business = self.query_set(Business_owner, id)
+        user = business.user
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(status=status.HTTP_206_PARTIAL_CONTENT)
+        
+        if 'user' in request.data:
+            user_data = request.data.pop('user')
+
+            user_ser = UsersSerializer(user, data=user_data, partial=True)
+            business_ser = Business_ownerSerializer(business, data=request.data, partial=True)
+        
+            if user_ser.is_valid() and business_ser.is_valid():
+                user_ser.save()
+                business_ser.save()
+            
+                return Response(business_ser.data, status=status.HTTP_206_PARTIAL_CONTENT)
+
+        business_ser = Business_ownerSerializer(business, data=request.data, partial=True)
+        if business_ser.is_valid():
+            business_ser.save()
+            return Response(business_ser.data, status=status.HTTP_206_PARTIAL_CONTENT)
 
         return Response(status=status.HTTP_400_BAD_REQUEST)
