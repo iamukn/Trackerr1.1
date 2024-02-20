@@ -38,18 +38,20 @@ class UsersView(APIView):
         try:
 
             user_serializer = UsersSerializer(data=request.data)
+            
             if user_serializer.is_valid():
                 user_serializer.save()
 
         except Exception:
             raise ValueError
 
-        if request.data.get('account_type') == 'business':
+        if request.data.get('account_type') == 'business':            
             user = User.objects.get(email=request.data.get('email'))
             business_serializer = Business_ownerSerializer(data={'business_name': request.data.get('business_name')})
             if business_serializer.is_valid():
                 business_serializer.save(user=user)
                 return Response(business_serializer.data, status=status.HTTP_201_CREATED)
+            return Response(business_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
             
         elif request.data.get('account_type') == 'logistics':
             pass

@@ -40,10 +40,12 @@ class Business_ownerRegistration(APIView):
 
     def post(self,request, *args, **kwargs):
         # This will handle registration of business owners
+        if not request.data.get('account_type') == 'business':
+            return Response(status=status.HTTP_400_BAD_REQUEST)
         try:
             user = UsersSerializer(data=request.data)
             business_owner = Business_ownerSerializer(data={'business_name': request.data.get('business_name')})
-
+            
             if business_owner.is_valid() and user.is_valid():
                 user.save()
                 business_owner.save(user=self.query_set(User, user.instance.id))
@@ -86,12 +88,15 @@ class Business_ownerRoute(Business_ownerRegistration):
         
         try:
             user_data = request.data.pop('user')
+            password = user_data.get('password')
+            print(password)
         except Exception:
             return Response('all user profile data is required!', status=status.HTTP_400_BAD_REQUEST)
         user_serializer = UsersSerializer(user, data=user_data, partial=True)
         business_serializer = Business_ownerSerializer(business, data=request.data, partial=True)
                 
         if user_serializer.is_valid() and business_serializer.is_valid():
+            user_serializer.instance.set_password(password)
             user_serializer.save()
             business_serializer.save()
 
