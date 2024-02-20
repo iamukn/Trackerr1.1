@@ -81,8 +81,32 @@ class Business_ownerRoute(Business_ownerRegistration):
             Modifies the existing data of a single business user
         """
 
+        business = self.query_set(Business_owner, id)
+        user = business.user
+        
+        try:
+            user_data = request.data.pop('user')
+        except Exception:
+            return Response('all user profile data is required!', status=status.HTTP_400_BAD_REQUEST)
+        user_serializer = UsersSerializer(user, data=user_data, partial=True)
+        business_serializer = Business_ownerSerializer(business, data=request.data, partial=True)
+                
+        if user_serializer.is_valid() and business_serializer.is_valid():
+            user_serializer.save()
+            business_serializer.save()
+
+            return Response(business_serializer.data, status=status.HTTP_206_PARTIAL_CONTENT)
+        return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+
+    def patch(self, request, id, *args, **kwargs):
+        """
+           modifies existing data of a single user using 
+           patch request
+        """
+
         user = self.query_set(Business_owner, id)
-        serializer = Business_ownerSerializer(user, data=request.data)
+        serializer = Business_ownerSerializer(user, data=request.data, partial=True)
 
         if serializer.is_valid():
             serializer.save()

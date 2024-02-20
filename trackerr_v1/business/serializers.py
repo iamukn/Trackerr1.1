@@ -1,9 +1,12 @@
 from rest_framework.serializers import ModelSerializer
 from .models import Business_owner
+from user.models import User
+from user.serializers import UsersSerializer
 
 """
   Serializer for handling Business owners model
 """
+
 
 class Business_ownerSerializer(ModelSerializer):
     """
