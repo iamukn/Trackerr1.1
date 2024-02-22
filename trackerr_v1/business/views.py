@@ -142,7 +142,7 @@ class Business_ownerRoute(Business_ownerRegistration):
         if request.user:
            
             try:
-                user = User.objects.get(id=id)
+                user = User.objects.get(name=request.user)
 
                 user.delete()
             
