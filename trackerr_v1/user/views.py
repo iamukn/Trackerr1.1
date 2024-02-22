@@ -60,3 +60,23 @@ class UserView(UsersView):
 
             return Response(serializer.data, status.HTTP_206_PARTIAL_CONTENT)
         return Response(status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request, pk, *args, **kwargs):
+
+        if not request.user:
+            return Response({'status': 'NOT FOUND'}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            #fetches the user from the Users model and deletes it
+            user = User.objects.get(id=pk)
+            user.delete()
+            
+            #ADD A FUNCTIONALITY THAT EMAILS THE USER THAT THEIR ACCOUNT HAS JUST BEEN DELETED
+            return Response({'status': 'success'}, status=status.HTTP_204_NO_CONTENT)
+
+        except User.DoesNotExist:
+            return Response({'status': 'NOT FOUND'}, status=status.HTTP_404_NOT_FOUND)
+
+
+
+

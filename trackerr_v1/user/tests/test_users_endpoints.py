@@ -53,3 +53,11 @@ class UserTests(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data.get('name'), 'Rena')
         self.assertEqual(type(res.data), ReturnDict)        
+
+    def test_to_delete_user(self: None) -> None:
+
+        url = reverse('user', kwargs={'pk':self.user.id})
+        res = self.client.delete(url)
+        
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT) 
+        self.assertFalse(User.objects.filter(id=self.user.id).exists())
