@@ -33,3 +33,13 @@ class BusinessTest(APITestCase):
         
         self.assertEqual(res.data['user'].get('name'), 'Richard')
         self.assertEqual(res.status_code, status.HTTP_206_PARTIAL_CONTENT)
+
+
+    def test_delete(self):
+        
+        url = reverse('business-owner-route', kwargs={'id':self.business.id})
+        res = self.client.delete(url)
+
+        self.assertEqual(res.status_code, 204)
+        self.assertFalse(User.objects.filter(id=self.user.id).exists())
+

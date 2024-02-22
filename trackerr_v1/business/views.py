@@ -66,12 +66,14 @@ class Business_ownerRoute(Business_ownerRegistration):
     Method that returns information 
     about a single business user
     """
+    permissions_classes = [IsAuthenticated]
 
     def get(self, request, id, *args, **kwargs):
 
         """ Returns information of a single
             Business owner
         """
+        
         user = self.query_set(Business_owner, id)
         serializer = Business_ownerSerializer(user)
 
@@ -133,3 +135,21 @@ class Business_ownerRoute(Business_ownerRegistration):
             return Response(business_ser.data, status=status.HTTP_206_PARTIAL_CONTENT)
 
         return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+    def delete(self, request,id, *args, **kwargs):
+
+        if request.user:
+           
+            try:
+                user = User.objects.get(id=id)
+
+                user.delete()
+            
+                return Response({"status": "successfully deleted"}, status=status.HTTP_204_NO_CONTENT)
+
+            except User.DoesNotExist:
+                return Response({"status":"User not found"}, status=status.HTTP_404_NOT_FOUND)    
+
+        return Response({"status":"User not found"}, status=status.HTTP_404_NOT_FOUND)
+
