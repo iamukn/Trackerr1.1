@@ -5,6 +5,7 @@ from django.dispatch import receiver
 from business.models import Business_owner
 from django.core.mail import send_mail
 from django.conf import settings
+import threading
 
 """ 
     Signals to send emails as soon as a User is Created
@@ -13,6 +14,11 @@ from django.conf import settings
 @receiver(post_save, sender=Business_owner)
 def send_welcome_email(sender, instance, created, **Kwargs):
 
+
+    def worker():
+        send_mail(subject, message, from_email, to)
+
+
     if created:# only send email for new users
 
         subject = 'Welcome to Trackerr!!'
@@ -20,7 +26,9 @@ def send_welcome_email(sender, instance, created, **Kwargs):
         from_email = settings.EMAIL_HOST_USER 
         to = [instance.user.email,]
         try:
-            send_mail(subject, message, from_email, to)
+            # starts the mail thread in the background
+            threading.Thread(target=worker, daemon=True).start()
+
         except Exception:
         # Write a logging for this incase an exception occurs
             print('ERROR IN BUSINESS SIGNALS, Please check!!')
