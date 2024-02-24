@@ -4,8 +4,8 @@ from rest_framework.parsers import JSONParser
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from user.serializers import UsersSerializer
-from .serializers import Business_ownerSerializer
-from .models import Business_owner
+from business.serializers import Business_ownerSerializer
+from business.models import Business_owner
 from user.models import User
 from django.shortcuts import (get_object_or_404, get_list_or_404)
 
