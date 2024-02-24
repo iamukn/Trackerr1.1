@@ -5,6 +5,7 @@ from user.models import User
 from user.serializers import UsersSerializer
 from rest_framework.views import APIView
 from rest_framework import status
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.renderers import JSONRenderer
 from business.serializers import Business_ownerSerializer
 
@@ -78,5 +79,12 @@ class UserView(UsersView):
             return Response({'status': 'NOT FOUND'}, status=status.HTTP_404_NOT_FOUND)
 
 
+class Users_count(APIView):
+    """ Fetches the count of all the users"""
+    permissions_classes = [AllowAny]
 
+    def get(self, request, *args, **kwargs) -> int:
+        # fetches the user and returns its count
 
+        count = User.objects.all().count()
+        return Response(count, status=status.HTTP_200_OK)
