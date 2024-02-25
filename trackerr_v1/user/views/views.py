@@ -40,10 +40,12 @@ class UserView(UsersView):
     """ Endpoint to handle individual user data update 
         The parser_class helps to handle the image field in the serializer
     """
+    permission_classes = [IsAuthenticated,]
     parser_classes = (JSONParser,)
 
     def get(self, request, pk,  *args, **kwargs):
         try:
+            print(request.user, request.auth)
             user = self.queryset().get(id=pk)
             serializer = UsersSerializer(instance=user)
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -73,7 +75,7 @@ class UserView(UsersView):
             user.delete()
             
             #ADD A FUNCTIONALITY THAT EMAILS THE USER THAT THEIR ACCOUNT HAS JUST BEEN DELETED
-            return Response({'status': 'success'}, status=status.HTTP_204_NO_CONTENT)
+            return Response({'status': 'Account successfully deleted'}, status=status.HTTP_204_NO_CONTENT)
 
         except User.DoesNotExist:
             return Response({'status': 'NOT FOUND'}, status=status.HTTP_404_NOT_FOUND)
