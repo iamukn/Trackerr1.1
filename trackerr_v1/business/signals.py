@@ -22,7 +22,7 @@ def send_welcome_email(sender, instance, created, **Kwargs):
     if created:# only send email for new users
 
         subject = 'Welcome to Trackerr!!'
-        message = f'Hello {instance.user.name}, you account has been successfully regisitered and you are set to start tracking your parcels in realtime ;)'
+        message = f'Hello {instance.user.name}, your account has been successfully regisitered and you are set to start tracking your parcels in realtime ;)'
         from_email = settings.EMAIL_HOST_USER 
         to = [instance.user.email,]
         try:
