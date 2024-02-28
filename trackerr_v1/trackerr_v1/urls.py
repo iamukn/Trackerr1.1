@@ -15,6 +15,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 #from rest_framework.schemas import get_schema_view
+
+from authentication.views.auth import CustomTokenObtainPairView as TokenObtain
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
@@ -30,7 +32,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('api/', include('user.urls')),
     path('api/', include('business.urls')),
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/', TokenObtain.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
