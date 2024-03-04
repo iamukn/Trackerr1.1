@@ -66,7 +66,7 @@ class Business_ownerRoute(Business_ownerRegistration):
     Method that returns information 
     about a single business user
     """
-    permissions_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated,]
 
     def get(self, request, id, *args, **kwargs):
 
