@@ -6,7 +6,7 @@ from rest_framework import status
 from user.models import User
 from user.generate import password_gen
 from authentication.test_email import emailer
-
+from threading import Thread
 
 """ Route that handles password reset for a user
 """
@@ -25,7 +25,8 @@ class Recover_password(APIView):
         if user:
             new_password = password_gen()
             try:
-                emailer(subject='Password reset', to=email, contents='Your OTP is %s'%new_password)
+                Thread(target=emailer, kwargs={"subject":'Password reset','to':email, 'contents':'Your OTP is %s'%new_password}, daemon=True).start()
+                
                 user.set_password(new_password)
                 user.save()
                 return Response(status=status.HTTP_200_OK)
