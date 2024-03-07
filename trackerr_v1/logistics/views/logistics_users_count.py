@@ -10,7 +10,7 @@ from logistics.models import Logistics_partner
 class Logistics_owners_count(APIView):
     permission_classes = [IsAdminUser,]
     def get(self, request, *args, **kwargs):
-        # Returns the count of only the business owners
+        # Returns the count of the logistics partners 
         counts = Logistics_partner.objects.all().count()
 
         return Response(counts, status=status.HTTP_200_OK)
