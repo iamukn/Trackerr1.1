@@ -5,6 +5,7 @@ from business.models import Business_owner
 from business.serializers import Business_ownerSerializer
 from user.serializers import UsersSerializer
 from rest_framework.test import APITestCase
+from rest_framework_simplejwt.tokens import AccessToken
 
 """ testing the HTTP methods [PUT, PATCH, DELETE] requests on the business app """
 
@@ -20,7 +21,8 @@ class BusinessTest(APITestCase):
             password='password',
             account_type='business'
                 )
-
+        self.token = AccessToken.for_user(user=self.user)
+        self.client.credentials(HTTP_AUTHORIZATION="Bearer %s"%self.token)
         self.business = Business_owner.objects.create(user=self.user, business_name='haplotype')
 
 
@@ -41,3 +43,17 @@ class BusinessTest(APITestCase):
 
         self.assertEqual(res.status_code, 204)
         self.assertFalse(User.objects.filter(id=self.user.id).exists())
+
+    """ Total counts of business owners routes """
+
+    def test_business_owners_count(self):
+        url = reverse('business-counts')
+        # Makes the test user an admin
+        self.user.is_superuser = True
+        self.user.is_staff = True
+        self.user.save()
+        # Make a request to the count endpoint
+        res = self.client.get(url, format='json')
+        # carry out test assertions
+        self.assertTrue(type(res.data), int)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
