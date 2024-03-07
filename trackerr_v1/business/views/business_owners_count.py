@@ -1,5 +1,6 @@
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAdminUser
 from rest_framework.views import APIView
 from business.models import Business_owner
 
@@ -7,7 +8,7 @@ from business.models import Business_owner
 
 
 class Business_count(APIView):
-
+    permission_classes = [IsAdminUser,]
     def get(self, request, *args, **kwargs):
         # Returns the count of only the business owners
         counts = Business_owner.objects.all().count()
