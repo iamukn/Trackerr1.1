@@ -4,7 +4,7 @@ from rest_framework.permissions import IsAdminUser
 from rest_framework.views import APIView
 from logistics.models import Logistics_partner
 
-""" View that returns the business owners count"""
+""" View that returns the logistics owners count"""
 
 
 class Logistics_owners_count(APIView):
