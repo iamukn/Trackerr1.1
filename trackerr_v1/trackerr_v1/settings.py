@@ -68,7 +68,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "authentication",
-    "tracking",
+    "tracking_information",
 ]
 
 MIDDLEWARE = [
