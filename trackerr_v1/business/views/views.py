@@ -2,9 +2,10 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.parsers import JSONParser
 from rest_framework.views import APIView
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from user.serializers import UsersSerializer
 from business.serializers import Business_ownerSerializer
+from .business_owner_permission import IsBusinessOwner
 from business.models import Business_owner
 from user.models import User
 from django.shortcuts import (get_object_or_404, get_list_or_404)
@@ -18,6 +19,7 @@ class Business_ownerRegistration(APIView):
     """Views that handles the GET and POST method on 
     Business owners
     """
+    permission_classes = [IsBusinessOwner,]
 
     parser_classes = [JSONParser,]
 
@@ -66,7 +68,7 @@ class Business_ownerRoute(Business_ownerRegistration):
     Method that returns information 
     about a single business user
     """
-    permission_classes = [IsAuthenticated,]
+    permission_classes = [IsBusinessOwner,]
 
     def get(self, request, id, *args, **kwargs):
 

@@ -6,7 +6,7 @@ from tracking_information.utils.tracking_class import Track_gen
 from tracking_information.serializer import Tracking_infoSerializer
 from tracking_information.models import Tracking_info
 from rest_framework.permissions import IsAuthenticated 
-from .business_owner_permission import IsBusinessOwner
+from business.views.business_owner_permission import IsBusinessOwner
 
 """ Route that handles tracking number generation using POST """
 
@@ -21,7 +21,6 @@ class GenerateView(APIView):
 
     def get(self, request, *args, **kwargs):
         
-        print(request.user.business_owner.business_name)
         tracking = Tracking_info.objects.all()
         ser = Tracking_infoSerializer(tracking, many=True)
 
