@@ -21,7 +21,7 @@ class GenerateView(APIView):
 
     def get(self, request, *args, **kwargs):
         
-
+        print(request.user.business_owner.business_name)
         tracking = Tracking_info.objects.all()
         ser = Tracking_infoSerializer(tracking, many=True)
 

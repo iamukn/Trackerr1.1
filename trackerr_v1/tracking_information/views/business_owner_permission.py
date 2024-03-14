@@ -16,5 +16,6 @@ class IsBusinessOwner(permissions.BasePermission):
         if request.user.account_type == 'business' and request.user.is_authenticated:
             return True
     
-#    def has_object_permission(self, request,obj, view):
-#        pass
+    def has_object_permission(self, request,obj, view):
+
+       return bool(request.user and request.user.is_authenticated)

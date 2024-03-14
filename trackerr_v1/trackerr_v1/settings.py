@@ -56,8 +56,9 @@ REST_FRAMEWORK = {
     ]
 }
 
-REST_FRAME_SIMPLEJWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),
+SIMPLEJWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }
 
 INSTALLED_APPS = [
