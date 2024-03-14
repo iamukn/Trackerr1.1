@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from .password_permission import IsBusinessOrLogisticsOwner
 from rest_framework import status
 from .password_recovery import Recover_password
 from django.shortcuts import get_object_or_404
@@ -10,7 +10,7 @@ from user.models import User
 
 class ChangePassword(Recover_password):
     ''' Route for password change for authenticated users '''
-    permission_classes = [IsAuthenticated,]
+    permission_classes = [IsBusinessOrLogisticsOwner,]
 
     def post(self, request, *args, **kwargs):
         # Receives a post request from Logged in user for password change

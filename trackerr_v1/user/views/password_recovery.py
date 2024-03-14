@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
+from rest_framework.permissions import AllowAny
 from user.models import User
 from user.generate import password_gen
 from authentication.test_email import emailer
@@ -14,6 +15,8 @@ from threading import Thread
 class Recover_password(APIView):
     """ password recovery class
     """
+    permission_classes = [AllowAny,]
+
     def get_queryset(self, email):
         user = get_object_or_404(User, email=email)
         return user
