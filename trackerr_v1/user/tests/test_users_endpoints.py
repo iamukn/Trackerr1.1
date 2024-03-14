@@ -39,7 +39,9 @@ class UserTests(APITestCase):
         """
         Ensure we can get all users data
         """
-        
+        self.user.is_staff = True
+        self.user.is_superuser = True
+        self.user.save()
         url = reverse('users')
         res = self.client.get(url, format='json')
 
@@ -50,6 +52,10 @@ class UserTests(APITestCase):
         """
         Ensure we can get a user data
         """
+        # Make the test user an admin user
+        self.user.is_staff = True
+        self.user.is_superuser = True
+        self.user.save()
         url = reverse('user', kwargs={'pk':self.user.pk})
         req = self.client.get(url)
                 

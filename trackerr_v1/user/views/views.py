@@ -5,7 +5,7 @@ from user.models import User
 from user.serializers import UsersSerializer
 from rest_framework.views import APIView
 from rest_framework import status
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import AllowAny, IsAdminUser, IsAuthenticated
 from rest_framework.renderers import JSONRenderer
 from business.serializers import Business_ownerSerializer
 
@@ -18,6 +18,7 @@ class UsersView(APIView):
     ''' Method to handle all the http methods on the
     User model
     '''
+    permission_classes = [IsAdminUser,]
     parser_classes = (JSONParser,)
 
     def queryset(self):
