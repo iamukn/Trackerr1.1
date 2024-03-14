@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 import environ
+from datetime import timedelta
 
 
 env = environ.Env(
@@ -53,6 +54,10 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ]
+}
+
+REST_FRAME_SIMPLEJWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),
 }
 
 INSTALLED_APPS = [

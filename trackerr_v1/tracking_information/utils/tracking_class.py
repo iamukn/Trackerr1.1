@@ -4,7 +4,7 @@ from random import randint
 from tracking_information.models import Tracking_info
 from .track_gen import tracking_number_gen
 from .track_gen_validate import uniquefy
-from typing import List
+from typing import Dict
 """ Handles the tracking generation and manipulation """
 
 class Track_gen:
@@ -28,7 +28,7 @@ class Track_gen:
         unique_num = uniquefy(num=parcel_number, vendor=vendor)
         return unique_num
 
-    def get_tracking_info(self, num:str) -> List or Dict:
+    def get_tracking_info(self, num:str) -> Dict:
         '''
             gets the tracking information for a unique tracking number and
             returns to the calling function
