@@ -18,14 +18,6 @@ class GenerateView(APIView):
         self.Track_gen = Track_gen() 
     
     # method that handles the POST request
-
-    def get(self, request, *args, **kwargs):
-        
-        tracking = Tracking_info.objects.all()
-        ser = Tracking_infoSerializer(tracking, many=True)
-
-        return Response(ser.data)
-
     def post(self, request, *args, **kwargs):
         try:
             data = {

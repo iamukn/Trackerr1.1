@@ -9,7 +9,7 @@ from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import AccessToken
 from user.models import User
 
-class TestTrackingEndpoint(APITestCase):
+class TestTrackingGenerationEndpoint(APITestCase):
     """ Test class for the tracking generation Endpoint """
     
     def setUp(self):
@@ -22,6 +22,7 @@ class TestTrackingEndpoint(APITestCase):
                 password='password',
                 account_type='business'
                 )
+        self.data = {'shipping_address':'Lagos, Ibadan'}
         self.token = AccessToken.for_user(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION="Bearer %s"%self.token)
         self.business = Business_owner.objects.create(user=self.user, business_name='Hue Logistics')
@@ -30,7 +31,7 @@ class TestTrackingEndpoint(APITestCase):
         # test to ensure that business users only creates tracking
         url = reverse('generate-tracking')
         
-        res = self.client.post(url, data={'shipping_address' : 'Lagos, Ibadan exoressway'})
+        res = self.client.post(url, data=self.data)
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertTrue(type(res.data), ReturnDict)
 
@@ -39,3 +40,12 @@ class TestTrackingEndpoint(APITestCase):
         url = reverse('generate-tracking')
         res = self.client.post(url)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_raises_a_401_when_generating_tracking_by_a_non_business_owner(self):
+        # method raises a 401 if a non business owner hits the generate tracking number endpoint
+
+        url = reverse('generate-tracking')
+        self.user.account_type = 'logistics'
+        self.user.save()
+        res = self.client.post(url, data=self.data)
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
