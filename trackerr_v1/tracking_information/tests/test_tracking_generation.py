@@ -2,6 +2,7 @@
 """ testing the tracking number generation route """
 
 from business.models import Business_owner
+from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import AccessToken
@@ -24,5 +25,8 @@ class TestTrackingEndpoint(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION="Bearer %s"%self.token)
         self.business = Business_owner.objects.create(user=self.user, business_name='Hue Logistics')
 
-    def test_tracking_generation(self):
-        print(self.user)
+    def test_tracking_generation_by_business_owner(self):
+        url = reverse('generate-tracking')
+        
+        res = self.client.post(url, data={'shipping_address' : 'Lagos, Ibadan exoressway'})
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
