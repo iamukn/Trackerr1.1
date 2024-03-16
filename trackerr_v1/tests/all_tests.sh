@@ -7,3 +7,5 @@ echo 'CHECKING FOR TESTS IN THE USER APP!!! ;)'
 ../manage.py test ../user/tests/
 echo 'CHECKING FOR TESTS IN THE Authetication APP!!! ;)'
 ../manage.py test ../authentication/tests/
+echo 'CHECKING FOR TESTS IN THE Tracking APP!!! ;)'
+../manage.py test ../tracking_information/tests/
