@@ -38,4 +38,7 @@ class TestPasswordRecoveryEmailandChange(APITestCase):
         mock_thread.assert_called_once_with(target=emailer, kwargs={'subject': 'Password reset', 'to': self.user.email, 'contents': ANY}, daemon=True)
 
     def test_change_password(self):
-        pass
+        url = reverse('change-password')
+        data = {'password1': 'password', 'password2': 'password'}
+        res = self.client.post(url, data=data, format='json')
+        self.assertTrue(res.status_code == 206)

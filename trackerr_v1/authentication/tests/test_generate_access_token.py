@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from django.urls import reverse
 from user.models import User
-from unittest.mock import patch
+from unittest.mock import patch, ANY
 
 
 """ Login and token generation test """
