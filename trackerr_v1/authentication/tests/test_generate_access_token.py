@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from authentication.test_email import emailer
+from authentication.views.auth import CustomTokenObtainPairView
 from rest_framework import status
 from rest_framework.test import APITestCase
 from django.urls import reverse
@@ -30,9 +32,10 @@ class TestTokenObtainPair(APITestCase):
     def test_can_get_login_tokens(self, mock_thread):
 
         # Configure the mock to do nothing when started
-        mock_thread.return_value.start.return_value = None
-
         url = reverse('token_obtain_pair')
         res = self.client.post(url, data={'email':'iamukn@yahoo.com', 'password': 'password'}, format='json')
+        mock_thread.assert_called_once()
+        self.assertTrue(mock_thread.call_args[1]['target'].__name__, 'worker')
+
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertTrue('access' in res.data and 'refresh' in res.data)

@@ -27,7 +27,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                     sender = settings.EMAIL_HOST_USER
                     to = [email,]
                     message = "Dear %s \n you just logged into your account on %s."% (name, time.strftime('%d-%m-%Y'))
-                   # send_mail(subject, message, sender, to)
+                   #send_mail(subject, message, sender, to)
                    # test email method below
                     emailer(subject=subject, to=to, contents=message)
                 except Exception as e:
