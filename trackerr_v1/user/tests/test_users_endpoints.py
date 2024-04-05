@@ -21,14 +21,14 @@ class UserTests(APITestCase):
                 )
         self.token = AccessToken.for_user(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION="Bearer %s"%self.token)
-        self.data = {'id': 1, 'name':'Rena','email':'rerse@gmail.com','password':'password', 'phone_number':'099', 'address':'hello','account_type': 'business', 'business_name': 'Meta'}
+        self.data = {'name':'Rena','email':'johndoe@gmail.com','password':'password', 'phone_number':'099', 'address':'hello','account_type': 'business', 'business_name': 'Meta', "service": 'parcel delivery'}
 
     def test_create_a_business_user(self):
         """ 
         Test  to create a business owner
         """
 
-        url = reverse('business-owners')
+        url = reverse('business-owners-signup')
         res = self.client.post(url, data=self.data, format='json')
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)

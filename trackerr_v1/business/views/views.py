@@ -2,7 +2,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.parsers import JSONParser
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAdminUser, IsAuthenticated
+from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from user.serializers import UsersSerializer
 from business.serializers import Business_ownerSerializer
 from .business_owner_permission import IsBusinessOwner
@@ -10,6 +10,30 @@ from business.models import Business_owner
 from user.models import User
 from django.shortcuts import (get_object_or_404, get_list_or_404)
 
+
+
+
+""" View that retrieves all business owners only when it's querried by
+   a staff or an admin user 
+"""
+
+class GetAllBusinessOwners(APIView):
+    """Views that handles the GET method on
+    Business owners
+    """
+
+    permission_classes = [IsAdminUser,]
+    parser_classes = [JSONParser,]
+
+    def get(self, request, *args, **kwargs):
+
+        # This will return all Business owners information
+        # That exist in the database
+        # Fetch business owners model from the database
+        # Serializer it and return a json response
+        business_owner = get_list_or_404(Business_owner)
+        business_owner_serializer = Business_ownerSerializer(business_owner, many=True)
+        return Response(business_owner_serializer.data, status=status.HTTP_200_OK)
 
 """ 
   Views to handle http methods on for Business owner
@@ -19,8 +43,7 @@ class Business_ownerRegistration(APIView):
     """Views that handles the GET and POST method on 
     Business owners
     """
-    permission_classes = [IsBusinessOwner,]
-
+    permission_classes = [AllowAny,]
     parser_classes = [JSONParser,]
 
     def query_set(self,instance, id, *args, **kwargs):
@@ -28,32 +51,33 @@ class Business_ownerRegistration(APIView):
         user = get_object_or_404(instance, pk=id)
         return user
 
-    def get(self,request, *args, **kwargs):
-        # This will return all Business owners information
-        # That exist in the database
-        # Fetch business owners model from the database
-        # Serializer it and return a json response
-        business_owner = get_list_or_404(Business_owner)
-        business_owner_serializer = Business_ownerSerializer(business_owner, many=True)
-
-        return Response(business_owner_serializer.data, status=status.HTTP_200_OK)
-
 
     def post(self,request, *args, **kwargs):
         # This will handle registration of business owners
+        
         if not request.data.get('account_type') == 'business':
             return Response(status=status.HTTP_400_BAD_REQUEST)
         try:
+        
             user = UsersSerializer(data=request.data)
-            business_owner = Business_ownerSerializer(data={'business_name': request.data.get('business_name')})
+
+            business_owner = Business_ownerSerializer(data={'business_name': request.data.get('business_name'), 'service': request.data.get('service'),})
             
-            if business_owner.is_valid() and user.is_valid():
+
+            if not business_owner.is_valid() and not user.is_valid():
+                return Response((user.errors, business_owner.errors), status=status.HTTP_400_BAD_REQUEST)
+            
+            elif not business_owner.is_valid():
+                return Response(business_owner.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            elif not user.is_valid():
+                return Response(user.errors, status=status.HTTP_400_BAD_REQUEST)
+            
+            elif business_owner.is_valid() and user.is_valid():
+                
                 user.save()
                 business_owner.save(user=self.query_set(User, user.instance.id))
                 return Response(business_owner.data, status=status.HTTP_201_CREATED)
-
-            else:
-                raise ValueError
 
         except ValueError:
             return Response(business_owner.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -140,6 +164,7 @@ class Business_ownerRoute(Business_ownerRegistration):
 
 
     def delete(self, request,id, *args, **kwargs):
+        permission_classes = [IsBusinessOwner,]
 
         if request.user:
            
