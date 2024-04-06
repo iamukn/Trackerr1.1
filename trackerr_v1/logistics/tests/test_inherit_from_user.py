@@ -15,4 +15,4 @@ class LogisticsRegistrationTest(TestCase):
         logistics_partner = Logistics_partner.objects.create(user=user)
         logistics_partner.save()
 
-        self.assertEqual(type(logistics_partner.user.name), str)
+        self.assertEqual(logistics_partner.user.name, 'Jane Doe')
