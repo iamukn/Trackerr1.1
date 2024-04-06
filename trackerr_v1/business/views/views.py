@@ -164,10 +164,9 @@ class Business_ownerRoute(Business_ownerRegistration):
 
 
     def delete(self, request,id, *args, **kwargs):
-        permission_classes = [IsBusinessOwner,]
 
         if request.user:
-           
+            id=request.user.id
             try:
                 user = User.objects.get(id=id)
 
@@ -178,5 +177,5 @@ class Business_ownerRoute(Business_ownerRegistration):
             except User.DoesNotExist:
                 return Response({"status":"User not found"}, status=status.HTTP_404_NOT_FOUND)    
 
-        return Response({"status":"User not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"status":"Unauthorized"}, status=status.HTTP_404_NOT_FOUND)
 
