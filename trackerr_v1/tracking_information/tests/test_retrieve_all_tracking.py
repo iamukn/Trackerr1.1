@@ -31,7 +31,7 @@ class TestRetrieveAllTracking(APITestCase):
         url1 = reverse('generate-tracking')
         res1 = self.client.post(url1, data=self.data, format='json')
   
-        url = reverse('retrieve-all')
+        url = reverse('trackings')
         res = self.client.get(url, format='json')
         self.assertTrue(res1.status_code == 201)
         self.assertTrue(res.status_code == 200)
