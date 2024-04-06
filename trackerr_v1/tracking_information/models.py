@@ -10,6 +10,7 @@ class Tracking_info(models.Model):
     date_of_purchase = models.DateField(auto_now_add=date.today, null=True, blank=True)
     delivery_date = models.DateField(default=date.today, null=False, blank=False) 
     shipping_address = models.CharField(max_length=255, null=False, blank=False)
+    realtime_location = models.CharField(max_length=255, null=True, blank=True)
     country = models.CharField(max_length=255, null=False, blank=False, default='Nigeria')
     product_name = models.CharField(max_length=255, null=False, blank=False, default='Unknown Product')
     quantity = models.IntegerField(null=False, blank=False, default=1)
