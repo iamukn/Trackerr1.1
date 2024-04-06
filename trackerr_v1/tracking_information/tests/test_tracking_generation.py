@@ -22,7 +22,7 @@ class TestTrackingGenerationEndpoint(APITestCase):
                 password='password',
                 account_type='business'
                 )
-        self.data = {'shipping_address':'Lagos, Ibadan'}
+        self.data = {'product': 'Medicine','shipping_address':'Lagos, Ibadan', 'country': 'Nigeria', 'quantity': 2, 'delivery_date': '2024-12-12'}
         self.token = AccessToken.for_user(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION="Bearer %s"%self.token)
         self.business = Business_owner.objects.create(user=self.user, business_name='Hue Logistics')
@@ -31,7 +31,8 @@ class TestTrackingGenerationEndpoint(APITestCase):
         # test to ensure that business users only creates tracking
         url = reverse('generate-tracking')
         
-        res = self.client.post(url, data=self.data)
+        res = self.client.post(url, data=self.data, format='json')
+        
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertTrue(type(res.data), ReturnDict)
 
