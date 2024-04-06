@@ -20,15 +20,21 @@ class GenerateView(APIView):
     # method that handles the POST request
     def post(self, request, *args, **kwargs):
         try:
+            # retrieves all the data from the requuest, generate a tracking number and return to user
             data = {
                 "shipping_address": request.data.get('shipping_address'),
                 "vendor": request.user.business_owner.business_name,
                 "owner": request.user.id,
-                "parcel_number": self.Track_gen.generate_tracking(vendor=request.user.name)
+                "parcel_number": self.Track_gen.generate_tracking(vendor=request.user.name),
+                "country": request.data.get('country'),
+                "product": request.data.get('product'),
+                "quantity": request.data.get('quantity'),
+                "delivery_date": request.data.get('delivery_date'),
                     }
             ser = Tracking_infoSerializer(data=data)
-        except Exception:
-            raise ValueError("An Error occured while creating the Tracking number")
+        except Exception as e:
+            return Response({"error":e.detail}, status=status.HTTP_400_BAD_REQUEST)
+            #raise ValueError("An Error occured while creating the Tracking number")
 
         if ser.is_valid():
             ser.save()
