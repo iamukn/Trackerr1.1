@@ -37,3 +37,16 @@ class TestRetrieveAllTracking(APITestCase):
         self.assertTrue(res.status_code == 200)
         self.assertTrue(type(res.data) == ReturnList)
         self.assertEqual(res.data[0].get('shipping_address'), 'Lagos, Ibadan')
+
+    def test_retrieve_one(self):
+        # generate a tracking number
+        url1 = reverse('generate-tracking')
+        res1 = self.client.post(url1, data=self.data, format='json')
+        # assugn the generated number to a variable
+        tracking_num = res1.data.get('parcel_number')
+
+        # track the number in the database
+        url = reverse('track-one', kwargs={'num':tracking_num})
+        res = self.client.get(url,format='json')
+        assert res.data.get('parcel_number') == tracking_num
+        assert res.status_code == 200
