@@ -57,3 +57,15 @@ class BusinessTest(APITestCase):
         # carry out test assertions
         self.assertTrue(type(res.data), int)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+    def test_can_fetch_tracking_number_counts(self):
+        # checks to see if the status count endpoint works
+        url = reverse('status-count')
+            
+        res = self.client.get(url)
+        # asserts if the returned data contained the returned_status_count field
+        self.assertTrue( "returned_status_count",  "total_tracking_generated" in res.data)
+        # asserts if the returned data is a dictionary
+        self.assertTrue(type(res.data) is dict)
+        # asserts if the response code is 200_OK
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
