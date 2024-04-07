@@ -3,6 +3,7 @@
 from tracking_information.models import Tracking_info
 from tracking_information.serializer import Tracking_infoSerializer
 from json import dumps
+from typing import Dict
 
 
 """ 
@@ -10,11 +11,13 @@ from json import dumps
   tracking number and counts the status of each tracking number
 """
 
-def tracking_status_count(user:object) -> dict:
+def tracking_status_count(user:Dict) -> Dict:
     """
     Receives a user and checks for tracking number \
     associated with that user, count the status and return
-
+    Args:
+        user: the user object from the request object
+        e.g request.user
     """ 
 
     try:
@@ -41,7 +44,7 @@ def tracking_status_count(user:object) -> dict:
                 }
 
         # serialize and return the count to the calling function
-        return dumps(counts)
+        return counts
     except Exception as e:
         # returns the exceotion details
-        return dumps({"details": e})
+        return {"details": e}

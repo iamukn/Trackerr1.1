@@ -17,3 +17,6 @@ class Tracking_info(models.Model):
     vendor = models.CharField(max_length=255, null=False, blank=False)
     status = models.CharField(max_length=15, null=True, blank=True, default="Pending")
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
+    
+    def __str__(self):
+        return f"{self.parcel_number}, {self.owner}, {self.country}, {self.vendor}, {self.status}"
