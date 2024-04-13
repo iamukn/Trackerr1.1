@@ -21,7 +21,7 @@ class RetrieveParcelLocation(object):
             location = {
                 "carrier_id" : track_num_ser.data.get('carrier_id'),
                 "parcel_number" : track_num_ser.data.get('parcel_number'),
-                "destination" : track_num_ser.data.get('shipping_address'),
+                "destination" : track_num_ser.data.get('shipping_address'), # this location will be gotten from the logistic owners profile which woll constantly be updating
                 "destination_lat" : track_num_ser.data.get('destination_lat'),
                 "destination_lon" : track_num_ser.data.get('destination_lon'),
                 "lon" : track_num_ser.data.get('longitude'),
