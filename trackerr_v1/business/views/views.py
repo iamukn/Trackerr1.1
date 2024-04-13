@@ -23,7 +23,7 @@ class GetAllBusinessOwners(APIView):
     """
 
     permission_classes = [IsAdminUser,]
-    parser_classes = [JSONParser,]
+    
 
     def get(self, request, *args, **kwargs):
 
