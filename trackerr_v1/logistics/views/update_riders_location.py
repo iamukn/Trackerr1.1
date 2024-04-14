@@ -27,7 +27,10 @@ class UpdateLocation(APIView):
         if serializer.is_valid():
             # saves the model with the new data
             serializer.save()
+            # removes the users data from the object
+            data = serializer.data
+            data.pop('user')
             # returns a 206
-            return Response(serializer.data, status=status.HTTP_206_PARTIAL_CONTENT)
+            return Response(data, status=status.HTTP_206_PARTIAL_CONTENT)
         # returns a 400 if the incorrect fields are passed
         return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
