@@ -11,6 +11,8 @@ class Logistics_partner(models.Model):
         Model that relatates the User to Logistics partner
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    lat = models.CharField(max_length=55, null=False, blank=False, default=None)
+    lng = models.CharField(max_length=55, null=False, blank=False, default=None)
 
     def __str__(self):
         """
