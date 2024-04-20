@@ -30,7 +30,6 @@ def verify_address(address:str) -> Dict:
     params = {'q': address, 'apikey':api_key}
     try:
         response = get(url, params=params)
-        print(response.json())
         base = response.json().get('items')[0]
 
         data = {
