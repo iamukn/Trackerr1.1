@@ -8,6 +8,10 @@ from tracking_information.models import Tracking_info
 from tracking_information.utils.validate_shipping_address import verify_address
 from rest_framework.permissions import IsAuthenticated 
 from business.views.business_owner_permission import IsBusinessOwner
+from shared.logger import setUp_logger
+
+# logger
+logger = setUp_logger(__name__, 'tracking_information.logs')
 
 """ Route that handles tracking number generation using POST """
 
@@ -39,6 +43,7 @@ class GenerateView(APIView):
                     }
             ser = Tracking_infoSerializer(data=data)
         except Exception as e:
+            logger.error(e)
             return Response({"error":e}, status=status.HTTP_400_BAD_REQUEST)
             #raise ValueError("An Error occured while creating the Tracking number")
 
@@ -47,5 +52,5 @@ class GenerateView(APIView):
             data = ser.data
             data.pop('owner')
             return Response(data, status=status.HTTP_201_CREATED)
-        
+        logger.error(ser.errors)
         return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)       

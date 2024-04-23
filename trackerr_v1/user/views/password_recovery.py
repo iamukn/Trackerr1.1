@@ -8,6 +8,9 @@ from user.models import User
 from user.generate import password_gen
 from authentication.test_email import emailer
 from threading import Thread
+from shared.logger import setUp_logger
+
+logger = setUp_logger(__name__, 'user.logs')
 
 """ Route that handles password reset for a user
 """
@@ -33,5 +36,6 @@ class Recover_password(APIView):
                 user.set_password(new_password)
                 user.save()
                 return Response(status=status.HTTP_200_OK)
-            except Exception:
+            except Exception as e:
+                logger.error(e)
                 raise ValueError('An error occurred during password reset!')        
