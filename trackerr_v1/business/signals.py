@@ -29,8 +29,11 @@ def send_welcome_email(sender, instance, created, **Kwargs):
         to = [instance.user.email,]
         try:
             # starts the mail thread in the background
-            threading.Thread(target=worker, daemon=True).start()
+            thread = threading.Thread(target=worker, daemon=True)
+            thread.start()
 
-        except Exception:
-        # Write a logging for this incase an exception occurs
-        logger.error('Email not sent from business signals, Please check!!')
+            if not thread.is_alive():
+                logger.error('Email not sent from business signals, Please check!!')
+        except Exception as e:
+            # Write a logging for this incase an exception occurs
+            logger.error(e)
