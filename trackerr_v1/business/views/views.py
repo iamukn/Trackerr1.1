@@ -182,4 +182,3 @@ class Business_ownerRoute(Business_ownerRegistration):
                 return Response({"status":"User not found"}, status=status.HTTP_404_NOT_FOUND)    
 
         return Response({"status":"Unauthorized"}, status=status.HTTP_404_NOT_FOUND)
-
