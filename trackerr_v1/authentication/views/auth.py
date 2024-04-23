@@ -3,12 +3,15 @@
 from django.core.mail import send_mail
 from django.conf import settings
 from user.models import User
+from shared.logger import setUp_logger
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 from authentication.test_email import emailer
 import threading
 import time
+
+logger = setUp_logger(__name__, 'authentication')
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -31,8 +34,9 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                    # test email method below
                     emailer(subject=subject, to=to, contents=message)
                 except Exception as e:
-                    print(e)
-                    #raise ValueError('Unable to send email')
+                    logger.error(f"Unable to send login email {request.data.get('email')}")
+                    logger.info(e)
+                    pass
 
             threading.Thread(target=worker, daemon=True).start()
 

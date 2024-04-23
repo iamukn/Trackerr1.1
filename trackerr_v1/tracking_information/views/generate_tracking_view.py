@@ -48,4 +48,4 @@ class GenerateView(APIView):
             data.pop('owner')
             return Response(data, status=status.HTTP_201_CREATED)
         
-        return Response(status=status.HTTP_400_BAD_REQUEST)       
+        return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)       
