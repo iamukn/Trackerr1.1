@@ -6,7 +6,7 @@ def setUp_logger(module, pathToFile):
     logger = logging.getLogger(module)
     BASEDIR = Path(__file__).resolve().parent
     path = BASEDIR / 'logs' / pathToFile
-    print(path)
+    
     file_handler = logging.FileHandler(path)
     
     # Define a custom date format for the log messages

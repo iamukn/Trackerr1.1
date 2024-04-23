@@ -4,6 +4,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from user.serializers import UsersSerializer
+from shared.logger import setUp_logger
 from business.serializers import Business_ownerSerializer
 from .business_owner_permission import IsBusinessOwner
 from business.models import Business_owner
@@ -12,6 +13,7 @@ from django.shortcuts import (get_object_or_404, get_list_or_404)
 
 
 
+logger = setUp_logger(__name__, 'business.logs')
 
 """ View that retrieves all business owners only when it's querried by
    a staff or an admin user 
@@ -54,8 +56,9 @@ class Business_ownerRegistration(APIView):
 
     def post(self,request, *args, **kwargs):
         # This will handle registration of business owners
-        
+         
         if not request.data.get('account_type') == 'business':
+            logger.error('account_type key not found in the post data')
             return Response(status=status.HTTP_400_BAD_REQUEST)
         try:
         
@@ -79,7 +82,8 @@ class Business_ownerRegistration(APIView):
                 business_owner.save(user=self.query_set(User, user.instance.id))
                 return Response(business_owner.data, status=status.HTTP_201_CREATED)
 
-        except ValueError:
+        except ValueError as e:
+            logger.error(e)
             return Response(business_owner.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
