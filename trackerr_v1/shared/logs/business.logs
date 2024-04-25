@@ -8,3 +8,20 @@ business.views.views : views.py :views : post: 61: :ERROR 40: account_type key n
 business.views.views : views.py :views : post: 61: :ERROR 40: account_type key not found in the post data : 04/23/2024 05:35:31 PM
 business.signals : signals.py :signals : send_welcome_email: 40: :ERROR 40: 'NoneType' object has no attribute 'start' : 04/23/2024 08:27:20 PM
 business.signals : signals.py :signals : send_welcome_email: 37: :ERROR 40: Email not sent from business signals, Please check!! : 04/23/2024 08:32:01 PM
+business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 04/25/2024 07:58:01 PM
+business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 04/25/2024 07:58:01 PM
+business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 04/25/2024 07:58:01 PM
+business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 04/25/2024 07:58:01 PM
+business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 04/25/2024 07:58:15 PM
+business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 04/25/2024 07:58:17 PM
+business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 04/25/2024 09:13:23 PM
+business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 04/25/2024 09:32:51 PM
+business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 04/25/2024 09:34:11 PM
+business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 04/25/2024 09:34:11 PM
+business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 04/25/2024 09:40:21 PM
+business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 04/25/2024 09:42:07 PM
+business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 04/25/2024 09:42:36 PM
+business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 04/25/2024 09:47:49 PM
+business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 04/25/2024 09:47:50 PM
+business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 04/25/2024 09:48:45 PM
+business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 04/25/2024 09:48:46 PM

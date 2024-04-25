@@ -1,2 +1,7 @@
 ============================ TRACKING INFORMATION ERROR LOGS ==================================
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 46: :ERROR 40: address must be string! : 04/25/2024 09:34:11 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 55: :ERROR 40: {'quantity': [ErrorDetail(string='This field may not be null.', code='null')]} : 04/25/2024 09:42:07 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 46: :ERROR 40: address must be string! : 04/25/2024 09:42:36 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 55: :ERROR 40: {'quantity': [ErrorDetail(string='This field may not be null.', code='null')]} : 04/25/2024 09:47:50 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 55: :ERROR 40: {'quantity': [ErrorDetail(string='This field may not be null.', code='null')]} : 04/25/2024 09:48:46 PM

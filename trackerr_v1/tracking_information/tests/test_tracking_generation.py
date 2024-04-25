@@ -46,19 +46,36 @@ class TestTrackingGenerationEndpoint(APITestCase):
         res = self.client.post(url, data=self.data, format='json')
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertTrue(type(res.data), ReturnDict)
-"""
-    def test_raises_a_404_for_missing_required_fields(self):
+
+    @patch('tracking_information.utils.validate_shipping_address.verify_address')
+    @patch('tracking_information.utils.tracking_class.Track_gen')
+    def test_raises_a_404_for_missing_required_fields(self, mock_track_gen, mock_verify_address):
         # test to ensure that a 404 is raised if required fields aren't provided
+        mock_track_gen_instance = MagicMock()
+        mock_verify_address_instance = MagicMock()
+        mock_track_gen_instance.generate_tracking_number.return_value = self.track_num
+        mock_track_gen.return_value = mock_track_gen_instance
+        data = self.data
+        data.pop('quantity')
+        mock_verify_address.return_value = self.return_value
         url = reverse('generate-tracking')
-        res = self.client.post(url)
+        res = self.client.post(url, data=data, format='json')
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
-    def test_raises_a_401_when_generating_tracking_by_a_non_business_owner(self):
+    @patch('tracking_information.utils.validate_shipping_address.verify_address')
+    @patch('tracking_information.utils.tracking_class.Track_gen')
+    def test_raises_a_401_when_generating_tracking_by_a_non_business_owner(self, mock_track_gen, mock_verify_address):
         # method raises a 401 if a non business owner hits the generate tracking number endpoint
-
+        #mocks the Track_gen and verify_address methods that yield dynamic data
+        mock_track_gen_instance = MagicMock()
+        mock_verify_address_instance = MagicMock()
+        mock_track_gen_instance.generate_tracking_number.return_value = self.track_num
+        mock_track_gen.return_value = mock_track_gen_instance
+        mock_verify_address.return_value = self.return_value
+        # makes the api query
         url = reverse('generate-tracking')
+        # modifies the account_type to logistics
         self.user.account_type = 'logistics'
         self.user.save()
-        res = self.client.post(url, data=self.data)
+        res = self.client.post(url, data=self.data, format='json')
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
-"""
