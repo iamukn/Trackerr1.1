@@ -13,8 +13,11 @@ class ActivityChart(object):
     today = datetime.today()
     def _get_query_set(self, user_id: int) -> List: 
         # fetches the data from the database
-        self.query_set = Tracking_info.objects.filter(owner=user_id)
-        return self.query_set
+        try:
+            self.query_set = Tracking_info.objects.filter(owner=user_id)
+            return self.query_set
+        except Exception as e:
+            return e
 
     def last_seven_days(self, user: User) -> Dict:
         """ fetches the count of tracking generated today

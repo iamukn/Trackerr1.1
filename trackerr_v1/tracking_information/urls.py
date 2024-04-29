@@ -7,6 +7,7 @@ from .views import (
         retrieve_one,
         retrieve_status_count,
         track_a_parcel_realtime,
+        get_activity_chart,
         )
 
 """ tracking routes """
@@ -17,4 +18,6 @@ urlpatterns = [
     path('tracking/<str:num>/', retrieve_one.RetrieveOne.as_view(), name='track-one'),
     path('trackings/', retrieve_all_tracking.RetrieveAllView.as_view(), name='trackings'),
     path('trackings/status-count/', retrieve_status_count.RetrieveStatusCount.as_view(), name='status-count'),
+    path('charts/weekly/', get_activity_chart.GetWeeklyActivityChart.as_view(), name='weekly-activity'),
+    path('charts/monthly/', get_activity_chart.GetMonthlyActivityChart.as_view(), name='monthly-activity'),
         ]
