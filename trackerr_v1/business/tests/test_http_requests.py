@@ -69,3 +69,21 @@ class BusinessTest(APITestCase):
         self.assertTrue(type(res.data) is dict)
         # asserts if the response code is 200_OK
         self.assertEqual(res.status_code, status.HTTP_200_OK)
+    
+    def test_can_fetch_weekly_activity_chart(self):
+        # checks to see if the weekly data is retrieved successfully
+        url = reverse('weekly-activity')
+        # make a request to the endpoint
+        response = self.client.get(url, format='json')
+        self.assertTrue('Mon' and 'Tue' and 'Wed' and 'Thur' and 'Fri' in response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue( isinstance(response.data, dict))
+
+    def test_can_fetch_monthly_activity_chart(self):
+        # checks to see if the monthly data is retrieved successfully
+        url = reverse('monthly-activity')
+        # make a request to the endpoint
+        response = self.client.get(url, format='json')
+        self.assertTrue('Week One' and 'Week Two' and 'Week Three' and 'Week Four' in response.data)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue( isinstance(response.data, dict))
