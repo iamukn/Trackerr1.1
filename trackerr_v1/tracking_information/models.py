@@ -9,6 +9,7 @@ from user.models import User
 class Tracking_info(models.Model):
     parcel_number = models.CharField(max_length=15, unique=True, null=False, blank=False)
     date_of_purchase = models.DateField(auto_now_add=date.today, null=True, blank=True)
+    customer_email = models.CharField(max_length=255, null=True, blank=True)
     delivery_date = models.DateField(default=date.today, null=False, blank=False) 
     shipping_address = models.CharField(max_length=255, null=False, blank=False)
     latitude = models.CharField(max_length=255, null=True, blank=True, default=None)
