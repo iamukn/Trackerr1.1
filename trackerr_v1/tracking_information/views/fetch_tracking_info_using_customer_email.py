@@ -12,6 +12,6 @@ class Customer_history(APIView):
     permission_classes = [AllowAny,]
 
     def get(self, request, *args, **kwargs):
-        email = request.data.get('email')
+        email = request.query_params.get('email')
         customer_history = retrieve_history(email)
         return Response(customer_history, status=status.HTTP_200_OK)

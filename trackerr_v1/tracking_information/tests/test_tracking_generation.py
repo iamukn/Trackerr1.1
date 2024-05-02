@@ -23,11 +23,11 @@ class TestTrackingGenerationEndpoint(APITestCase):
                 password='password',
                 account_type='business'
                 )
-        self.data = {'product': 'Medicine','shipping_address':'Authority avenue ikotun lagos', 'country': 'Nigeria', 'quantity': 2, 'delivery_date': '2024-12-12'}
+        self.data = {'product': 'Medicine','shipping_address':'Authority avenue ikotun lagos','customer_email':'JohnDoe@gmail.com', 'country': 'Nigeria', 'quantity': 2, 'delivery_date': '2024-12-12'}
         self.token = AccessToken.for_user(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION="Bearer %s"%self.token)
         self.business = Business_owner.objects.create(user=self.user, business_name='Hue Logistics')
-        self.return_value = {'address': 'Authority Ave, Alimosho, Nigeria', 'city': 'Lagos', 'country': 'Nigeria', 'latitude': 6.54219, 'longitude': 3.22122}
+        self.return_value = {'address': 'Authority Ave, Alimosho, Nigeria', 'customer_email':self.data['customer_email'],'city': 'Lagos', 'country': 'Nigeria', 'latitude': 6.54219, 'longitude': 3.22122}
         self.track_num = 'J123456778OE'
 
     @patch('tracking_information.utils.tracking_class.Track_gen')
@@ -79,3 +79,18 @@ class TestTrackingGenerationEndpoint(APITestCase):
         self.user.save()
         res = self.client.post(url, data=self.data, format='json')
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+
+    @patch('tracking_information.utils.validate_shipping_address.verify_address')
+    @patch('tracking_information.utils.tracking_class.Track_gen')
+    def test_return_tracking_history_for_a_unique_email(self, mock_track_gen, mock_verify_address):
+        mock_track_gen_instance = MagicMock()
+        mock_verify_address_instance = MagicMock()
+        mock_track_gen_instance.generate_tracking_number.return_value = self.track_num
+        mock_track_gen.return_value = mock_track_gen_instance
+        mock_verify_address.return_value = self.return_value
+
+        url = reverse('generate-tracking')
+        res = self.client.post(url, data=self.data, format='json')
+        url2 = reverse('history')
+        res2 = self.client.get(url2, data={'email':self.data['customer_email']})
+        self.assertEqual(res2.status_code, status.HTTP_200_OK)

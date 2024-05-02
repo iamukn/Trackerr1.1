@@ -38,6 +38,7 @@ class GenerateView(APIView):
                 "parcel_number": self.Track_gen.generate_tracking(vendor=request.user.name),
                 "country": address.get('country'),
                 "product_name": request.data.get('product'),
+                "customer_email": request.data.get('customer_email'),
                 "quantity": request.data.get('quantity'),
                 "delivery_date": request.data.get('delivery_date'),
                     }
