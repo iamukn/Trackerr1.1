@@ -330,3 +330,9 @@ business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Emai
 business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 05/02/2024 10:20:37 PM
 business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 05/02/2024 10:20:38 PM
 business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 05/02/2024 10:20:38 PM
+business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 05/07/2024 03:17:52 PM
+business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 05/07/2024 03:17:52 PM
+business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 05/07/2024 03:17:52 PM
+business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 05/07/2024 03:17:52 PM
+business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 05/07/2024 03:17:52 PM
+business.signals : signals.py :signals : send_welcome_email: 36: :ERROR 40: Email not sent from business signals, Please check!! : 05/07/2024 03:17:52 PM

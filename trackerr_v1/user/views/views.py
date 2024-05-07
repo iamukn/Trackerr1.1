@@ -37,6 +37,7 @@ class UsersView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
 
+
 class UserView(UsersView):
     """ Endpoint to handle individual user data update 
         The parser_class helps to handle the image field in the serializer

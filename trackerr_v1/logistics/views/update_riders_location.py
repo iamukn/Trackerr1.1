@@ -15,7 +15,7 @@ class UpdateLocation(APIView):
 
     permission_classes = [IsLogisticsOwner,]
 
-    def post(self, request, *args, **kwargs):
+    def patch(self, request, *args, **kwargs):
         
         data = request.data
         lat = data.get('lat')

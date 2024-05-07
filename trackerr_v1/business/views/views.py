@@ -20,7 +20,7 @@ logger = setUp_logger(__name__, 'business.logs')
 """
 
 class GetAllBusinessOwners(APIView):
-    """Views that handles the GET method on
+    """Views that returns all
     Business owners
     """
 
@@ -181,4 +181,4 @@ class Business_ownerRoute(Business_ownerRegistration):
             except User.DoesNotExist:
                 return Response({"status":"User not found"}, status=status.HTTP_404_NOT_FOUND)    
 
-        return Response({"status":"Unauthorized"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"status":"User not found"}, status=status.HTTP_404_NOT_FOUND)
