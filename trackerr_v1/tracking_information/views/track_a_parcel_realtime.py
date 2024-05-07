@@ -11,11 +11,13 @@ from tracking_information.utils.fetch_parcel_location import RetrieveParcelLocat
 class RealtimeParcelTracking(APIView):
     permission_classes = [AllowAny,]
     
-    def post(self, request, *args, **kwargs):
+    """ receiving tracking informations as query_params """
+    def get(self, request, *args, **kwargs):
         if not request.data:
             return Response({"detail": "A tracking number is required!"}, status=status.HTTP_400_BAD_REQUEST)
-
-        parcel_number = request.data.get('parcel_number')
+        
+        parcel_number = request.query_params.get('parcel_number')
+        
         track = RetrieveParcelLocation().get_parcel_location(parcel_number)
         if 'parcel_number' in track:
             return Response(track, status=status.HTTP_200_OK)
