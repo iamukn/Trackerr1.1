@@ -30,10 +30,10 @@ from rest_framework_simplejwt.views import (
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('api/', include('user.urls')),
-    path('api/', include('business.urls')),
-    path('api/', include('logistics.routes')),
-    path('api/', include('tracking_information.urls')),
-    path('api/token/', TokenObtain.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/v1/', include('user.urls')),
+    path('api/v1/', include('business.urls')),
+    path('api/v1/', include('logistics.routes')),
+    path('api/v1/', include('tracking_information.urls')),
+    path('api/v1/token/', TokenObtain.as_view(), name='token_obtain_pair'),
+    path('api/v1/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

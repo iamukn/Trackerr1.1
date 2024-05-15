@@ -37,12 +37,12 @@ class TestLogisticsEndpoint(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertTrue(type(res.data), int)
 
-    def test_realtime_location(self):
+    def test_update_realtime_location(self):
         url = reverse('realtime-location')
 
         self.user.account_type = 'logistics'
         self.user.save()
         data = {'lat': '4.256', 'lng': '4.2426'}
-        res = self.client.post(url, data=data, format='json')
+        res = self.client.patch(url, data=data, format='json')
         self.assertEqual(res.status_code, 206)
         self.assertTrue(res.data.get('lat') == '4.256')
