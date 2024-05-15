@@ -71,3 +71,24 @@ class TestRetrieveAllTracking(APITestCase):
         res = self.client.get(url, format='json')
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertTrue(res.data['parcel_number'] == tracking_num)
+
+    @patch('tracking_information.utils.tracking_class.Track_gen')
+    @patch('tracking_information.utils.validate_shipping_address.verify_address')
+    def test_retrieve_all_for_a_customer(self, mock_track_gen, mock_verify_address):
+        mock_track_gen_instance = MagicMock()
+        mock_verify_address_instance = MagicMock()
+        mock_track_gen_instance.generate_tracking_number.return_value = self.track_num
+        mock_track_gen.return_value = mock_track_gen_instance
+        mock_verify_address.return_value = self.return_value
+        # generate a tracking number
+        url = reverse('generate-tracking')
+        res = self.client.post(url, data=self.data, format='json')
+        # check if the order was created successfully
+        
+        # Query the endpoint to retrieve all tracking linked to an email
+        params = {'email': self.data.get('customer_email')}
+        url1 = reverse('history')
+        res1 = self.client.get(url1, params)
+        # asserting the status and the content type
+        self.assertTrue(res1.status_code == status.HTTP_200_OK)
+        self.assertTrue(type(res1.data) == ReturnList)
