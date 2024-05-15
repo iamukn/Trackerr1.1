@@ -25,6 +25,7 @@ from rest_framework_simplejwt.views import (
             TokenObtainPairView,
                 TokenRefreshView,
                 )
+from shared.swagger import schema_view
 
 
 
@@ -36,4 +37,5 @@ urlpatterns = [
     path('api/v1/', include('tracking_information.urls')),
     path('api/v1/token/', TokenObtain.as_view(), name='token_obtain_pair'),
     path('api/v1/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/v1/swagger/', schema_view.with_ui('swagger',cache_timeout=0), name='schema-swagger-ui'),
     ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

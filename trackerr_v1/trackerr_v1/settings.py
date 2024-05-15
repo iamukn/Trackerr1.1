@@ -75,6 +75,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "authentication",
     "tracking_information",
+    "drf_yasg",
 ]
 
 MIDDLEWARE = [
@@ -112,6 +113,19 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "trackerr_v1.wsgi.application"
 
+
+
+# Swagger configuration
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'Bearer': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    },
+    'USE_SESSION_AUTH': False,
+}
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
