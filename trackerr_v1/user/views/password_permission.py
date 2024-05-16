@@ -10,7 +10,9 @@ class IsBusinessOrLogisticsOwner(BasePermission):
     message = "Access limited to business and logistics partners only!"
 
     def has_permission(self, request, view):
-        if request.user.account_type == 'business' or request.user.account_type == 'logistics' and request.user.is_authenticated:
+        if not request.user.id:
+            return False
+        elif request.user.account_type == 'business' or request.user.account_type == 'logistics' and request.user.is_authenticated:
             return bool(request.user)
         return False
 
