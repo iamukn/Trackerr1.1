@@ -1,0 +1,8 @@
+version: "3"
+services:
+    postgres:
+        image: postgres
+        environment:
+            POSTGRES_PASSWORD: "${PASSWORD}"
+        volumes:
+            - /root/trackerr_app/Trackerr1.1/pgdata:/var/lib/postgresql/data

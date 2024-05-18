@@ -138,8 +138,8 @@ DATABASES = {
         'NAME': 'mydb',
         'USER': 'eyen',
         'PASSWORD': env('PASSWORD'),
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'HOST': 'postgres',
+        'PORT': 5432,
     }
 }
 

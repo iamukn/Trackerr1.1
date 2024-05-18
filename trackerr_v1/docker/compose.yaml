@@ -1,0 +1,27 @@
+# Compose file for the Tracker_V1 app
+version: "3"
+include:
+    - db.yaml
+services:
+    trackerr:
+        build: ../
+        command: python3 manage.py runserver 0.0.0.0:8000
+        ports: 
+            - "8000:8000"
+        environment:
+            - DEBUG
+            - PASSWORD
+            - ALLOWED_HOST
+            - SECRET_KEY
+            - EMAIL
+            - EMAIL_PASSWORD
+            - apikey
+        depends_on:
+            - postgres
+        volumes:
+            - ../:/app
+        develop:
+            watch:
+                - action: sync
+                  path: ../
+                  target: /app
