@@ -10,5 +10,4 @@ def emailer(to,subject, contents):
     password = settings.EMAIL_HOST_PASSWORD
     yagmail.register(email, password)
     yag = yagmail.SMTP(email)
-    yag.send(subject=subject, to=to, contents=contents)
-    
+    yag.send(subject=subject, to=to, contents=contents)    
