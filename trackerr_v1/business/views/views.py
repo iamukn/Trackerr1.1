@@ -58,7 +58,7 @@ class Business_ownerRegistration(APIView):
         # This will handle registration of business owners
          
         if not request.data.get('account_type') == 'business':
-            logger.error('account_type key not found in the post data')
+            logger.error('account_type is not business owner')
             return Response(status=status.HTTP_400_BAD_REQUEST)
         try:
         
