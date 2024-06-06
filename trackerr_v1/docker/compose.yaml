@@ -16,6 +16,7 @@ services:
             - EMAIL
             - EMAIL_PASSWORD
             - apikey
+            - DB_HOST
         depends_on:
             - postgres
         volumes:
