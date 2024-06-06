@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 from django.shortcuts import get_object_or_404
+from django.db import transaction
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
@@ -33,9 +34,10 @@ class Recover_password(APIView):
             try:
                 Thread(target=emailer, kwargs={"subject":'Password reset','to':email, 'contents':'Your OTP is %s'%new_password}, daemon=True).start()
                 
-                user.set_password(new_password)
-                user.save()
-                return Response(status=status.HTTP_200_OK)
+                with transaction.atomic():
+                    user.set_password(new_password)
+                    user.save()
+                    return Response(status=status.HTTP_200_OK)
             except Exception as e:
                 logger.error(e)
                 raise ValueError('An error occurred during password reset!')        

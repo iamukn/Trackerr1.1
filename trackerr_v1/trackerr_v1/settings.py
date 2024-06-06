@@ -138,7 +138,7 @@ DATABASES = {
         'NAME': 'mydb',
         'USER': 'eyen',
         'PASSWORD': env('PASSWORD'),
-        'HOST': 'localhost',
+        'HOST': env('POSTGRES_HOST'),
         'PORT': 5432,
     }
 }
