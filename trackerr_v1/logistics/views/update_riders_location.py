@@ -2,6 +2,7 @@
 """ Updates Logistic owners location """
 
 from django.shortcuts import get_object_or_404
+from django.db import transaction
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -23,14 +24,15 @@ class UpdateLocation(APIView):
         # get the users model
         user = get_object_or_404(Logistics_partner, user=request.user.id)
         # serializes the data
-        serializer = Logistics_partnerSerializer(user, data=request.data, partial=True)
-        if serializer.is_valid():
-            # saves the model with the new data
-            serializer.save()
-            # removes the users data from the object
-            data = serializer.data
-            data.pop('user')
-            # returns a 206
-            return Response(data, status=status.HTTP_206_PARTIAL_CONTENT)
-        # returns a 400 if the incorrect fields are passed
-        return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+        with transaction.atomic():
+            serializer = Logistics_partnerSerializer(user, data=request.data, partial=True)
+            if serializer.is_valid():
+                # saves the model with the new data
+                serializer.save()
+                # removes the users data from the object
+                data = serializer.data
+                data.pop('user')
+                # returns a 206
+                return Response(data, status=status.HTTP_206_PARTIAL_CONTENT)
+            # returns a 400 if the incorrect fields are passed
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)

@@ -1,4 +1,4 @@
-version: "3"
+version: "3.9"
 services:
     postgres:
         image: postgres
@@ -6,3 +6,7 @@ services:
             POSTGRES_PASSWORD: "${PASSWORD}"
         volumes:
             - /root/trackerr_app/Trackerr1.1/pgdata:/var/lib/postgresql/data
+        networks:
+            - connect
+networks:
+    connect:

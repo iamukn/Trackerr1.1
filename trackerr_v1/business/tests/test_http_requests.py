@@ -24,17 +24,25 @@ class BusinessTest(APITestCase):
         self.token = AccessToken.for_user(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION="Bearer %s"%self.token)
         self.business = Business_owner.objects.create(user=self.user, business_name='haplotype')
+        
 
 
 
     def test_put(self):
         data = {'user':{'name':'Richard','email':'rere@gmail.com', 'password':'password11', 'phone_number':'0901588', 'address':'Abuja','account_type': 'business'}, 'business_name':'dabidab'}
-        
+       
         url = reverse('business-owner-route', kwargs={'id':self.business.id})
         res = self.client.put(url, data=data, format='json')
         
         self.assertEqual(res.data['user'].get('name'), 'Richard')
         self.assertEqual(res.status_code, status.HTTP_206_PARTIAL_CONTENT)
+
+    def test_patch(self):
+        data = {"user": {'name': 'Lovina Davies'},"business_name": "Volta Charger"}
+        url = reverse('business-owner-route', kwargs={'id':self.business.id})
+        res = self.client.patch(url, data=data, format='json')
+        self.assertEqual(res.status_code, status.HTTP_206_PARTIAL_CONTENT)
+        
 
     def test_delete(self):
         

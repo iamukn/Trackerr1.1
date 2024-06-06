@@ -1,5 +1,5 @@
 # Compose file for the Tracker_V1 app
-version: "3"
+version: "3.9"
 include:
     - db.yaml
 services:
@@ -20,8 +20,12 @@ services:
             - postgres
         volumes:
             - ../:/app
+        networks:
+            - connect
         develop:
             watch:
                 - action: sync
                   path: ../
                   target: /app
+networks:
+    connect:

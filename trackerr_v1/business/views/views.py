@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.parsers import JSONParser
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
+from django.db import transaction
 from user.serializers import UsersSerializer
 from shared.logger import setUp_logger
 from business.serializers import Business_ownerSerializer
@@ -61,26 +62,27 @@ class Business_ownerRegistration(APIView):
             logger.error('account_type is not business owner')
             return Response(status=status.HTTP_400_BAD_REQUEST)
         try:
+            with transaction.atomic(): 
         
-            user = UsersSerializer(data=request.data)
+                user = UsersSerializer(data=request.data)
 
-            business_owner = Business_ownerSerializer(data={'business_name': request.data.get('business_name'), 'service': request.data.get('service'),})
+                business_owner = Business_ownerSerializer(data={'business_name': request.data.get('business_name'), 'service': request.data.get('service'),})
             
 
-            if not business_owner.is_valid() and not user.is_valid():
-                return Response((user.errors, business_owner.errors), status=status.HTTP_400_BAD_REQUEST)
+                if not business_owner.is_valid() and not user.is_valid():
+                    return Response((user.errors, business_owner.errors), status=status.HTTP_400_BAD_REQUEST)
             
-            elif not business_owner.is_valid():
-                return Response(business_owner.errors, status=status.HTTP_400_BAD_REQUEST)
+                elif not business_owner.is_valid():
+                    return Response(business_owner.errors, status=status.HTTP_400_BAD_REQUEST)
 
-            elif not user.is_valid():
-                return Response(user.errors, status=status.HTTP_400_BAD_REQUEST)
+                elif not user.is_valid():
+                    return Response(user.errors, status=status.HTTP_400_BAD_REQUEST)
             
-            elif business_owner.is_valid() and user.is_valid():
+                elif business_owner.is_valid() and user.is_valid():
                 
-                user.save()
-                business_owner.save(user=self.query_set(User, user.instance.id))
-                return Response(business_owner.data, status=status.HTTP_201_CREATED)
+                    user.save()
+                    business_owner.save(user=self.query_set(User, user.instance.id))
+                    return Response(business_owner.data, status=status.HTTP_201_CREATED)
 
         except ValueError as e:
             logger.error(e)
@@ -122,19 +124,21 @@ class Business_ownerRoute(Business_ownerRegistration):
             password = user_data.pop('password')
         except Exception:
             return Response('all user profile data is required!', status=status.HTTP_400_BAD_REQUEST)
-        user_serializer = UsersSerializer(user, data=user_data, partial=True)
+        
+        with transaction.atomic():
+            user_serializer = UsersSerializer(user, data=user_data, partial=True)
 
-        business_serializer = Business_ownerSerializer(business, data=request.data, partial=True)
+            business_serializer = Business_ownerSerializer(business, data=request.data, partial=True)
                 
-        if user_serializer.is_valid() and business_serializer.is_valid():
+            if user_serializer.is_valid() and business_serializer.is_valid():
  
-            user_serializer.save()
-            user_serializer.instance.set_password(password)
-            user_serializer.save()
-            business_serializer.save()
+                user_serializer.save()
+                user_serializer.instance.set_password(password)
+                user_serializer.save()
+                business_serializer.save()
 
-            return Response(business_serializer.data, status=status.HTTP_206_PARTIAL_CONTENT)
-        return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                return Response(business_serializer.data, status=status.HTTP_206_PARTIAL_CONTENT)
+            return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 
     def patch(self, request, id, *args, **kwargs):
@@ -150,21 +154,23 @@ class Business_ownerRoute(Business_ownerRegistration):
         if 'user' in request.data:
             user_data = request.data.pop('user')
 
-            user_ser = UsersSerializer(user, data=user_data, partial=True)
-            business_ser = Business_ownerSerializer(business, data=request.data, partial=True)
+            with transaction.atomic():
+                user_ser = UsersSerializer(user, data=user_data, partial=True)
+                business_ser = Business_ownerSerializer(business, data=request.data, partial=True)
         
-            if user_ser.is_valid() and business_ser.is_valid():
-                user_ser.save()
-                business_ser.save()
+                if user_ser.is_valid() and business_ser.is_valid():
+                    user_ser.save()
+                    business_ser.save()
             
+                    return Response(business_ser.data, status=status.HTTP_206_PARTIAL_CONTENT)
+
+        with transaction.atomic():
+            business_ser = Business_ownerSerializer(business, data=request.data, partial=True)
+            if business_ser.is_valid():
+                business_ser.save()
                 return Response(business_ser.data, status=status.HTTP_206_PARTIAL_CONTENT)
 
-        business_ser = Business_ownerSerializer(business, data=request.data, partial=True)
-        if business_ser.is_valid():
-            business_ser.save()
-            return Response(business_ser.data, status=status.HTTP_206_PARTIAL_CONTENT)
-
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
     def delete(self, request,id, *args, **kwargs):
