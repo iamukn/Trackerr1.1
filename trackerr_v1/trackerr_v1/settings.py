@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-import environ
+#import environ
 from datetime import timedelta
 import os
 
@@ -45,7 +45,7 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny'
+        'rest_framework.permissions.IsAuthenticated'
     ],
 
     'DEFAULT_RENDERER_CLASSES': [
@@ -59,8 +59,11 @@ REST_FRAMEWORK = {
 }
 
 SIMPLEJWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=60),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=60),
+    "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+
 }
 
 INSTALLED_APPS = [

@@ -6,3 +6,13 @@ authentication.views.auth : auth.py :auth : worker: 37: :ERROR 40: Unable to sen
 authentication.views.auth : auth.py :auth : worker: 38: :INFO 20: Password should be a unicode string, not bytes. : 05/20/2024 09:01:58 PM
 authentication.views.auth : auth.py :auth : worker: 37: :ERROR 40: Unable to send login email kingsley@voltacharger.com : 05/20/2024 09:02:10 PM
 authentication.views.auth : auth.py :auth : worker: 38: :INFO 20: Password should be a unicode string, not bytes. : 05/20/2024 09:02:10 PM
+authentication.views.auth : auth.py :auth : worker: 37: :ERROR 40: Unable to send login email testuser@gmail.com : 06/08/2024 05:38:27 PM
+authentication.views.auth : auth.py :auth : worker: 38: :INFO 20: Password should be a unicode string, not bytes. : 06/08/2024 05:38:27 PM
+authentication.views.auth : auth.py :auth : worker: 37: :ERROR 40: Unable to send login email testuser@gmail.com : 06/08/2024 05:56:44 PM
+authentication.views.auth : auth.py :auth : worker: 38: :INFO 20: Password should be a unicode string, not bytes. : 06/08/2024 05:56:44 PM
+authentication.views.auth : auth.py :auth : worker: 37: :ERROR 40: Unable to send login email testuser@gmail.com : 06/08/2024 06:03:35 PM
+authentication.views.auth : auth.py :auth : worker: 38: :INFO 20: Password should be a unicode string, not bytes. : 06/08/2024 06:03:35 PM
+authentication.views.auth : auth.py :auth : worker: 37: :ERROR 40: Unable to send login email testuser@gmail.com : 06/08/2024 06:22:39 PM
+authentication.views.auth : auth.py :auth : worker: 38: :INFO 20: Password should be a unicode string, not bytes. : 06/08/2024 06:22:39 PM
+authentication.views.auth : auth.py :auth : worker: 37: :ERROR 40: Unable to send login email testuser@gmail.com : 06/08/2024 06:22:39 PM
+authentication.views.auth : auth.py :auth : worker: 38: :INFO 20: Password should be a unicode string, not bytes. : 06/08/2024 06:22:39 PM

@@ -20,7 +20,7 @@ services:
         depends_on:
             - postgres
         volumes:
-            - ../:/app
+            - ../:/app:ro
         networks:
             - connect
         develop:

@@ -20,6 +20,6 @@ urlpatterns = [
     path('trackings/', retrieve_all_tracking.RetrieveAllView.as_view(), name='trackings'),
     path('trackings/history/', fetch_tracking_info_using_customer_email.Customer_history.as_view(), name='history'),
     path('trackings/status-count/', retrieve_status_count.RetrieveStatusCount.as_view(), name='status-count'),
-    path('charts/weekly/', get_activity_chart.GetWeeklyActivityChart.as_view(), name='weekly-activity'),
-    path('charts/monthly/', get_activity_chart.GetMonthlyActivityChart.as_view(), name='monthly-activity'),
+    path('trackings/charts/weekly/', get_activity_chart.GetWeeklyActivityChart.as_view(), name='weekly-activity'),
+    path('trackings/charts/monthly/', get_activity_chart.GetMonthlyActivityChart.as_view(), name='monthly-activity'),
         ]
