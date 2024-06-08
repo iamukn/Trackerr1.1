@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.permissions import AllowAny
 from user.models import User
-from user.generate import password_gen
+from user.utils.generate import password_gen
 from authentication.test_email import emailer
 from threading import Thread
 from shared.logger import setUp_logger
@@ -35,9 +35,9 @@ class Recover_password(APIView):
                 Thread(target=emailer, kwargs={"subject":'Password reset','to':email, 'contents':'Your OTP is %s'%new_password}, daemon=True).start()
                 
                 with transaction.atomic():
-                    user.set_password(new_password)
+                    user.set_password(str(new_password))
                     user.save()
-                    return Response(status=status.HTTP_200_OK)
+                    return Response("{'detail': 'A one time password has been sent to you email'}",status=status.HTTP_200_OK)
             except Exception as e:
                 logger.error(e)
                 raise ValueError('An error occurred during password reset!')        
