@@ -8,7 +8,11 @@ from business.models import Business_owner
 
 
 class Business_count(APIView):
-    """ Returns an int of the total number of business owners 
+    """ 
+        Returns an integer of the total number of business owners 
+        HTTP Method allowed - GET
+
+
     """
     permission_classes = [IsAdminUser,]
     def get(self, request, *args, **kwargs):

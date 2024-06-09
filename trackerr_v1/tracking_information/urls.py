@@ -14,7 +14,7 @@ from .views import (
 """ tracking routes """
 
 urlpatterns = [
-    path('generate-tracking/', generate_tracking_view.GenerateView.as_view(), name='generate-tracking'),
+    path('trackings/generate-tracking/', generate_tracking_view.GenerateView.as_view(), name='generate-tracking'),
     path('tracking/realtime/', track_a_parcel_realtime.RealtimeParcelTracking.as_view(), name='realtime-tracking'),
     path('tracking/<str:num>/', retrieve_one.RetrieveOne.as_view(), name='track-one'),
     path('trackings/', retrieve_all_tracking.RetrieveAllView.as_view(), name='trackings'),
