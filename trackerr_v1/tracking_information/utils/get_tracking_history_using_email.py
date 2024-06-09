@@ -13,7 +13,9 @@ def retrieve_history(email: str) -> list:
         serializer = Tracking_infoSerializer(tracking_info, many=True)
         datas =serializer.data
         for data in datas:
+            data['date_of_purchase'] = data.get('date_of_purchase').replace('-', '/')
             if data.get('status') == 'Pending':
+                
                 info = {'details': {
                     'status1': f"{data.get('parcel_number')} is {data.get('status').lower()}",
                     'status2': f"Estimated time of arrival~ {data.get('status').lower()}"}}
