@@ -26,7 +26,6 @@ class GenerateView(APIView):
     # method that handles the POST request
     def post(self, request, *args, **kwargs):
         try:
-
             address = verify_address(request.data.get('shipping_address'))
             # retrieves all the data from the requuest, generate a tracking number and return to user
             data = {
