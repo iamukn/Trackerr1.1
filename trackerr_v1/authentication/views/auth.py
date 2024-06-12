@@ -3,18 +3,19 @@
 from django.core.mail import send_mail
 from django.conf import settings
 from user.models import User
+from shared.celery_tasks.auth_tasks.send_email import send_login_email
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
-from shared.logger import setUp_logger
+from authentication.logger_config import logger
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.views import TokenObtainPairView
-from authentication.test_email import emailer
+from authentication.email_setup import worker
 import threading
 import time
 
-logger = setUp_logger(__name__, 'authentication')
+
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
@@ -39,24 +40,9 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         """
         response = super().post(request, *args, **kwargs)
         if response.status_code == 200:
-            def worker():
-                email = request.data.get('email')
-                name = request.user
-                name = User.objects.get(email=email).name
-
-                try:
-                    subject = "Trackerr Notification"
-                    sender = settings.EMAIL_HOST_USER
-                    to = [email,]
-                    message = "Dear %s \n you just logged into your account on %s."% (name, time.strftime('%d-%m-%Y'))
-                   #send_mail(subject, message, sender, to)
-                   # test email method below
-                    emailer(subject=subject, to=to, contents=message)
-                except Exception as e:
-                    logger.error(f"Unable to send login email {request.data.get('email')}")
-                    logger.info(e)
-                    pass
-
-            threading.Thread(target=worker, daemon=True).start()
+            email = request.data.get('email')
+            name = User.objects.get(email=email).name
+            # celery email sender
+            email = send_login_email.apply_async(args=[name, email], retry=False)   
 
             return response

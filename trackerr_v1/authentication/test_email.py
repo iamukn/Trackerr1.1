@@ -11,4 +11,5 @@ def emailer(to,subject, contents):
     password = password if isinstance(password, str) else f'{password}'
     yagmail.register(email, password)
     yag = yagmail.SMTP(email)
-    yag.send(subject=subject, to=to, contents=contents)    
+    yag.send(subject=subject, to=to, contents=contents)
+    return "Email sent by emailer"

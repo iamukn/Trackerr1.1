@@ -28,14 +28,12 @@ class TestTokenObtainPair(APITestCase):
         self.user.save()
 
 
-    @patch('authentication.views.auth.threading.Thread')
-    def test_can_get_login_tokens(self, mock_thread):
+    @patch('authentication.views.auth.send_login_email.apply_async')
+    def test_can_get_login_tokens(self, mock_send_login_email):
 
         # Configure the mock to do nothing when started
         url = reverse('token_obtain_pair')
         res = self.client.post(url, data={'email':'iamukn@yahoo.com', 'password': 'password'}, format='json')
-        mock_thread.assert_called_once()
-        self.assertTrue(mock_thread.call_args[1]['target'].__name__, 'worker')
-
+        mock_send_login_email.assert_called_once_with(args=[self.user.name, self.user.email], retry=False)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertTrue('access' in res.data and 'refresh' in res.data)

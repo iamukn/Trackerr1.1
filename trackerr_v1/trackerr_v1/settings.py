@@ -34,7 +34,7 @@ env = os.environ.get
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = True
 
 ALLOWED_HOSTS = [env('ALLOWED_HOST')]
 
@@ -77,10 +77,10 @@ INSTALLED_APPS = [
     "business",
     "logistics",
     "rest_framework",
-    "corsheaders",
     "authentication",
     "tracking_information",
     "drf_yasg",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
@@ -96,7 +96,16 @@ MIDDLEWARE = [
 ]
 
 
-CORS_ALLOW_ALL_ORIGINS: True
+CORS_ORIGIN_ALLOW_ALL = True
+
+CORS_ALLOW_METHODS = [
+    'GET',
+    'POST',
+    'PUT',
+    'PATCH',
+    'DELETE',
+    'OPTIONS',
+]
 
 ROOT_URLCONF = "trackerr_v1.urls"
 
@@ -185,6 +194,15 @@ STATIC_URL = "static/"
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+# CELERY CONFIG
+CELERY_BROKER_URL = env('CELERY_BROKER_URL')
+CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND')
+CELERY_TIMEZONE = env('CELERY_TIMEZONE')
+CELERY_ENABLE_UTC = env('CELERY_ENABLE_UTC')
+CELERY_ACCEPT_CONTENT = env('CELERY_ACCEPT_CONTENT')
+CELERY_TASK_SERIALIZER = env('CELERY_TASK_SERIALIZER')
+
+# Email configurations
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
