@@ -6,7 +6,6 @@ from rest_framework_simplejwt.tokens import AccessToken
 from unittest.mock import patch, ANY
 from user.models import User
 from user.views.password_recovery import Recover_password
-from authentication.test_email import emailer
 from business.models import Business_owner
 
 """ Test the email messaging endpoint for password recovery """
@@ -29,13 +28,13 @@ class TestPasswordRecoveryEmailandChange(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION="Bearer %s"%self.token)
         self.business = Business_owner.objects.create(user=self.user, business_name='haplotype')
     
-    @patch('user.views.password_recovery.Thread')
+    @patch('user.views.password_recovery.send_recovery_email.delay')
     def test_can_send_recovery_email(self, mock_thread):
         url = reverse('recover-password')
         res = self.client.post(url, data={'email': self.user.email})
         self.assertTrue(res.status_code == 200)
         # mocks the thread in charge of sending recovery emails with a one time token
-        mock_thread.assert_called_once_with(target=emailer, kwargs={'subject': 'Password reset', 'to': self.user.email, 'contents': ANY}, daemon=True)
+        mock_thread.assert_called_once_with(email=self.user.email, new_password=ANY)
 
     def test_change_password(self):
         url = reverse('change-password')

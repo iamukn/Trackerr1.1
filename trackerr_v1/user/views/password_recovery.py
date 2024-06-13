@@ -7,8 +7,7 @@ from rest_framework import status
 from rest_framework.permissions import AllowAny
 from user.models import User
 from user.utils.generate import password_gen
-from authentication.test_email import emailer
-from threading import Thread
+from shared.celery_tasks.user_tasks.send_recovery_email import send_recovery_email
 from shared.logger import setUp_logger
 
 logger = setUp_logger(__name__, 'user.logs')
@@ -32,12 +31,17 @@ class Recover_password(APIView):
         if user:
             new_password = password_gen()
             try:
-                Thread(target=emailer, kwargs={"subject":'Password reset','to':email, 'contents':'Your OTP is %s'%new_password}, daemon=True).start()
-                
+
                 with transaction.atomic():
                     user.set_password(str(new_password))
                     user.save()
+                    # sends recovert email
+                    send_recovery_email.delay(
+                        email=email,
+                        new_password=new_password
+                        )
                     return Response("{'detail': 'A one time password has been sent to you email'}",status=status.HTTP_200_OK)
+
             except Exception as e:
                 logger.error(e)
                 raise ValueError('An error occurred during password reset!')        
