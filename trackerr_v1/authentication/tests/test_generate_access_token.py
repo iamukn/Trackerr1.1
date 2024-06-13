@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-from authentication.test_email import emailer
 from authentication.views.auth import CustomTokenObtainPairView
 from rest_framework import status
 from rest_framework.test import APITestCase
