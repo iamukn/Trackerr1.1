@@ -1,2 +1,4 @@
 ========================USER ERROR LOGS=================================================================================
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+user.views.password_recovery : password_recovery.py :password_recovery : post: 46: :ERROR 40: send_recovery_email() got multiple values for argument 'email' : 06/13/2024 08:08:26 PM
+user.views.password_recovery : password_recovery.py :password_recovery : post: 46: :ERROR 40: send_recovery_email() takes 2 positional arguments but 3 were given : 06/13/2024 08:12:52 PM
