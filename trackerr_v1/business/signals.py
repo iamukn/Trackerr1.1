@@ -3,10 +3,9 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 from business.models import Business_owner
-from django.core.mail import send_mail
+from shared.celery_tasks.utils_tasks.send_reg_email import send_reg_email
 from django.conf import settings
 from shared.logger import setUp_logger
-import threading
 
 logger = setUp_logger(__name__, 'business.logs')
 """ 
@@ -16,24 +15,15 @@ logger = setUp_logger(__name__, 'business.logs')
 @receiver(post_save, sender=Business_owner)
 def send_welcome_email(sender, instance, created, **Kwargs):
 
-
-    def worker():
-        send_mail(subject, message, from_email, to)
-
-
     if created:# only send email for new users
-
-        subject = 'Welcome to Trackerr!!'
-        message = f'Hello {instance.user.name}, your account has been successfully regisitered and you are set to start tracking your parcels in realtime ;)'
-        from_email = settings.EMAIL_HOST_USER 
         to = [instance.user.email,]
+        username=instance.user.name
+        account_type = instance.user.account_type
         try:
-            # starts the mail thread in the background
-            thread = threading.Thread(target=worker, daemon=True)
-            thread.start()
-
-            if not thread.is_alive():
-                logger.error('Email not sent from business signals, Please check!!')
+            # send registration email
+            send_reg_email.apply_async(
+                args=[to, username, account_type]
+                    )
         except Exception as e:
             # Write a logging for this incase an exception occurs
             logger.error(e)

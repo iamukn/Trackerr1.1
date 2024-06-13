@@ -5,7 +5,7 @@ from django.core.mail import send_mail
 
 """ Tasks that sends recovery email """
 
-@shared_task(bind=True)
+@shared_task(bind=True, name='send_recovery_email')
 def send_recovery_email(self,email, new_password):
     data = {
         "subject": "Password reset",

@@ -6,7 +6,7 @@ from django.conf import settings
 
 """ Sends login email to a logged in users """
 
-@shared_task(bind=True)
+@shared_task(bind=True, name='send_login_email')
 def send_login_email(self, name, email):
     #send email
     try:
