@@ -1,14 +1,8 @@
-# Compose file for the Tracker_V1 app
 version: "3.9"
-include:
-    - db.yaml
-    - celery.yml
 services:
-    trackerr:
+    celery:
         build: ../
-        command: python3 manage.py runserver 0.0.0.0:8000
-        ports: 
-            - "8000:8000"
+        command: celery -A trackerr_v1 worker --loglevel info --concurrency=1
         environment:
             - DEBUG
             - PASSWORD
@@ -27,14 +21,8 @@ services:
         depends_on:
             - postgres
             - redis
-        volumes:
-            - ../:/app
+            - trackerr
         networks:
             - connect
-        develop:
-            watch:
-                - action: sync
-                  path: ../
-                  target: /app
 networks:
     connect:

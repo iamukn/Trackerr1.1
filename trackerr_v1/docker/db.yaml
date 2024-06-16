@@ -8,5 +8,9 @@ services:
             - /root/trackerr_app/Trackerr1.1/pgdata:/var/lib/postgresql/data
         networks:
             - connect
+    redis:
+        image: redis
+        networks:
+            - connect
 networks:
     connect:
