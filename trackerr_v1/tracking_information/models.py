@@ -22,9 +22,9 @@ class Tracking_info(models.Model):
     rider_email = models.EmailField(max_length=255,null=True, blank=True, default=None)
     realtime_location = models.CharField(max_length=255, null=True, blank=True)
     country = models.CharField(max_length=255, null=False, blank=False, default='Nigeria')
-    product_name = models.CharField(max_length=255, null=False, blank=False, default='Unknown Product')
+    product_name = models.CharField(max_length=255, null=False, blank=False, default='unknown product')
     quantity = models.IntegerField(null=False, blank=False, default=1)
-    status = models.CharField(max_length=15, null=True, blank=True, default="Pending")
+    status = models.CharField(max_length=15, null=True, blank=True, default="pending")
     vendor = models.CharField(max_length=255, null=False, blank=False)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
     

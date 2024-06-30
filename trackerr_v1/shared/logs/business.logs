@@ -880,3 +880,11 @@ business.views.views : views.py :views : post: 62: :ERROR 40: account_type is no
 business.views.views : views.py :views : post: 62: :ERROR 40: account_type is not business owner : 06/13/2024 10:46:39 PM
 business.views.views : views.py :views : post: 62: :ERROR 40: account_type is not business owner : 06/13/2024 10:48:34 PM
 business.views.views : views.py :views : post: 62: :ERROR 40: account_type is not business owner : 06/13/2024 10:48:49 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: Error -3 connecting to redis:6379. Temporary failure in name resolution. : 06/30/2024 10:53:54 AM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: Error -3 connecting to redis:6379. Temporary failure in name resolution. : 06/30/2024 10:54:15 AM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: Error -3 connecting to redis:6379. Temporary failure in name resolution. : 06/30/2024 10:54:34 AM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: Error -3 connecting to redis:6379. Temporary failure in name resolution. : 06/30/2024 10:54:53 AM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: Error -3 connecting to redis:6379. Temporary failure in name resolution. : 06/30/2024 10:55:12 AM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: Error -3 connecting to redis:6379. Temporary failure in name resolution. : 06/30/2024 10:55:32 AM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: Error -3 connecting to redis:6379. Temporary failure in name resolution. : 06/30/2024 10:55:51 AM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: Error -3 connecting to redis:6379. Temporary failure in name resolution. : 06/30/2024 10:56:10 AM

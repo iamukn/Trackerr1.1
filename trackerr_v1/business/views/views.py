@@ -185,6 +185,6 @@ class Business_ownerRoute(Business_ownerRegistration):
                 return Response({"status": "successfully deleted"}, status=status.HTTP_204_NO_CONTENT)
 
             except User.DoesNotExist:
-                return Response({"status":"User not found"}, status=status.HTTP_404_NOT_FOUND)    
+                return Response({"status":"user not found"}, status=status.HTTP_404_NOT_FOUND)    
 
-        return Response({"status":"User not found"}, status=status.HTTP_404_NOT_FOUND)
+        return Response({"status":"user not found"}, status=status.HTTP_404_NOT_FOUND)
