@@ -888,3 +888,53 @@ business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: Erro
 business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: Error -3 connecting to redis:6379. Temporary failure in name resolution. : 06/30/2024 10:55:32 AM
 business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: Error -3 connecting to redis:6379. Temporary failure in name resolution. : 06/30/2024 10:55:51 AM
 business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: Error -3 connecting to redis:6379. Temporary failure in name resolution. : 06/30/2024 10:56:10 AM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:01:27 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:01:28 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:01:28 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:01:28 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:01:28 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:01:28 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:01:28 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:01:28 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:01:34 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:01:35 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:01:36 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:01:43 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:01:44 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:01:44 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:01:44 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:01:44 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:01:44 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:01:44 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:03:19 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:03:19 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:03:19 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:03:19 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:03:56 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:04:52 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:06:53 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:08:40 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:09:46 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:09:46 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:09:46 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:13:00 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:13:01 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:13:01 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: 'No such transport: ' : 09/25/2024 10:01:56 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: 'No such transport: ' : 09/25/2024 10:01:56 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: 'No such transport: ' : 09/25/2024 10:01:56 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: 'No such transport: ' : 09/25/2024 10:01:56 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: 'No such transport: ' : 09/25/2024 10:01:56 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: 'No such transport: ' : 09/25/2024 10:01:56 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: 'No such transport: ' : 09/25/2024 10:01:56 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: 'No such transport: ' : 09/25/2024 10:01:56 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: 'No such transport: ' : 09/25/2024 10:02:02 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: 'No such transport: ' : 09/25/2024 10:02:03 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: 'No such transport: ' : 09/25/2024 10:02:04 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: 'No such transport: ' : 09/25/2024 10:02:10 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: 'No such transport: ' : 09/25/2024 10:02:11 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: 'No such transport: ' : 09/25/2024 10:02:11 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: 'No such transport: ' : 09/25/2024 10:02:11 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: 'No such transport: ' : 09/25/2024 10:02:11 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: 'No such transport: ' : 09/25/2024 10:02:11 PM
+business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: 'No such transport: ' : 09/25/2024 10:02:11 PM

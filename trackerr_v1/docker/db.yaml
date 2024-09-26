@@ -3,7 +3,7 @@ services:
     postgres:
         image: postgres
         environment:
-            POSTGRES_PASSWORD: "${PASSWORD}"
+            PASSWORD: "${PASSWORD}"
         volumes:
             - /root/trackerr_app/Trackerr1.1/pgdata:/var/lib/postgresql/data
         networks:
@@ -12,5 +12,3 @@ services:
         image: redis
         networks:
             - connect
-networks:
-    connect:

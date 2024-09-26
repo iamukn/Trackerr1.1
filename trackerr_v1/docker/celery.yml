@@ -24,5 +24,3 @@ services:
             - trackerr
         networks:
             - connect
-networks:
-    connect:

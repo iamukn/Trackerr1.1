@@ -18,6 +18,7 @@ services:
             - EMAIL_PASSWORD
             - apikey
             - DB_HOST
+            - POSTGRES_HOST
             - CELERY_BROKER_URL
             - CELERY_RESULT_BACKEND
             - CELERY_TIMEZONE

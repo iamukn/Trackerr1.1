@@ -141,3 +141,32 @@ tracking_information.views.generate_tracking_view : generate_tracking_view.py :g
 tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 55: :ERROR 40: {'quantity': [ErrorDetail(string='This field may not be null.', code='null')]} : 06/13/2024 11:02:27 PM
 tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 58: :ERROR 40: {'quantity': [ErrorDetail(string='This field may not be null.', code='null')]} : 07/01/2024 12:16:12 AM
 tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 58: :ERROR 40: {'quantity': [ErrorDetail(string='This field may not be null.', code='null')]} : 07/01/2024 12:17:30 AM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:01:43 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:01:44 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:01:44 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:01:44 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:01:44 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:01:44 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:03:19 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:03:19 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:03:19 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:03:56 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:04:52 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:06:53 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:08:40 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:09:46 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:09:46 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:09:46 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:13:00 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:13:01 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: No encoder/decoder installed for [json] : 09/25/2024 09:13:01 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 58: :ERROR 40: {'quantity': [ErrorDetail(string='This field may not be null.', code='null')]} : 09/25/2024 09:37:11 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 58: :ERROR 40: {'quantity': [ErrorDetail(string='This field may not be null.', code='null')]} : 09/25/2024 09:37:51 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 58: :ERROR 40: {'quantity': [ErrorDetail(string='This field may not be null.', code='null')]} : 09/25/2024 09:40:00 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: 'No such transport: ' : 09/25/2024 10:02:11 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: 'No such transport: ' : 09/25/2024 10:02:11 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: 'No such transport: ' : 09/25/2024 10:02:11 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: 'No such transport: ' : 09/25/2024 10:02:11 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: 'No such transport: ' : 09/25/2024 10:02:11 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 49: :ERROR 40: 'No such transport: ' : 09/25/2024 10:02:11 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 58: :ERROR 40: {'quantity': [ErrorDetail(string='This field may not be null.', code='null')]} : 09/25/2024 10:10:46 PM
