@@ -14,7 +14,7 @@ def retrieve_history(email: str) -> list:
         datas =serializer.data
         for data in datas:
             data['date_of_purchase'] = data.get('date_of_purchase').replace('-', '/')
-            if data.get('status') == 'Pending':
+            if data.get('status') == 'pending':
                 
                 info = {'details': {
                     'status1': f"{data.get('parcel_number')} is {data.get('status').lower()}",

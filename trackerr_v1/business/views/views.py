@@ -118,8 +118,6 @@ class Business_ownerRoute(Business_ownerRegistration):
 
         business = self.query_set(Business_owner, id)
         user = business.user
-        print(user)
-        print(dir(user))
         
         try:
             user_data = request.data.pop('user')

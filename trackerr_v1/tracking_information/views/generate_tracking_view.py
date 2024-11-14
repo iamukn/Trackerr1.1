@@ -29,6 +29,7 @@ class GenerateView(APIView):
         try:
             #address = verify_address(request.data.get('shipping_address'))
             # retrieve the location data using celery
+    
             address = verify_shipping_address.apply_async(kwargs={'address': request.data.get('shipping_address')}).get()
             # retrieves all the data from the requuest, generate a tracking number and return to user
             data = {
@@ -46,6 +47,7 @@ class GenerateView(APIView):
                     }
             ser = Tracking_infoSerializer(data=data)
         except Exception as e:
+            print(e)
             logger.error(e)
             return Response({"error":e}, status=status.HTTP_400_BAD_REQUEST)
             #raise ValueError("An Error occured while creating the Tracking number")
