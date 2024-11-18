@@ -64,3 +64,7 @@ class Otp(models.Model):
         otp_expired = self.otp_expiration > now()
         check_pword = check_password(otp, self.hashed_otp)
         return check_pword and otp_expired
+
+    def reset_otp(self):
+        self.hashed_otp = None
+        return True

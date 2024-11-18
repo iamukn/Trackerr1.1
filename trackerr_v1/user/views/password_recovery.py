@@ -31,6 +31,7 @@ class Recover_password(APIView):
         if user:
             # generate a new password
             new_password = password_gen()
+            print(new_password)
             # get the user Otp model
             try:
                 user_otp_model = user.otp
