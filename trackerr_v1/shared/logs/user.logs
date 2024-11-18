@@ -2,3 +2,11 @@
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 user.views.password_recovery : password_recovery.py :password_recovery : post: 46: :ERROR 40: send_recovery_email() got multiple values for argument 'email' : 06/13/2024 08:08:26 PM
 user.views.password_recovery : password_recovery.py :password_recovery : post: 46: :ERROR 40: send_recovery_email() takes 2 positional arguments but 3 were given : 06/13/2024 08:12:52 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Ukaegbu1 : 11/18/2024 06:14:49 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 28: :ERROR 40: null value in column "otp" violates not-null constraint
+DETAIL:  Failing row contains (1, null, 5).
+ : 11/18/2024 06:26:57 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Ukaegbu122 : 11/18/2024 06:38:47 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 26: :INFO 20: Otp created and assigned to Ukaegbu2 : 11/18/2024 06:41:40 PM
+user.views.password_recovery : password_recovery.py :password_recovery : post: 51: :ERROR 40: name 'u' is not defined : 11/18/2024 07:22:14 PM
+user.views.password_recovery : password_recovery.py :password_recovery : post: 51: :ERROR 40: Password must be a string or bytes, got int. : 11/18/2024 07:23:34 PM

@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField, CharField
-from .models import (User,)
+from .models import (User, Otp)
 
 """ 
     Serializer for the User model
@@ -37,4 +37,4 @@ class UsersSerializer(ModelSerializer):
             instance.set_password(password)
             instance.save()
         return instance
-'''        
+'''

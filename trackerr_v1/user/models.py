@@ -1,6 +1,9 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.contrib.auth.hashers import make_password, check_password
 from django.utils.translation import gettext_lazy as _
+from django.utils.timezone import now
+from datetime import timedelta
 from .manager import UserManager
 """
 Custom user model to handle registration of both Business user and Logistics Partner
@@ -38,3 +41,26 @@ class User(AbstractBaseUser, PermissionsMixin):
             The created instance name
         """
         return self.name
+
+class Otp(models.Model):
+    # otp model
+    hashed_otp = models.CharField(max_length=128, default=None, null=True, blank=True, unique=False, verbose_name=_('otp'))
+    otp_expiration = models.DateTimeField(null=True, blank=True)
+    owner = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        """ string representation of the
+        otp owners
+        """
+        return "{} otps model".format(self.owner.email)
+
+    def set_otp(self, otp):
+        # set the password
+        self.hashed_otp = make_password(otp)
+        self.otp_expiration = now() + timedelta(minutes=15)
+        
+    def check_otp(self, otp):
+        # check otp
+        otp_expired = self.otp_expiration > now()
+        check_pword = check_password(otp, self.hashed_otp)
+        return check_pword and otp_expired

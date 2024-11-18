@@ -6,5 +6,5 @@ from random import randint
 from string import ascii_uppercase
 def password_gen()-> str:
     digits = randint(102345,998999)
-    new_password = digits
+    new_password = str(digits)
     return new_password
