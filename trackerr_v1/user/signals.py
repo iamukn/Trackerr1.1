@@ -22,7 +22,6 @@ def create_otp_model_for_user(sender, instance, created, **Kwargs):
                 owner=user
                     )
             otp.save()
-            print(otp, otp.owner.name)
             logger.info('Otp created and assigned to {}'.format(otp.owner.name))
         except Exception as e:
             # Write a logging for this incase an exception occurs

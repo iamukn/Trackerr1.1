@@ -4,6 +4,7 @@ from rest_framework.parsers import JSONParser
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from django.db import transaction
+from django.db.utils import IntegrityError
 from user.serializers import UsersSerializer
 from shared.logger import setUp_logger
 from business.serializers import Business_ownerSerializer
@@ -79,10 +80,12 @@ class Business_ownerRegistration(APIView):
                     return Response(user.errors, status=status.HTTP_400_BAD_REQUEST)
             
                 elif business_owner.is_valid() and user.is_valid():
-                
                     user.save()
                     business_owner.save(user=self.query_set(User, user.instance.id))
                     return Response(business_owner.data, status=status.HTTP_201_CREATED)
+
+        except IntegrityError as e:
+            return Response(str(e.args[0].strip('\n')), status=status.HTTP_400_BAD_REQUEST)
 
         except ValueError as e:
             logger.error(e)
@@ -121,19 +124,17 @@ class Business_ownerRoute(Business_ownerRegistration):
         
         try:
             user_data = request.data.pop('user')
-            password = user_data.pop('password')
+            if 'password' in user_data:
+                user_data.pop('password')
         except Exception:
             return Response('all user profile data is required!', status=status.HTTP_400_BAD_REQUEST)
         
         with transaction.atomic():
             user_serializer = UsersSerializer(user, data=user_data, partial=True)
-
             business_serializer = Business_ownerSerializer(business, data=request.data, partial=True)
                 
             if user_serializer.is_valid() and business_serializer.is_valid():
- 
                 user_serializer.save()
-                user_serializer.instance.set_password(password)
                 user_serializer.save()
                 business_serializer.save()
 
@@ -153,6 +154,8 @@ class Business_ownerRoute(Business_ownerRegistration):
         
         if 'user' in request.data:
             user_data = request.data.pop('user')
+            if 'password' in user_data:
+                user_data.pop('password')
 
             with transaction.atomic():
                 user_ser = UsersSerializer(user, data=user_data, partial=True)

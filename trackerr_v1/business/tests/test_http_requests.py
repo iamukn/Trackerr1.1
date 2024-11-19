@@ -34,7 +34,7 @@ class BusinessTest(APITestCase):
         url = reverse('business-owner-route', kwargs={'id':self.business.id})
         res = self.client.put(url, data=data, format='json')
         
-        self.assertEqual(res.data['user'].get('name'), 'Richard')
+        self.assertEqual(res.data['user'].get('name'), 'richard')
         self.assertEqual(res.status_code, status.HTTP_206_PARTIAL_CONTENT)
 
     def test_patch(self):

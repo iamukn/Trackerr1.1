@@ -33,7 +33,7 @@ class UserTests(APITestCase):
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertEqual(type(res.data), ReturnDict)
-        self.assertEqual(res.data.get('user').get('name'), 'Rena')
+        self.assertEqual(res.data.get('user').get('name'), 'rena')
 
     def test_retrieve_users_data(self):
         """

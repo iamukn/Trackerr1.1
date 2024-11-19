@@ -18,7 +18,6 @@ class ChangePassword(Recover_password):
     def post(self, request, *args, **kwargs):
         # Receives a post request from Logged in user for password change
         email = request.user.email
-        print(request.headers)
         user = self.get_queryset(email)
         password1 = request.data.get('password1')
         password2 = request.data.get('password2')

@@ -12,8 +12,14 @@ class Business_ownerSerializer(ModelSerializer):
     """
       Business Owners Serializer
     """
+    user = UsersSerializer(required=False, read_only=True)
 
     class Meta:
         model = Business_owner
         fields = '__all__'
-        depth = 1
+
+    def to_internal_value(self, data):
+        data = super().to_internal_value(data)
+        if 'business_name' in data:
+            data['business_name'] = data['business_name'].lower()
+        return data

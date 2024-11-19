@@ -3,7 +3,7 @@ from django.urls import reverse
 from rest_framework.test import APITestCase
 from rest_framework import status
 from rest_framework_simplejwt.tokens import AccessToken
-from unittest.mock import patch, ANY
+from unittest.mock import patch, ANY, MagicMock
 from user.models import User
 from user.views.password_recovery import Recover_password
 from business.models import Business_owner
@@ -27,7 +27,8 @@ class TestPasswordRecoveryEmailandChange(APITestCase):
         self.token = AccessToken.for_user(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION="Bearer %s"%self.token)
         self.business = Business_owner.objects.create(user=self.user, business_name='haplotype')
-    
+        self.otp = '123546'
+
     @patch('user.views.password_recovery.send_recovery_email.delay')
     def test_can_send_recovery_email(self, mock_thread):
         url = reverse('recover-password')
@@ -41,3 +42,17 @@ class TestPasswordRecoveryEmailandChange(APITestCase):
         data = {'password1': 'password', 'password2': 'password'}
         res = self.client.post(url, data=data, format='json')
         self.assertTrue(res.status_code == 206)
+
+    @patch('user.views.password_recovery.password_gen') 
+    def test_update_password(self, mock_otp):
+        # reset the password
+        url = reverse('recover-password')
+        # mock the password_generation function
+        mock_otp.return_value=self.otp
+        res = self.client.post(url, data={'email': self.user.email})
+
+        # update the password
+        url = reverse('update-password')
+        data = {'password1': 'password', 'password2': 'password', 'email': self.user.email, 'otp': self.otp}
+        res = self.client.post(url, data=data)
+        self.assertEquals(res.status_code, status.HTTP_206_PARTIAL_CONTENT)

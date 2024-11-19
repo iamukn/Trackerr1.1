@@ -8,6 +8,6 @@ from .views import views, business_owners_count
 urlpatterns = [
     path('business-owners/', views.GetAllBusinessOwners.as_view(), name='business-owners'),
     path('business-owners/signup/', views.Business_ownerRegistration.as_view(), name='business-owners-signup'),
-    path('business-owner/<int:id>/', views.Business_ownerRoute.as_view(), name='business-owner-route'),
-    path('business-owner-count/',business_owners_count.Business_count.as_view(), name='business-counts' ),
+    path('business-owners/<int:id>/', views.Business_ownerRoute.as_view(), name='business-owner-route'),
+    path('business-owners-count/',business_owners_count.Business_count.as_view(), name='business-counts' ),
         ]
