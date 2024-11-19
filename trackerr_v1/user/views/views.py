@@ -28,7 +28,7 @@ class UsersView(APIView):
 
     def get(self, request, *args, **kwargs):
 
-        """ Handles the get requests on the users endpoint
+        """ Returns all registered users
         """
             
         users = self.queryset()

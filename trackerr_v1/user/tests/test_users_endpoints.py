@@ -29,7 +29,7 @@ class UserTests(APITestCase):
         """
 
         url = reverse('business-owners-signup')
-        res = self.client.post(url, data=self.data, format='json')
+        res = self.client.post(url, data=self.data, format='multipart')
 
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertEqual(type(res.data), ReturnDict)

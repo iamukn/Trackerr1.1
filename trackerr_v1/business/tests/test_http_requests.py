@@ -29,7 +29,7 @@ class BusinessTest(APITestCase):
 
 
     def test_put(self):
-        data = {'user':{'name':'Richard','email':'rere@gmail.com', 'password':'password11', 'phone_number':'0901588', 'address':'Abuja','account_type': 'business'}, 'business_name':'dabidab'}
+        data = {'name':'richard','email':'rere@gmail.com', 'password':'password11', 'phone_number':'0901588', 'address':'Abuja','account_type': 'business', 'business_name':'dabidab'}
        
         url = reverse('business-owner-route', kwargs={'id':self.business.id})
         res = self.client.put(url, data=data, format='json')
@@ -38,17 +38,17 @@ class BusinessTest(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_206_PARTIAL_CONTENT)
 
     def test_patch(self):
-        data = {"user": {'name': 'Lovina Davies'},"business_name": "Volta Charger"}
+        data = {'name': 'Lovina Davies',"business_name": "Volta Charger"}
         url = reverse('business-owner-route', kwargs={'id':self.business.id})
-        res = self.client.patch(url, data=data, format='json')
+        res = self.client.patch(url, data=data, format='multipart')
         self.assertEqual(res.status_code, status.HTTP_206_PARTIAL_CONTENT)
         
 
     def test_delete(self):
         
-        url = reverse('business-owner-route', kwargs={'id':self.business.user.id})
+        url = reverse('business-owner-route', kwargs={'id':self.business.id})
         res = self.client.delete(url)
-
+        
         self.assertEqual(res.status_code, 204)
         self.assertFalse(User.objects.filter(id=self.user.id).exists())
 

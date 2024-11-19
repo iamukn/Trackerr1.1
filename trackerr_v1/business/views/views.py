@@ -1,6 +1,6 @@
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.parsers import JSONParser
+from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from django.db import transaction
@@ -48,7 +48,7 @@ class Business_ownerRegistration(APIView):
     Business owners
     """
     permission_classes = [AllowAny,]
-    parser_classes = [JSONParser,]
+    parser_classes = [JSONParser, MultiPartParser, FormParser]
 
     def query_set(self,instance, id, *args, **kwargs):
         # Get the user object or return a 404    
@@ -65,9 +65,9 @@ class Business_ownerRegistration(APIView):
         try:
             with transaction.atomic(): 
         
-                user = UsersSerializer(data=request.data)
+                user = UsersSerializer(data=request.data, context={'request': request})
 
-                business_owner = Business_ownerSerializer(data={'business_name': request.data.get('business_name'), 'service': request.data.get('service'),})
+                business_owner = Business_ownerSerializer(data={'business_name': request.data.get('business_name'), 'service': request.data.get('service'),}, context={'request': request})
             
 
                 if not business_owner.is_valid() and not user.is_valid():
@@ -102,39 +102,42 @@ class Business_ownerRoute(Business_ownerRegistration):
     about a single business user
     """
     permission_classes = [IsBusinessOwner,]
+    parser_classes = [JSONParser, MultiPartParser, FormParser]
+    
+    def authorized(self, request, business_id):
+        id = business_id
+        user_id = request.user.business_owner.id
+        return user_id == int(id)
 
     def get(self, request, id, *args, **kwargs):
 
         """ Returns information of a single
             Business owner
         """
-        
+        if not self.authorized(request, id):
+            return Response({'error': 'forbidded'}, status=status.HTTP_403_FORBIDDEN)
         user = self.query_set(Business_owner, id)
-        serializer = Business_ownerSerializer(user)
-
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer = Business_ownerSerializer(user, context={'request': request})
+        if user:
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({'error': 'user not found'}, status=status.HTTP_404_NOT_FOUND)
 
     def put(self, request, id, *args, **kwargs):
         """
             Modifies the existing data of a single business user
         """
-
+        if not self.authorized(request, id):
+            return Response({'error': 'forbidded'}, status=status.HTTP_403_FORBIDDEN)
         business = self.query_set(Business_owner, id)
         user = business.user
-        
-        try:
-            user_data = request.data.pop('user')
-            if 'password' in user_data:
-                user_data.pop('password')
-        except Exception:
-            return Response('all user profile data is required!', status=status.HTTP_400_BAD_REQUEST)
-        
+        data = request.data
+        if 'password' in data:
+            data.pop('password')
         with transaction.atomic():
-            user_serializer = UsersSerializer(user, data=user_data, partial=True)
-            business_serializer = Business_ownerSerializer(business, data=request.data, partial=True)
+            user_serializer = UsersSerializer(user, data=data, partial=True)
+            business_serializer = Business_ownerSerializer(business, data=data, context={'request': request}, partial=True)
                 
             if user_serializer.is_valid() and business_serializer.is_valid():
-                user_serializer.save()
                 user_serializer.save()
                 business_serializer.save()
 
@@ -147,37 +150,30 @@ class Business_ownerRoute(Business_ownerRegistration):
            modifies existing data of a single user using 
            patch request
         """
+        if not self.authorized(request, id):
+            return Response({'error': 'forbidded'}, status=status.HTTP_403_FORBIDDEN)
 
         business = self.query_set(Business_owner, id)
         user = business.user
 
-        
-        if 'user' in request.data:
-            user_data = request.data.pop('user')
-            if 'password' in user_data:
-                user_data.pop('password')
-
-            with transaction.atomic():
-                user_ser = UsersSerializer(user, data=user_data, partial=True)
-                business_ser = Business_ownerSerializer(business, data=request.data, partial=True)
-        
-                if user_ser.is_valid() and business_ser.is_valid():
-                    user_ser.save()
-                    business_ser.save()
-            
-                    return Response(business_ser.data, status=status.HTTP_206_PARTIAL_CONTENT)
+        data = request.data
+        if 'password' in data:
+            data.pop('password')
 
         with transaction.atomic():
-            business_ser = Business_ownerSerializer(business, data=request.data, partial=True)
-            if business_ser.is_valid():
+            user_ser = UsersSerializer(user, data=data, partial=True)
+            business_ser = Business_ownerSerializer(business, data=data, context={'request': request}, partial=True)
+        
+            if user_ser.is_valid() and business_ser.is_valid():
+                user_ser.save()
                 business_ser.save()
                 return Response(business_ser.data, status=status.HTTP_206_PARTIAL_CONTENT)
-
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
     def delete(self, request,id, *args, **kwargs):
-
+        if not self.authorized(request, id):
+            return Response({'error': 'forbidded'}, status=status.HTTP_403_FORBIDDEN)
         if request.user:
             id=request.user.id
             try:

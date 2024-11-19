@@ -20,10 +20,16 @@ class UserManager(BaseUserManager):
 
         if not name or not phone_number:
             raise ValueError(_('name or phone number is missing!'))
-
+        
+        groups_fields = extra_fields.pop('groups', None)
+        permissions_field = extra_fields.pop('user_permissions', None)
         user = self.model(email=email, name=name, phone_number=phone_number, address=address, account_type=account_type, **extra_fields)
+
         user.set_password(password)
         user.save(using=self._db)
+        if groups_fields and permissions_field:
+            user.groups.set(groups_fields)
+            user.user_permissions.set(permissions_field)
         return user
 
     def create_superuser(self, email, name, phone_number, address, account_type, password, **extra_fields):

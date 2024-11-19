@@ -18,4 +18,7 @@ urlpatterns = [
     path('api/v1/auth/token/', TokenObtain.as_view(), name='token_obtain_pair'),
     path('api/v1/auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/v1/swagger/', schema_view.with_ui('swagger',cache_timeout=0), name='schema-swagger-ui'),
-    ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

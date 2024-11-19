@@ -941,3 +941,5 @@ business.signals : signals.py :signals : send_welcome_email: 29: :ERROR 40: 'No 
 business.views.views : views.py :views : post: 63: :ERROR 40: account_type is not business owner : 11/19/2024 12:21:49 AM
 business.views.views : views.py :views : post: 63: :ERROR 40: account_type is not business owner : 11/19/2024 12:22:15 AM
 business.views.views : views.py :views : post: 63: :ERROR 40: account_type is not business owner : 11/19/2024 12:24:00 AM
+business.views.views : views.py :views : post: 91: :ERROR 40: The 'avatar' attribute has no file associated with it. : 11/19/2024 08:40:20 PM
+business.views.views : views.py :views : post: 91: :ERROR 40: The 'avatar' attribute has no file associated with it. : 11/19/2024 08:52:08 PM

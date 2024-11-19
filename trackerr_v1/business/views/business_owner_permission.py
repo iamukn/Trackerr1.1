@@ -11,14 +11,15 @@ class IsBusinessOwner(permissions.BasePermission):
     """
     Grants access to only business owners
     """
-    message = "Restricted to only business owners"
+    message = "business owners only!!"
 
     def has_permission(self, request, view):
-
+        
         if not request.user.id:
             return False
         
-        elif request.user.account_type == 'business' and request.user.is_authenticated:
+        elif request.user.account_type == 'business' and \
+                request.user.is_authenticated: \
             return True
         return False
     
