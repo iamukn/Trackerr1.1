@@ -6,3 +6,4 @@
 .gitignore
 pgdata/
 *.pyc
+media/
