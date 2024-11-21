@@ -17,5 +17,5 @@ def send_recovery_email(self,email, new_password):
     try:
         send_mail(**data)
         return "Password recovery email has been sent"
-    except Exception:
+    except Exception as e:
         return "Error sending recovery email"

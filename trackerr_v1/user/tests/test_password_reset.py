@@ -13,8 +13,11 @@ from business.models import Business_owner
 
 class TestPasswordRecoveryEmailandChange(APITestCase):
     """  password reset test """
+    @patch('business.signals.send_reg_email')
+    def setUp(self, mock_reg_email):
+        # mock registration email 
+        mock_reg_email.return_value.apply_async= None
 
-    def setUp(self):
         self.user = User.objects.create(
             name = 'Jane Doe',
             email = 'officialtrackerr@gmail.com',
@@ -28,7 +31,7 @@ class TestPasswordRecoveryEmailandChange(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION="Bearer %s"%self.token)
         self.business = Business_owner.objects.create(user=self.user, business_name='haplotype')
         self.otp = '123546'
-
+    
     @patch('user.views.password_recovery.send_recovery_email.delay')
     def test_can_send_recovery_email(self, mock_thread):
         url = reverse('recover-password')
@@ -42,17 +45,19 @@ class TestPasswordRecoveryEmailandChange(APITestCase):
         data = {'password1': 'password', 'password2': 'password'}
         res = self.client.post(url, data=data, format='json')
         self.assertTrue(res.status_code == 206)
-
+ 
+    @patch('user.views.change_password.send_update_email.delay')
     @patch('user.views.password_recovery.password_gen') 
-    def test_update_password(self, mock_otp):
+    def test_update_password(self, mock_otp, mock_reg_email):
         # reset the password
         url = reverse('recover-password')
         # mock the password_generation function
         mock_otp.return_value=self.otp
         res = self.client.post(url, data={'email': self.user.email})
+        mock_reg_email.return_value = None
 
         # update the password
         url = reverse('update-password')
         data = {'password1': 'password', 'password2': 'password', 'email': self.user.email, 'otp': self.otp}
         res = self.client.post(url, data=data)
-        self.assertEquals(res.status_code, status.HTTP_206_PARTIAL_CONTENT)
+        self.assertEquals(res.status_code, status.HTTP_200_OK)

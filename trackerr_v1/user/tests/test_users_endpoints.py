@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.test import (APITestCase,APIClient,APIRequestFactory, force_authenticate)
 from user.models import User
+from unittest.mock import patch
 from rest_framework.utils.serializer_helpers import (ReturnList, ReturnDict)
 from rest_framework_simplejwt.tokens import AccessToken
 
@@ -10,7 +11,9 @@ from rest_framework_simplejwt.tokens import AccessToken
 
 class UserTests(APITestCase):
 
-    def setUp(self):
+    @patch('business.signals.send_reg_email')
+    def setUp(self, mock_reg_email):
+        mock_reg_email.return_value.apply_async = None
         self.user = User.objects.create(
             name='Rena',
             email='rere@gmail.com',
@@ -23,7 +26,9 @@ class UserTests(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION="Bearer %s"%self.token)
         self.data = {'name':'Rena','email':'johndoe@gmail.com','password':'password', 'phone_number':'099', 'address':'hello','account_type': 'business', 'business_name': 'Meta', "service": 'parcel delivery'}
 
-    def test_create_a_business_user(self):
+    @patch('business.signals.send_reg_email')
+    def test_create_a_business_user(self, mock_reg_email):
+        mock_reg_email.return_value.apply_async = None
         """ 
         Test  to create a business owner
         """

@@ -4,10 +4,15 @@ from .password_permission import IsBusinessOrLogisticsOwner
 from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from rest_framework import status
+from shared.celery_tasks.auth_tasks.send_email import send_update_email
+from shared.logger import setUp_logger
 from .password_recovery import Recover_password
 from django.shortcuts import get_object_or_404
 from django.db import transaction
 from user.models import User
+
+# logger
+logger = setUp_logger(__name__, 'business.logs')
 
 """ Change Password Feature """
 
@@ -59,6 +64,11 @@ class UpdatePassword(Recover_password):
                     # reset the otp
                     user_otp.hashed_otp = None
                     user_otp.save()
-                    return Response(status=status.HTTP_206_PARTIAL_CONTENT)
+                    #send update email
+                    try:
+                        send_update_email.delay(email=user.email, name=user.name)
+                    except Exception as e:
+                        logger.error(f"Failed to enqueue email task: {str(e)}")
+                    return Response({"message":"password updated successfully"}, status=status.HTTP_200_OK)
             return Response({"error": "incorrect or expired otp"}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"error": f"{email} not found"}, status=status.HTTP_404_NOT_FOUND)

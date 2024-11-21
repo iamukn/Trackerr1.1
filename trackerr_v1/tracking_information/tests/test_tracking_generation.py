@@ -12,8 +12,10 @@ from user.models import User
 
 class TestTrackingGenerationEndpoint(APITestCase):
     """ Test class for the tracking generation Endpoint """
-    
-    def setUp(self):
+    @patch('business.signals.send_reg_email') 
+    def setUp(self, mock_reg_email):
+        # mock registration email
+        mock_reg_email.return_value.apply_async = None
         
         self.user = User.objects.create(
                 name='Jane Doe',

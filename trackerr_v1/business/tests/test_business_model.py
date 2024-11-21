@@ -1,5 +1,6 @@
 from django.test import TestCase
 from business.models import Business_owner
+from unittest.mock import patch
 from user.models import User
 
 
@@ -8,8 +9,10 @@ from user.models import User
 """
 
 class Business_owner_registration_test(TestCase):
-
-    def test_can_inherit_business_owner_model(self):
+    # mock the send_email_method
+    @patch('business.signals.send_reg_email')
+    def test_can_inherit_business_owner_model(self, mock_reg_email):
+        mock_reg_email.return_value.apply_async = None
         user = User.objects.create(name="Jane Doe", email='janedoe@gmail.com', phone_number='+2347037******', address='Lagos', account_type='Business', password='hello world')
         user.save()
         business_owner = Business_owner.objects.create(user=user, service='Parcel Delivery', business_name='Ukn logistics')

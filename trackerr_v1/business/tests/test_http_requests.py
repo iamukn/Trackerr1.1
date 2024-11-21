@@ -4,15 +4,17 @@ from user.models import User
 from business.models import Business_owner
 from business.serializers import Business_ownerSerializer
 from user.serializers import UsersSerializer
+from unittest.mock import patch
 from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import AccessToken
 
 """ testing the HTTP methods [PUT, PATCH, DELETE] requests on the business app """
 
 class BusinessTest(APITestCase):
-
-    def setUp(self):
-
+    
+    @patch('business.signals.send_reg_email')
+    def setUp(self, mock_reg_email):
+        mock_reg_email.return_value.apply_async = None
         self.user = User.objects.create(
             name='Rena',
             email='rere@gmail.com',
@@ -25,8 +27,6 @@ class BusinessTest(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION="Bearer %s"%self.token)
         self.business = Business_owner.objects.create(user=self.user, business_name='haplotype')
         
-
-
 
     def test_put(self):
         data = {'name':'richard','email':'rere@gmail.com', 'password':'password11', 'phone_number':'0901588', 'address':'Abuja','account_type': 'business', 'business_name':'dabidab'}
