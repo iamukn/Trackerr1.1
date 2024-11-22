@@ -77,6 +77,7 @@ INSTALLED_APPS = [
     "authentication",
     "tracking_information",
     "drf_yasg",
+    "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
 ]
 
