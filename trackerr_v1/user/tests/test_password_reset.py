@@ -13,10 +13,12 @@ from business.models import Business_owner
 
 class TestPasswordRecoveryEmailandChange(APITestCase):
     """  password reset test """
+    @patch('user.views.change_password.send_update_email.delay')
     @patch('business.signals.send_reg_email')
-    def setUp(self, mock_reg_email):
+    def setUp(self, mock_reg_email, mock_update):
         # mock registration email 
         mock_reg_email.return_value.apply_async= None
+        mock_update.return_value = None
 
         self.user = User.objects.create(
             name = 'Jane Doe',

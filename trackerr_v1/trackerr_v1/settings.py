@@ -38,7 +38,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = [env('ALLOWED_HOST')]
 
-
 # Application definition
 
 REST_FRAMEWORK = {
@@ -95,6 +94,10 @@ MIDDLEWARE = [
 
 
 CORS_ORIGIN_ALLOW_ALL = True
+CSRF_TRUSTED_ORIGINS = [
+#    'https://*.ngrok-free.app',
+]
+
 
 CORS_ALLOW_METHODS = [
     'GET',
