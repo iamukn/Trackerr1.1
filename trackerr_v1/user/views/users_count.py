@@ -13,5 +13,5 @@ class Users_count(APIView):
     def get(self, request, *args, **kwargs) -> int:
         # fetches the user and returns its count
 
-        count = User.objects.all().count()
+        count = User.objects.values('email').count()
         return Response(count, status=status.HTTP_200_OK)
