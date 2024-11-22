@@ -10,7 +10,7 @@ from .password_recovery import Recover_password
 from django.shortcuts import get_object_or_404
 from user.utils.shortcuts import get_otp_or_none
 from django.db import transaction
-from user.models import User, Otp
+from user.models import Otp
 
 # logger
 logger = setUp_logger(__name__, 'business.logs')
