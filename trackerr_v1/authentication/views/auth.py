@@ -3,11 +3,12 @@
 from django.core.mail import send_mail
 from django.conf import settings
 from user.models import User
+from user.views.password_permission import IsBusinessOrLogisticsOwner
 from shared.celery_tasks.auth_tasks.send_email import send_login_email
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from authentication.logger_config import logger
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.views import TokenObtainPairView
