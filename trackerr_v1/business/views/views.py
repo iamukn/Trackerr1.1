@@ -13,8 +13,6 @@ from business.models import Business_owner
 from user.models import User
 from django.shortcuts import (get_object_or_404, get_list_or_404)
 
-
-
 logger = setUp_logger(__name__, 'business.logs')
 
 """ View that retrieves all business owners only when it's querried by
@@ -49,12 +47,11 @@ class Business_ownerRegistration(APIView):
     """
     permission_classes = [AllowAny,]
     parser_classes = [JSONParser, MultiPartParser, FormParser]
-
+    
     def query_set(self,instance, id, *args, **kwargs):
         # Get the user object or return a 404    
         user = get_object_or_404(instance, pk=id)
         return user
-
 
     def post(self,request, *args, **kwargs):
         # This will handle registration of business owners
@@ -83,6 +80,7 @@ class Business_ownerRegistration(APIView):
                     user.save()
                     business_owner.save(user=self.query_set(User, user.instance.id))
                     return Response(business_owner.data, status=status.HTTP_201_CREATED)
+                return Response({'message': 'invalid data'}, status=status.HTTP_400_BAD_REQUEST)
 
         except IntegrityError as e:
             return Response(str(e.args[0].strip('\n')), status=status.HTTP_400_BAD_REQUEST)

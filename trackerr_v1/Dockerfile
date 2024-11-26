@@ -1,14 +1,17 @@
-# Choose the base image
+# Use the base image
 FROM python:3.8.10
-# set the working directory
+
+# Set the working directory
 WORKDIR /app
-# copy the requirements file to /app
+# copy requirements
 COPY requirements.txt requirements.txt
-# install the requirements
+
 RUN pip install -r requirements.txt
-# copy files
-COPY . .
-# expose a port
+# Copy the project files
+COPY . /app/
+#exposed port
 EXPOSE 8000
-# start the app
-CMD ["python3", "manage.py", "runserver"]
+
+# Start the app using Gunicorn
+CMD ["python3", "manage.py", "runserver", "0.0.0.0:8000"]
+
