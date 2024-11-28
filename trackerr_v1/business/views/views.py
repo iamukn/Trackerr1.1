@@ -3,8 +3,11 @@ from rest_framework import status
 from rest_framework.parsers import JSONParser, MultiPartParser, FormParser
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
+from django.http import HttpResponseNotAllowed
 from django.db import transaction
 from django.db.utils import IntegrityError
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 from user.serializers import UsersSerializer
 from shared.logger import setUp_logger
 from business.serializers import Business_ownerSerializer
@@ -26,7 +29,94 @@ class GetAllBusinessOwners(APIView):
 
     permission_classes = [IsAdminUser,]
     
+    @swagger_auto_schema(
+        operation_description="Retrieves the information of all business users \nAdmin users only",
+        operation_summary='Retrieve all business owners data',
+        tags=["Business Owner"],
+        responses={
+            "200": openapi.Response(
+                description='Business owners data retrieved successfully',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    items=openapi.Schema(
+                        type=openapi.TYPE_OBJECT,
+                        properties={
+                            'id': openapi.Schema(
+                            type=openapi.TYPE_NUMBER,
+                            description='ID of the user',
+                            ),
+                            'user': openapi.Schema(
+                                type=openapi.TYPE_OBJECT,
+                                properties={
+                                    'name': openapi.Schema(
+                                        type=openapi.TYPE_STRING,
+                                        description="name of the user"
+                                        ),
+                                    'email': openapi.Schema(
+                                        type=openapi.TYPE_STRING,
+                                        description='email address'
+                                        ),
+                                    'phone_number': openapi.Schema(
+                                        type=openapi.TYPE_STRING,
+                                        description='phone number'
+                                        ),
+                                    'is_verified': openapi.Schema(
+                                        type=openapi.TYPE_BOOLEAN,
+                                        description='specifies whether the user is verified'
+                                        ),
+                                    'account_type': openapi.Schema(
+                                        type=openapi.TYPE_STRING,
+                                        description='specifies the account type of the user'
+                                        ),
+                                    'address': openapi.Schema(
+                                        type=openapi.TYPE_STRING,
+                                        description='address of the user'
+                                        ),
+                                    'is_active': openapi.Schema(
+                                        type=openapi.TYPE_BOOLEAN,
+                                        description='specifies if a user is active'
+                                        ),
+                                    'updated_on': openapi.Schema(
+                                        type=openapi.TYPE_STRING,
+                                        description='user data last update datetime if available, else null'
+                                        ),
+                                    'avatar':openapi.Schema(
+                                        type=openapi.TYPE_STRING,
+                                        description='link to the users avatar if available'
+                                        )
+                                    }
+                                ),
+                                'service': openapi.Schema(
+                                    type=openapi.TYPE_STRING,
+                                    description='service offered by user'
+                                    ),
+                                'business_name': openapi.Schema(
+                                    type=openapi.TYPE_STRING,
+                                    description='business name of user'
+                                    )
+                            },
+                example={
+                    'id': 1,
+                    'user': {
+                        'name': 'john doe',
+                        'email': 'johndoe@mail.com',
+                        'phone_number': '080345676578',
+                        'is_verified': True,
+                        'account_type': 'business',
+                        'address': '36 johndoe avenue example crescent, Canada',
+                        'is_active': False,
+                        'updated_on': None,
+                        'avatar': ''
+                        },
+                    'service': 'parcel delivery',
+                    'business_name': 'parcel 101'
+                    },
+                ),    
+            ),
+        ),
 
+        },
+    )
     def get(self, request, *args, **kwargs):
 
         # This will return all Business owners information
@@ -37,12 +127,13 @@ class GetAllBusinessOwners(APIView):
         business_owner_serializer = Business_ownerSerializer(business_owner, many=True)
         return Response(business_owner_serializer.data, status=status.HTTP_200_OK)
 
+
 """ 
   Views to handle http methods on for Business owner
 """
 
 class Business_ownerRegistration(APIView):
-    """Views that handles the GET and POST method on 
+    """Views that handles the POST method on 
     Business owners
     """
     permission_classes = [AllowAny,]
@@ -53,12 +144,155 @@ class Business_ownerRegistration(APIView):
         user = get_object_or_404(instance, pk=id)
         return user
 
+    @swagger_auto_schema(
+        operation_description="Registers a new user. If an avatar is included, the request should be "
+            "in `multipart/form-data`. Otherwise, the request should be in JSON.",
+
+        operation_summary='Create a new business owner',
+        tags=['Business Owner'],
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'name': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='name of the user'
+                    ),
+                'phone_number': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='phone number of the user'
+                    ),
+                'email':openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='email address of the user'
+                    ),
+                'password': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='desired password of the user'
+                    ),
+                'address': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='address of the user'
+                    ),
+                'service': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='service offered by the user'
+                    ),
+                'business_name': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='business name of the user'
+                     ),
+                'avatar': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    format=openapi.FORMAT_BINARY,
+                    description='profile picture of the user'
+                     ),
+                'account_type': openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description='the account type'
+                    )
+                },
+            required = ['name', 'email', 'phone_number', 'address', 'password', 'service', 'business_name', 'account_type'],
+            example = {
+                'name': "john doe",
+                'email': "johndoe@example.com",
+                "phone_number": "0709876567567",
+                "address": "36 testing avenue, America",
+                "password": "helloTh3r3",
+                "service": "parcel delivery",
+                "business_name": "johnny logistics",
+                'account_type': 'business'
+                }
+            ),
+        responses={
+            "201": openapi.Response(
+                description='user registered successfully',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_ARRAY,
+                    items=openapi.Schema(
+                        type=openapi.TYPE_OBJECT,
+                        properties={
+                            'id': openapi.Schema(
+                            type=openapi.TYPE_NUMBER,
+                            description='ID of the user',
+                            ),
+                            'user': openapi.Schema(
+                                type=openapi.TYPE_OBJECT,
+                                properties={
+                                    'name': openapi.Schema(
+                                        type=openapi.TYPE_STRING,
+                                        description="name of the user"
+                                        ),
+                                    'email': openapi.Schema(
+                                        type=openapi.TYPE_STRING,
+                                        description='email address'
+                                        ),
+                                    'phone_number': openapi.Schema(
+                                        type=openapi.TYPE_STRING,
+                                        description='phone number'
+                                        ),
+                                    'is_verified': openapi.Schema(
+                                        type=openapi.TYPE_BOOLEAN,
+                                        description='specifies whether the user is verified'
+                                        ),
+                                    'account_type': openapi.Schema(
+                                        type=openapi.TYPE_STRING,
+                                        description='specifies the account type of the user'
+                                        ),
+                                    'address': openapi.Schema(
+                                        type=openapi.TYPE_STRING,
+                                        description='address of the user'
+                                        ),
+                                    'is_active': openapi.Schema(
+                                        type=openapi.TYPE_BOOLEAN,
+                                        description='specifies if a user is active'
+                                        ),
+                                    'updated_on': openapi.Schema(
+                                        type=openapi.TYPE_STRING,
+                                        description='user data last update datetime if available, else null'
+                                        ),
+                                    'avatar':openapi.Schema(
+                                        type=openapi.TYPE_STRING,
+                                        description='link to the users avatar if available'
+                                        )
+                                    }
+                                ),
+                                'service': openapi.Schema(
+                                    type=openapi.TYPE_STRING,
+                                    description='service offered by user'
+                                    ),
+                                'business_name': openapi.Schema(
+                                    type=openapi.TYPE_STRING,
+                                    description='business name of user'
+                                    )
+                            }
+                        )
+                        )
+                        ),
+            "400": openapi.Response(
+                    description="Error: Bad Request",
+                    schema=openapi.Schema(
+                        type=openapi.TYPE_OBJECT,
+                        properties={
+                            'error': openapi.Schema(
+                                type=openapi.TYPE_STRING,
+                                description='Error message describing why the input is invalid'
+
+                                )
+                            },
+                        example={
+                            'error': 'account type must be business'
+                            }
+                        )
+                    )
+                    }
+                )
+    
     def post(self,request, *args, **kwargs):
         # This will handle registration of business owners
          
         if not request.data.get('account_type') == 'business':
             logger.error('account_type is not business owner')
-            return Response("account type must be business", status=status.HTTP_400_BAD_REQUEST)
+            return Response({"error":"account type must be business"}, status=status.HTTP_400_BAD_REQUEST)
         try:
             with transaction.atomic(): 
         
@@ -80,7 +314,7 @@ class Business_ownerRegistration(APIView):
                     user.save()
                     business_owner.save(user=self.query_set(User, user.instance.id))
                     return Response(business_owner.data, status=status.HTTP_201_CREATED)
-                return Response({'message': 'invalid data'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': 'invalid data'}, status=status.HTTP_400_BAD_REQUEST)
 
         except IntegrityError as e:
             return Response(str(e.args[0].strip('\n')), status=status.HTTP_400_BAD_REQUEST)
@@ -94,11 +328,17 @@ class Business_ownerRegistration(APIView):
   Class to retrieve, modify and delete a business_owner
 """
 
-class Business_ownerRoute(Business_ownerRegistration):
+class Business_ownerRoute(APIView):
     """ 
     Method that returns information 
     about a single business user
     """
+    def query_set(self,instance, id, *args, **kwargs):
+        # Get the user object or return a 404
+        user = get_object_or_404(instance, pk=id)
+        # return user a 404
+        return user
+
     permission_classes = [IsBusinessOwner,]
     parser_classes = [JSONParser, MultiPartParser, FormParser]
     
@@ -106,6 +346,7 @@ class Business_ownerRoute(Business_ownerRegistration):
         id = business_id
         user_id = request.user.business_owner.id
         return user_id == int(id)
+
 
     def get(self, request, id, *args, **kwargs):
 

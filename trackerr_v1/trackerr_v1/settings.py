@@ -34,7 +34,7 @@ env = os.environ.get
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = int(env('DEBUG'))
 
 ALLOWED_HOSTS = []
 ALLOWED_HOST_IP = env('ALLOWED_HOST_IP').split(',')
@@ -48,7 +48,6 @@ TRUSTED_DOMAINS = env('TRUSTED_DOMAINS').split(',')
 if TRUSTED_DOMAINS:
     CSRF_TRUSTED_ORIGINS.extend(TRUSTED_DOMAINS)
 
-print(CSRF_TRUSTED_ORIGINS)
 # Application definition
 
 REST_FRAMEWORK = {
@@ -200,7 +199,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / '/static/'
+STATIC_ROOT = BASE_DIR / '/static'
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / '/media'

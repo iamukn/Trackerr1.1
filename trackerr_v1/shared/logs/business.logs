@@ -951,3 +951,8 @@ business.views.views : views.py :views : post: 60: :ERROR 40: account_type is no
 business.views.views : views.py :views : post: 60: :ERROR 40: account_type is not business owner : 11/23/2024 07:47:31 PM
 business.views.views : views.py :views : post: 60: :ERROR 40: account_type is not business owner : 11/23/2024 07:47:40 PM
 business.views.views : views.py :views : post: 60: :ERROR 40: account_type is not business owner : 11/23/2024 07:48:03 PM
+business.views.views : views.py :views : post: 154: :ERROR 40: account_type is not business owner : 11/28/2024 07:18:59 PM
+business.views.views : views.py :views : post: 205: :ERROR 40: account_type is not business owner : 11/28/2024 08:26:45 PM
+business.views.views : views.py :views : post: 278: :ERROR 40: account_type is not business owner : 11/28/2024 09:01:30 PM
+business.views.views : views.py :views : post: 281: :ERROR 40: account_type is not business owner : 11/28/2024 09:13:47 PM
+business.views.views : views.py :views : post: 294: :ERROR 40: account_type is not business owner : 11/28/2024 09:20:16 PM
