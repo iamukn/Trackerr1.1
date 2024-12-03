@@ -943,3 +943,16 @@ business.views.views : views.py :views : post: 63: :ERROR 40: account_type is no
 business.views.views : views.py :views : post: 63: :ERROR 40: account_type is not business owner : 11/19/2024 12:24:00 AM
 business.views.views : views.py :views : post: 91: :ERROR 40: The 'avatar' attribute has no file associated with it. : 11/19/2024 08:40:20 PM
 business.views.views : views.py :views : post: 91: :ERROR 40: The 'avatar' attribute has no file associated with it. : 11/19/2024 08:52:08 PM
+business.views.views : views.py :views : post: 79: :ERROR 40: account_type is not business owner : 11/22/2024 09:51:57 PM
+business.views.views : views.py :views : post: 79: :ERROR 40: account_type is not business owner : 11/22/2024 09:52:22 PM
+business.views.views : views.py :views : post: 79: :ERROR 40: account_type is not business owner : 11/22/2024 09:52:34 PM
+business.views.views : views.py :views : post: 60: :ERROR 40: account_type is not business owner : 11/23/2024 07:46:28 PM
+business.views.views : views.py :views : post: 60: :ERROR 40: account_type is not business owner : 11/23/2024 07:47:09 PM
+business.views.views : views.py :views : post: 60: :ERROR 40: account_type is not business owner : 11/23/2024 07:47:31 PM
+business.views.views : views.py :views : post: 60: :ERROR 40: account_type is not business owner : 11/23/2024 07:47:40 PM
+business.views.views : views.py :views : post: 60: :ERROR 40: account_type is not business owner : 11/23/2024 07:48:03 PM
+business.views.views : views.py :views : post: 154: :ERROR 40: account_type is not business owner : 11/28/2024 07:18:59 PM
+business.views.views : views.py :views : post: 205: :ERROR 40: account_type is not business owner : 11/28/2024 08:26:45 PM
+business.views.views : views.py :views : post: 278: :ERROR 40: account_type is not business owner : 11/28/2024 09:01:30 PM
+business.views.views : views.py :views : post: 281: :ERROR 40: account_type is not business owner : 11/28/2024 09:13:47 PM
+business.views.views : views.py :views : post: 294: :ERROR 40: account_type is not business owner : 11/28/2024 09:20:16 PM

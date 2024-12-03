@@ -34,9 +34,19 @@ env = os.environ.get
 SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = int(env('DEBUG'))
 
-ALLOWED_HOSTS = [env('ALLOWED_HOST')]
+ALLOWED_HOSTS = []
+ALLOWED_HOST_IP = env('ALLOWED_HOST_IP').split(',')
+
+if ALLOWED_HOST_IP:
+    ALLOWED_HOSTS.extend(ALLOWED_HOST_IP)
+
+CSRF_TRUSTED_ORIGINS = []
+
+TRUSTED_DOMAINS = env('TRUSTED_DOMAINS').split(',')
+if TRUSTED_DOMAINS:
+    CSRF_TRUSTED_ORIGINS.extend(TRUSTED_DOMAINS)
 
 # Application definition
 
@@ -82,12 +92,12 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "django.middleware.csrf.CsrfViewMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -95,9 +105,6 @@ MIDDLEWARE = [
 
 
 CORS_ORIGIN_ALLOW_ALL = True
-CSRF_TRUSTED_ORIGINS = [
-#    'https://*.ngrok-free.app',
-]
 
 
 CORS_ALLOW_METHODS = [
@@ -191,10 +198,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "static/"
+STATIC_URL = "/static/"
+STATIC_ROOT = BASE_DIR / '/static'
+
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = BASE_DIR / '/media'
+
 
 # CELERY CONFIG
 CELERY_BROKER_URL = env('CELERY_BROKER_URL')

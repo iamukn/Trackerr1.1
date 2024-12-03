@@ -6,7 +6,7 @@ include:
 services:
     trackerr:
         build: ../
-        command: python3 manage.py runserver 0.0.0.0:8000
+        command: /bin/bash -c "python3 manage.py collectstatic --noinput && gunicorn trackerr_v1.wsgi:application --workers 3 --bind 0.0.0.0:8000"
         ports: 
             - "8000:8000"
         environment:
@@ -30,12 +30,12 @@ services:
             - redis
         volumes:
             - ../:/app
+            - static_volume:/static
+            - media_volume:/media
         networks:
             - connect
-        develop:
-            watch:
-                - action: sync
-                  path: ../
-                  target: /app
 networks:
     connect:
+volumes:
+    static_volume:
+    media_volume:
