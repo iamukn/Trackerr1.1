@@ -31,7 +31,7 @@ class GenerateView(APIView):
         operation_summary='Endpoint that generates a tracking number',
         operation_description='Generate a tracking number',
         tags=['trackings'],
-        request_body=openapi.Schema(
+        request_data=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
                 'shipping_address': openapi.Schema(
@@ -199,18 +199,18 @@ class GenerateView(APIView):
     def post(self, request, *args, **kwargs):
         try:
             # retrieve the location data using celery
-            address = verify_shipping_address.apply_async(kwargs={'address': request.data.get('shipping_address')}).get()
+            address = verify_shipping_address.apply_async(kwargs={'address': request.data.get('shipping_address').capitalize()}).get()
             # retrieves all the data from the requuest, generate a tracking number and return to user
             data = {
-                "shipping_address": address.get('address'),
+                "shipping_address": address.get('address').capitalize(),
                 "destination_lat": address.get('latitude'),
                 "destination_lng": address.get('longitude'),
                 "vendor": request.user.business_owner.business_name,
                 "owner": request.user.id,
                 "parcel_number": self.Track_gen.generate_tracking(vendor=request.user.name),
-                "country": address.get('country'),
-                "product_name": request.data.get('product'),
-                "customer_email": request.data.get('customer_email'),
+                "country": address.get('country').capitalize(),
+                "product_name": request.data.get('product').lower(),
+                "customer_email": request.data.get('customer_email').lower(),
                 "quantity": request.data.get('quantity'),
                 "delivery_date": request.data.get('delivery_date'),
                     }

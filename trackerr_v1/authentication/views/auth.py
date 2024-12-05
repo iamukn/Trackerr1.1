@@ -13,14 +13,72 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework_simplejwt.views import TokenObtainPairView
 import time
-
+from authentication.serializers import CustomTokenObtainPairSerializer
 
 
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     permission_classes = [AllowAny]
-    # configuring the swagger api docs
-
+    serializer_class = CustomTokenObtainPairSerializer
+    
+    @swagger_auto_schema(
+        operation_summary='Handle user login and send a notification email upon successful login.',
+        operation_description='POST /login',
+        request_body=openapi.Schema(
+            type=openapi.TYPE_OBJECT,
+            properties={
+                'email': openapi.Schema(type=openapi.TYPE_STRING, title='Email', minLength=1),
+                'password': openapi.Schema(type=openapi.TYPE_STRING, title='Password', minLength=1),
+                },
+            example={
+                'email': 'testuser@gmail.com',
+                'password': 'password'
+                },
+            required=['email', 'password']
+            ),
+        responses={
+            '200': openapi.Response(
+                description='Login Successful',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'access': openapi.Schema(
+                            title='access token',
+                            description='generated access token',
+                            type=openapi.TYPE_STRING,
+                            ),
+                        'refresh': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            title='refresh token',
+                            description='generated refresh token'
+                            ),
+                        'id': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            title='id',
+                            description='unique ID of the logged in user'
+                            )
+                        },
+                    example={
+                        "refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTczODQ0MTg1NCwiaWF0IjoxNzMzMjU3ODU0LCJqdGkiOiI2YzVkYTg2OWZkYjI0YjIwOWEwOGYxM2E4ZDhlNGYwMSIsInVzZXJfaWQiOjc3fQ.unYFZ6CvkVFgYjleHrw_7TJFh5cnOgTS8LJWG4dYFZU",
+                        "access": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzMzMjYxNDU0LCJpYXQiOjE3MzMyNTc4NTQsImp0aSI6ImVjZmExYjE1NDg0MTQzZDk4MmI1YWU4OTJjNzM5YzMyIiwidXNlcl9pZCI6Nzd9.UaMQrDAtY4ULXW3AFuF-0ABsZcnfpxFg0dHOvjRvyUY",
+                        "id": 75
+                        }
+                    ),
+                ),
+            '401': openapi.Response(
+                description='Error: Unauthorized',
+                schema=openapi.Schema(
+                    type=openapi.TYPE_OBJECT,
+                    properties={
+                        'detail': openapi.Schema(type=openapi.TYPE_STRING, title='error message', description='No active account with the given credentials'),
+                        },
+                    example={
+                     "detail": "No active account found with the given credentials"
+                    }
+                    )
+                )
+            }
+            )
     def post(self, request, *args, **kwargs):
         """
             Handle user login and send a notification email upon successful login.
