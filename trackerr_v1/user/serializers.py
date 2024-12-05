@@ -38,6 +38,7 @@ class UsersSerializer(ModelSerializer):
     def to_representation(self, instance):
 
         user_instance = {
+            "id": instance.id,
             "name": instance.name,
             "email": instance.email,
             "phone_number": instance.phone_number,
@@ -46,6 +47,7 @@ class UsersSerializer(ModelSerializer):
             "address": instance.address,
             "is_verified": instance.is_verified,
             "is_active": instance.is_active,
+            "created_on": instance.date_joined,
             "updated_on": instance.updated_on
                 }
         
