@@ -1,4 +1,6 @@
 from django.shortcuts import render
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.parsers import MultiPartParser, JSONParser
 from rest_framework.response import Response
 from user.models import User
@@ -25,7 +27,75 @@ class UsersView(APIView):
         """Method that gets the User models datas
         """
         return User.objects.all()
-
+    
+    # Swagger documentation
+    @swagger_auto_schema(
+            operation_description='Retrieves all registered users data',
+            operation_summary='GET all registered users data',
+            tags=['Users'],
+            responses={
+                '200': openapi.Response(
+                    description='Successful',
+                    schema=openapi.Schema(
+                        type=openapi.TYPE_ARRAY,
+                        items=openapi.Schema(
+                            type=openapi.TYPE_OBJECT,
+                            properties={
+                                'id': openapi.Schema(type=openapi.TYPE_INTEGER, description='unique userID of user'),
+                                'name': openapi.Schema(type=openapi.TYPE_STRING, description='name of user'),
+                                'email': openapi.Schema(type=openapi.TYPE_STRING, description='users email'),
+                                'phone_number': openapi.Schema(type=openapi.TYPE_STRING, description='phone number of user'),
+                                'is_verified': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='verification status of user'),
+                                'account_type': openapi.Schema(type=openapi.TYPE_STRING, description='account type'),
+                                'address': openapi.Schema(type=openapi.TYPE_STRING, description='address of user'),
+                                'is_active': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='active status of user'),
+                                'created_on': openapi.Schema(type=openapi.TYPE_STRING, description='when the user was created'),
+                                'updated_on': openapi.Schema(type=openapi.TYPE_STRING, description='users profile update time or null'),
+                                'avatar': openapi.Schema(type=openapi.TYPE_STRING, description='users profile picture link or an empty string'),
+                                },
+                            example = {
+                                'id': 1,
+                                "name": "stone cold",
+                                "email": "user@example.com",
+                                "phone_number": "4567890987678",
+                                "is_verified": True,
+                                "account_type": "business",
+                                "address": "string",
+                                "is_active": True,
+                                "created_on": "2024-11-22T21:53:44.274771Z",
+                                "updated_on": "2024-11-22T21:51:54.113000Z",
+                                "avatar": ""
+                                }
+                            )
+                        )
+                    ),
+                '401': openapi.Response(
+                    description='Error: Unauthorized',
+                    schema=openapi.Schema(
+                        type=openapi.TYPE_OBJECT,
+                        properties={
+                            'detail': openapi.Schema(type=openapi.TYPE_STRING, title='unauthorized', description='Authentication credentials were not provided.')
+                            },
+                        example={
+                            'detail': 'Authentication credentials were not provided.'
+                            }
+                        ),
+                    ),
+                '403': openapi.Response(
+                    description='Error: Forbidden',
+                    schema=openapi.Schema(
+                        type=openapi.TYPE_OBJECT,
+                        properties={
+                            'detail': openapi.Schema(type=openapi.TYPE_STRING, title='forbidden', description='You do not have permission to perform this action.')
+                                },
+                        example={
+                            'detail': 'You do not have permission to perform this action.'
+                                 }
+                        ),
+                    )
+                }
+            )
+    # Retrieve all users
     def get(self, request, *args, **kwargs):
 
         """ Returns all registered users
