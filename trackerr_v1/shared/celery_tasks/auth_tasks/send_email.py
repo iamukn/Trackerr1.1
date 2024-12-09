@@ -15,7 +15,7 @@ def send_login_email(self, name, email):
         to = [email,]
         message = "Dear %s \n you just logged into your account on %s."% (name, datetime.now().strftime('%d-%m-%Y at %H:%M:%S PM'))
         send_mail(subject=subject, message=message, from_email=sender,recipient_list=to, fail_silently=False)
-        return 'Login email sent to {t0[0]}'
+        return f'Login email sent to {to[0]}'
     except Exception as e:
         return 'Failed to send'
     
