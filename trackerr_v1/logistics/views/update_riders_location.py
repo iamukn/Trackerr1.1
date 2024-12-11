@@ -1,6 +1,6 @@
 #!/usr/bin/python3
-""" Updates Logistic owners location """
-
+from drf_yasg import openapi
+from drf_yasg.utils import swagger_auto_schema
 from django.shortcuts import get_object_or_404
 from django.db import transaction
 from rest_framework import status
@@ -10,12 +10,17 @@ from logistics.models import Logistics_partner
 from logistics.serializer import Logistics_partnerSerializer
 from .logistics_owner_permission import IsLogisticsOwner
 
+""" Update Riders Location """
 
 class UpdateLocation(APIView):
     """ Handles updating the logistics owners location """
 
     permission_classes = [IsLogisticsOwner,]
-
+    
+    # Swagger documentation
+    @swagger_auto_schema(
+        tags=['Logistics Partner']
+            )
     def patch(self, request, *args, **kwargs):
         
         data = request.data
