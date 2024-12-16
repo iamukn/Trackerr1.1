@@ -56,6 +56,12 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                             type=openapi.TYPE_STRING,
                             title='id',
                             description='unique ID of the logged in user'
+                            ),
+                        'account_type': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            enum=['admin', 'business', 'rider'],
+                            title='account type',
+                            description='specifies the type of account type which can be either admin, business or rider',
                             )
                         },
                     example={
