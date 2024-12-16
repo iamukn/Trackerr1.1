@@ -4,7 +4,7 @@ from user.models import User
 from business.models import Business_owner
 from business.serializers import Business_ownerSerializer
 from user.serializers import UsersSerializer
-from unittest.mock import patch
+from unittest.mock import patch, MagicMock
 from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import AccessToken
 
@@ -26,10 +26,29 @@ class BusinessTest(APITestCase):
         self.token = AccessToken.for_user(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION="Bearer %s"%self.token)
         self.business = Business_owner.objects.create(user=self.user, business_name='haplotype')
+        self.data = {'name':'richard','email':'rere@gmail.com', 'password':'password11', 'phone_number':'0901588', 'address':'Abuja','account_type': 'business', 'business_name':'dabidab'}
+        self.return_value = {'address': '36b authority avenue', 'city': 'Lagos', 'country': 'Nigeria', 'latitude': 6.54219, 'longitude': 3.22122} 
+
+    @patch('business.signals.send_reg_email.apply_async')
+    @patch('business.views.views.verify_shipping_address.apply_async')
+    def test_create_a_business_onwer(self, mock_apply, mock_email):
+        mock_instance = MagicMock(return_value=self.return_value)
+        mock_apply.return_value.get = mock_instance
         
+        url = reverse('business-owners-signup')
+        data = self.data
+        data['service'] = 'parcel delivery'
+        data['email'] = 'janedoe1212@gmail.com'
+        res = self.client.post(url, data=data, format='json')
+        # mock email
+        mock_email_instance = MagicMock(return_value="Registration email sent")
+        mock_email.return_value = mock_email_instance
+        mock_email.assert_called_once()
+        mock_apply.assert_called_once()
+        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
     def test_put(self):
-        data = {'name':'richard','email':'rere@gmail.com', 'password':'password11', 'phone_number':'0901588', 'address':'Abuja','account_type': 'business', 'business_name':'dabidab'}
+        data = self.data
        
         url = reverse('business-owner-route', kwargs={'id':self.business.id})
         res = self.client.put(url, data=data, format='json')

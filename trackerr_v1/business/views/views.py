@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from django.http import HttpResponseNotAllowed
 from django.db import transaction
+from shared.celery_tasks.tracking_info_tasks.verify_address_task import verify_shipping_address
 from django.db.utils import IntegrityError
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
@@ -292,10 +293,20 @@ class Business_ownerRegistration(APIView):
             return Response({"error":"account type must be business"}, status=status.HTTP_400_BAD_REQUEST)
         try:
             with transaction.atomic(): 
-        
+                
+                # get the lat and lng for the business owner
+                data = request.data
+                address = verify_shipping_address.apply_async(kwargs={'address': data.get('address').capitalize()}).get()
+                
                 user = UsersSerializer(data=request.data, context={'request': request})
-
-                business_owner = Business_ownerSerializer(data={'business_name': request.data.get('business_name'), 'service': request.data.get('service'),}, context={'request': request})
+                
+                business_data = {
+                    'business_name': request.data.get('business_name'),
+                    'service': request.data.get('service'),
+                    'latitude': address.get('latitude'),
+                    'longitude': address.get('longitude')
+                        }
+                business_owner = Business_ownerSerializer(data=business_data, context={'request': request})
             
 
                 if not business_owner.is_valid() and not user.is_valid():
