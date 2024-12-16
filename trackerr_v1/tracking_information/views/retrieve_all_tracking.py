@@ -19,7 +19,7 @@ class RetrieveAllView(APIView):
         self.all_tracking = Tracking_info.objects.all()
 
     class CustomPaginator(PageNumberPagination):
-        page_size = 3  # Number of items per page
+        page_size = 10  # Number of items per page
         page_size_query_param = 'page_size'  # Allow client to set page size
         max_page_size = 100  # Maximum allowed page size
     

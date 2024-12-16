@@ -115,10 +115,8 @@ class UsersView(APIView):
 
         serializer = UsersSerializer(paginated_queryset, many=True)
                 # Return paginated response
-        return paginator.get_paginated_response(serializer.data)
+        return paginator.get_paginated_response(serializer.data)        
     
-
-
 class UserView(UsersView):
     """ Endpoint to handle individual user data update 
         The parser_class helps to handle the image field in the serializer
