@@ -49,8 +49,8 @@ class TestRetrieveAllTracking(APITestCase):
         res = self.client.get(url, format='json')
         self.assertTrue(res1.status_code == 201)
         self.assertTrue(res.status_code == 200)
-        self.assertTrue(type(res.data) == ReturnList)
-        self.assertEqual(res.data[0].get('shipping_address'), 'Authority Ave, Alimosho, Nigeria'.capitalize())
+        self.assertTrue('next' in res.data)
+        self.assertEqual(res.data['results'][0].get('shipping_address'), 'Authority Ave, Alimosho, Nigeria'.capitalize())
 
     @patch('tracking_information.views.generate_tracking_view.Track_gen')
     @patch('tracking_information.views.generate_tracking_view.verify_shipping_address.apply_async')

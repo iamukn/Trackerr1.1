@@ -9,6 +9,7 @@ from user.serializers import UsersSerializer
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.renderers import JSONRenderer
 from business.serializers import Business_ownerSerializer
 
@@ -23,6 +24,11 @@ class UsersView(APIView):
     '''
     permission_classes = [IsAdminUser,]
     parser_classes = (JSONParser,)
+
+    class CustomPaginator(PageNumberPagination):
+        page_size = 10  # Number of items per page
+        page_size_query_param = 'page_size'  # Allow client to set page size
+        max_page_size = 100  # Maximum allowed page size
 
     def queryset(self):
         """Method that gets the User models datas
@@ -102,10 +108,14 @@ class UsersView(APIView):
         """ Returns all registered users
         """
             
-        users = self.queryset()
-        serializer = UsersSerializer(users, many=True)
+        users = self.queryset().order_by('-date_joined')
+                # Apply pagination
+        paginator = self.CustomPaginator()
+        paginated_queryset = paginator.paginate_queryset(users, request)
 
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        serializer = UsersSerializer(paginated_queryset, many=True)
+                # Return paginated response
+        return paginator.get_paginated_response(serializer.data)
     
 
 

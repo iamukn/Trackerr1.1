@@ -37,7 +37,7 @@ class UserTests(APITestCase):
         res = self.client.get(url, format='json')
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(type(res.data), ReturnList)
+        self.assertEqual(type(res.data), dict)
 
     def test_retrieve_a_user_data(self):
         """
