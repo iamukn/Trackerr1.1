@@ -31,7 +31,7 @@ class GenerateView(APIView):
         operation_summary='Endpoint that generates a tracking number',
         operation_description='Generate a tracking number',
         tags=['trackings'],
-        request_data=openapi.Schema(
+        request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
                 'shipping_address': openapi.Schema(
