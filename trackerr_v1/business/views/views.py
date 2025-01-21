@@ -291,6 +291,9 @@ class Business_ownerRegistration(APIView):
         if not request.data.get('account_type') == 'business':
             logger.error('account_type is not business owner')
             return Response({"error":"account type must be business"}, status=status.HTTP_400_BAD_REQUEST)
+        if 'address' not in request.data:
+            return Response({'error': 'address is required'}, status=status.HTTP_400_BAD_REQUEST)
+            #
         try:
             with transaction.atomic(): 
                 
