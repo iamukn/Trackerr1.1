@@ -22,6 +22,7 @@ class Business_count(APIView):
     @swagger_auto_schema(operation_description="GET the total of all business owners. \n Open to only admin users only", 
             operation_summary="Retrieves count of all business owners",
             tags=['Business Owners'],
+            schemes=['https', 'http'],
             responses={
                 200: openapi.Response(
                      description="Successful",

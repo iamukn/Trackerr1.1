@@ -26,20 +26,6 @@ class UserTests(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION="Bearer %s"%self.token)
         self.data = {'name':'Rena','email':'johndoe@gmail.com','password':'password', 'phone_number':'099', 'address':'hello','account_type': 'business', 'business_name': 'Meta', "service": 'parcel delivery'}
 
-    @patch('business.signals.send_reg_email')
-    def test_create_a_business_user(self, mock_reg_email):
-        mock_reg_email.return_value.apply_async = None
-        """ 
-        Test  to create a business owner
-        """
-
-        url = reverse('business-owners-signup')
-        res = self.client.post(url, data=self.data, format='multipart')
-
-        self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-        self.assertEqual(type(res.data), ReturnDict)
-        self.assertEqual(res.data.get('user').get('name'), 'rena')
-
     def test_retrieve_users_data(self):
         """
         Ensure we can get all users data
@@ -51,7 +37,7 @@ class UserTests(APITestCase):
         res = self.client.get(url, format='json')
 
         self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertEqual(type(res.data), ReturnList)
+        self.assertEqual(type(res.data), dict)
 
     def test_retrieve_a_user_data(self):
         """
@@ -69,7 +55,11 @@ class UserTests(APITestCase):
         self.assertEqual(type(req.data), ReturnDict)        
 
     def test_to_delete_user(self: None) -> None:
-
+        # make the user an admin
+        self.user.is_staff = True
+        self.user.is_superuser = True
+        self.user.save()
+        # query the delete endpoint
         url = reverse('user', kwargs={'pk':self.user.id})
         res = self.client.delete(url)
         

@@ -8,7 +8,6 @@ from tracking_information.utils.tracking_class import Track_gen
 from tracking_information.serializer import Tracking_infoSerializer
 from tracking_information.models import Tracking_info
 from shared.celery_tasks.tracking_info_tasks.verify_address_task import verify_shipping_address
-from tracking_information.utils.validate_shipping_address import verify_address
 from rest_framework.permissions import IsAuthenticated 
 from business.views.business_owner_permission import IsBusinessOwner
 from shared.logger import setUp_logger
@@ -31,7 +30,7 @@ class GenerateView(APIView):
         operation_summary='Endpoint that generates a tracking number',
         operation_description='Generate a tracking number',
         tags=['trackings'],
-        request_data=openapi.Schema(
+        request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
                 'shipping_address': openapi.Schema(
@@ -213,6 +212,8 @@ class GenerateView(APIView):
                 "customer_email": request.data.get('customer_email').lower(),
                 "quantity": request.data.get('quantity'),
                 "delivery_date": request.data.get('delivery_date'),
+                "latitude": request.user.business_owner.latitude,
+                "longitude": request.user.business_owner.longitude
                     }
             ser = Tracking_infoSerializer(data=data)
         except Exception as e:

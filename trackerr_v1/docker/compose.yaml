@@ -25,6 +25,7 @@ services:
             - CELERY_ENABLE_UTC
             - CELERY_ACCEPT_CONTENT
             - CELERY_TASK_SERIALIZER
+            - SWAGGER_URL
         depends_on:
             - postgres
             - redis

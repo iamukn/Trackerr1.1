@@ -956,3 +956,4 @@ business.views.views : views.py :views : post: 205: :ERROR 40: account_type is n
 business.views.views : views.py :views : post: 278: :ERROR 40: account_type is not business owner : 11/28/2024 09:01:30 PM
 business.views.views : views.py :views : post: 281: :ERROR 40: account_type is not business owner : 11/28/2024 09:13:47 PM
 business.views.views : views.py :views : post: 294: :ERROR 40: account_type is not business owner : 11/28/2024 09:20:16 PM
+user.views.change_password : change_password.py :change_password : post: 168: :ERROR 40: Failed to enqueue email task: 'NoneType' object is not callable : 12/16/2024 03:41:39 PM

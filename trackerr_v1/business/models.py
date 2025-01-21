@@ -12,6 +12,8 @@ class Business_owner(models.Model):
       Model that relatates the User to Business owner
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    longitude = models.CharField(max_length=30, null=True, blank=True, verbose_name=_('longitude'))
+    latitude = models.CharField(max_length=30, null=True, blank=True, verbose_name=_('latitude'))
     service = models.CharField(max_length=200, null=False, blank=False, verbose_name=_('services'), default='parcel delivery')
     business_name = models.CharField(max_length=500, null=False, blank=False, unique=True, verbose_name=_('business name'))
 
