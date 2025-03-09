@@ -33,6 +33,7 @@ env = os.environ.get
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
 
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(env('DEBUG'))
 
@@ -114,6 +115,7 @@ CORS_ALLOW_METHODS = [
     'PATCH',
     'DELETE',
     'OPTIONS',
+    'HEAD',
 ]
 
 ROOT_URLCONF = "trackerr_v1.urls"
@@ -149,6 +151,8 @@ SWAGGER_SETTINGS = {
     },
     'USE_SESSION_AUTH': False,
 }
+
+
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases

@@ -281,6 +281,21 @@ class Business_ownerRegistration(APIView):
                             'error': 'account type must be business'
                             }
                         )
+                    ),
+            "404": openapi.Response(
+                    description="Error: Address Not Found",
+                    schema=openapi.Schema(
+                        type=openapi.TYPE_OBJECT,
+                        properties={
+                            'error': openapi.Schema(
+                                type=openapi.TYPE_STRING,
+                                description='Error message describing the error'
+                                )
+                            },
+                        example={
+                            'error': 'address cannot be found on the map, enter a valid address'
+                            }
+                        )
                     )
                     }
                 )
@@ -299,8 +314,14 @@ class Business_ownerRegistration(APIView):
                 
                 # get the lat and lng for the business owner
                 data = request.data
-                address = verify_shipping_address.apply_async(kwargs={'address': data.get('address').capitalize()}).get()
+                address = verify_shipping_address.apply_async(kwargs={'address': data.get('address', '').capitalize()})
+                address = address.get(timeout=10)
+
                 
+                # handle errors from address field
+                if 'error' in address:
+                    return Response({'error': 'address cannot be found on the map, please enter a valid address'}, status=status.HTTP_404_NOT_FOUND)
+
                 user = UsersSerializer(data=request.data, context={'request': request})
                 
                 business_data = {
@@ -334,6 +355,9 @@ class Business_ownerRegistration(APIView):
             logger.error(e)
             return Response(business_owner.errors, status=status.HTTP_400_BAD_REQUEST)
 
+        except Exception as e:
+            logger.error(e)
+            return Response(e)
 
 """
   Class to retrieve, modify and delete a business_owner

@@ -957,3 +957,12 @@ business.views.views : views.py :views : post: 278: :ERROR 40: account_type is n
 business.views.views : views.py :views : post: 281: :ERROR 40: account_type is not business owner : 11/28/2024 09:13:47 PM
 business.views.views : views.py :views : post: 294: :ERROR 40: account_type is not business owner : 11/28/2024 09:20:16 PM
 user.views.change_password : change_password.py :change_password : post: 168: :ERROR 40: Failed to enqueue email task: 'NoneType' object is not callable : 12/16/2024 03:41:39 PM
+business.views.views : views.py :views : post: 292: :ERROR 40: account_type is not business owner : 12/17/2024 10:42:48 AM
+business.views.views : views.py :views : post: 292: :ERROR 40: account_type is not business owner : 03/09/2025 08:48:37 AM
+business.views.views : views.py :views : post: 343: :ERROR 40: TypeError('Object of type IndexError is not JSON serializable') : 03/09/2025 10:06:59 AM
+business.views.views : views.py :views : post: 343: :ERROR 40: TypeError('Object of type IndexError is not JSON serializable') : 03/09/2025 10:07:42 AM
+business.views.views : views.py :views : post: 343: :ERROR 40: TypeError('Object of type IndexError is not JSON serializable') : 03/09/2025 10:10:14 AM
+business.views.views : views.py :views : post: 343: :ERROR 40: TypeError('Object of type IndexError is not JSON serializable') : 03/09/2025 10:11:08 AM
+business.views.views : views.py :views : post: 344: :ERROR 40: TypeError('Object of type IndexError is not JSON serializable') : 03/09/2025 10:17:31 AM
+business.views.views : views.py :views : post: 344: :ERROR 40: TypeError('Object of type IndexError is not JSON serializable') : 03/09/2025 10:21:07 AM
+business.views.views : views.py :views : post: 344: :ERROR 40: TypeError('Object of type IndexError is not JSON serializable') : 03/09/2025 10:21:27 AM
