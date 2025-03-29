@@ -112,7 +112,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         if response.status_code == 200:
             email = request.data.get('email').lower()
             name = User.objects.get(email=email).name
-            # celery email sender
+            # sends a login email to the user
             email = send_login_email.apply_async(args=[name, email], retry=False)   
 
             return response
