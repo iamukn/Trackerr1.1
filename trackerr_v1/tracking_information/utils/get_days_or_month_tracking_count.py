@@ -39,7 +39,7 @@ class ActivityChart(object):
             date = today - day_date
             count = query_set.filter(date_of_purchase=date).count()
             last_seven[date.strftime("%a")] = count
-        last_seven["Thur"] = last_seven["Thu"]
+        last_seven["Thur"] = last_seven.get("Thu", 0)
         custom_order = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"]
         sorted_last_seven = {day: last_seven[day] for day in custom_order}
 
