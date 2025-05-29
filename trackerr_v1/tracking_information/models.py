@@ -12,6 +12,7 @@ class Tracking_info(models.Model):
     date_of_purchase = models.DateField(auto_now_add=date.today, null=False, blank=False)
     time_of_purchase = models.CharField(default=time.strftime('%H:%M' + 'hrs'), null=False, blank=False)
     customer_email = models.CharField(max_length=255, null=True, blank=True)
+    customer_phone = models.CharField(max_length=15, null=True, blank=True)
     delivery_date = models.DateField(default=date.today, null=False, blank=False) 
     shipping_address = models.CharField(max_length=255, null=False, blank=False)
     latitude = models.CharField(max_length=255, null=True, blank=True, default=None)
