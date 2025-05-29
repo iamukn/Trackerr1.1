@@ -3325,3 +3325,33 @@ user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Ot
 user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Rena : 03/09/2025 10:39:46 AM
 user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Rena : 03/09/2025 10:39:46 AM
 user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Rena : 03/09/2025 10:39:46 AM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Doe : 05/27/2025 07:19:43 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Jane Doe : 05/27/2025 07:19:48 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Rena : 05/27/2025 07:19:49 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Rena : 05/27/2025 07:19:49 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Rena : 05/27/2025 07:19:49 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Rena : 05/27/2025 07:19:49 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Rena : 05/27/2025 07:19:49 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to richard : 05/27/2025 07:19:50 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Rena : 05/27/2025 07:19:51 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Rena : 05/27/2025 07:19:51 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Rena : 05/27/2025 07:19:51 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Jane Doe : 05/27/2025 07:19:51 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to John Doe : 05/27/2025 07:19:52 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to John Doe : 05/27/2025 07:19:52 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Jane Doe : 05/27/2025 07:19:52 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Jane Doe : 05/27/2025 07:19:52 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Jane Doe : 05/27/2025 07:19:52 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Jane Doe : 05/27/2025 07:19:53 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Jane Doe : 05/27/2025 07:19:53 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Jane Doe : 05/27/2025 07:19:53 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Jane Doe : 05/27/2025 07:19:53 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Jane Doe : 05/27/2025 07:19:53 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Jane Doe : 05/27/2025 07:19:55 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Jane Doe : 05/27/2025 07:19:56 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Jane Doe : 05/27/2025 07:20:03 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to John Doe : 05/27/2025 07:20:03 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Rena : 05/27/2025 07:20:04 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Rena : 05/27/2025 07:20:04 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Rena : 05/27/2025 07:20:04 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Rena : 05/27/2025 07:20:04 PM

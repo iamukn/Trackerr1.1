@@ -81,6 +81,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'channels',
     "user",
     "business",
     "logistics",
@@ -232,3 +233,5 @@ EMAIL_HOST_PASSWORD = env('EMAIL_PASSWORD')
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = 'user.User'
+# ASGI config
+ASGI_APPLICATION = "trackerr_v1.asgi.application"

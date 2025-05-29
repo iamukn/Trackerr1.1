@@ -20,6 +20,7 @@ class Tracking_info(models.Model):
     destination_lng = models.CharField(max_length=255, null=False, blank=False)
     rider = models.ForeignKey(Logistics_partner, on_delete=models.SET_NULL, null=True, blank=True, default=None)
     rider_email = models.EmailField(max_length=255,null=True, blank=True, default=None)
+    rider_uuid = models.CharField(max_length=500, null=True, blank=True)
     realtime_location = models.CharField(max_length=255, null=True, blank=True)
     country = models.CharField(max_length=255, null=False, blank=False, default='Nigeria')
     product_name = models.CharField(max_length=255, null=False, blank=False, default='unknown product')
