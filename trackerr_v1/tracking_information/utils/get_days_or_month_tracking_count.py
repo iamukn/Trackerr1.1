@@ -39,10 +39,9 @@ class ActivityChart(object):
             date = today - day_date
             count = query_set.filter(date_of_purchase=date).count()
             last_seven[date.strftime("%a")] = count
-        last_seven["Thur"] = last_seven.get("Thu", 0)
+        last_seven["Thur"] = last_seven.pop("Thu", 0)
         custom_order = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"]
-        sorted_last_seven = {day: last_seven[day] for day in custom_order}
-
+        sorted_last_seven = {day: last_seven.get(day, 0) for day in custom_order}
         return sorted_last_seven
 
     def last_month_count(self, user: User) -> List:
