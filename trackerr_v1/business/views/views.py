@@ -15,6 +15,7 @@ from business.serializers import Business_ownerSerializer
 from .business_owner_permission import IsBusinessOwner
 from business.models import Business_owner
 from user.models import User
+#from uuid import uuid4
 from django.shortcuts import (get_object_or_404, get_list_or_404)
 
 logger = setUp_logger(__name__, 'business.logs')
@@ -328,7 +329,7 @@ class Business_ownerRegistration(APIView):
                     'business_name': request.data.get('business_name'),
                     'service': request.data.get('service'),
                     'latitude': address.get('latitude'),
-                    'longitude': address.get('longitude')
+                    'longitude': address.get('longitude'),
                         }
                 business_owner = Business_ownerSerializer(data=business_data, context={'request': request})
             

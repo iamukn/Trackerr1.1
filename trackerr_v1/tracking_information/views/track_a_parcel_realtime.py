@@ -24,15 +24,65 @@ class RealtimeTracking(AsyncWebsocketConsumer):
         print('Connected!!!')
 
     async def track_parcel_loop(self):
+        coords = []
+        rider_uuid = None
         while True:
-            # fetch the latest coordinates
-            parcel = await get_tracking_data(parcel_number=self.tracking_number)
-            coords = {"lat": parcel.latitude, "long": parcel.longitude}
+            if not coords:
+                # fetch the latest coordinates
+                parcel = await get_tracking_data(parcel_number=self.tracking_number)
 
-            await self.send(text_data=json.dumps({"location": coords}))
+                if parcel:
+                    coords.append(parcel)
+            # get the location of the rider
+            # rider_location = get_rider_location(rider_uuid)
+            parcels = coords[0]
+
+            # return only the business owner and destination location if status is either pending, delivered or returned
+            if parcels.status in ['pending', 'delivered', 'returned']:
+    
+                location_data = {
+                    'parcel': {
+                        'parcel_number': self.tracking_number,
+                        'status': parcels.status,
+                        },
+                    'locations': {
+                        'business_owner': {
+                            'lat': float(parcels.business_owner_lat),
+                            'lng': float(parcels.business_owner_lng)
+                            },
+                        'customer': {
+                            'lat': float(parcels.destination_lat),
+                            'lng': float(parcels.destination_lng)
+                            }
+                        }
+                        }
+                await self.send(text_data=json.dumps({'location_data': location_data}))
+                break
+                
+            
+            location_data = {
+                'parcel': {
+                    'parcel_number': self.tracking_number,
+                    'status': parcels.status,
+                    },
+                'locations': {
+                    'business_owner': {
+                        'lat': float(parcels.business_owner_lat),
+                        'lng': float(parcels.business_owner_lng)
+                        },
+                    'customer': {
+                        'lat': float(parcels.destination_lat),
+                        'lng': float(parcels.destination_lng),
+                        },
+                    'rider': {
+                        'lat': '',
+                        'lng': '',
+                        }
+                    }
+                    }
+            await self.send(text_data=json.dumps({"location_data": location_data}))
             await asyncio.sleep(2)
-
-
+            
     async def disconnect(self, close_code):
         print('Disconnected!!!')
         if hasattr(self, 'tracking_task'):

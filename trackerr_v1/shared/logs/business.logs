@@ -966,3 +966,4 @@ business.views.views : views.py :views : post: 343: :ERROR 40: TypeError('Object
 business.views.views : views.py :views : post: 344: :ERROR 40: TypeError('Object of type IndexError is not JSON serializable') : 03/09/2025 10:17:31 AM
 business.views.views : views.py :views : post: 344: :ERROR 40: TypeError('Object of type IndexError is not JSON serializable') : 03/09/2025 10:21:07 AM
 business.views.views : views.py :views : post: 344: :ERROR 40: TypeError('Object of type IndexError is not JSON serializable') : 03/09/2025 10:21:27 AM
+business.views.views : views.py :views : post: 361: :ERROR 40: Cannot set both 'fields' and 'exclude' options on serializer Business_ownerSerializer. : 06/05/2025 06:49:27 PM
