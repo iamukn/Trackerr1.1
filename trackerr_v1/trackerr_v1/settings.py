@@ -75,6 +75,7 @@ SIMPLE_JWT = {
 }
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -234,5 +235,13 @@ EMAIL_HOST_PASSWORD = env('EMAIL_PASSWORD')
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = 'user.User'
-# ASGI config
+# Channels
 ASGI_APPLICATION = "trackerr_v1.asgi.application"
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [(env('CHANNEL_REDIS_HOST'), env('CHANNEL_REDIS_PORT') )],
+        },
+    },
+}

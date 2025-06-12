@@ -13,7 +13,7 @@ class Logistics_partner(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     lat = models.CharField(max_length=55, null=True, blank=True)
     lng = models.CharField(max_length=55, null=True, blank=True)
-
+    # add rider uuid here
     def __str__(self):
         """
           String representation of the logistics partner

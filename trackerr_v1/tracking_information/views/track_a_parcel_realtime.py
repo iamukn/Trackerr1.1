@@ -33,6 +33,10 @@ class RealtimeTracking(AsyncWebsocketConsumer):
 
                 if parcel:
                     coords.append(parcel)
+                else:
+                    print('Parcel not found')
+                    await self.send(text_data=json.dumps({'error': 'parcel not found!'}))
+                    return
             # get the location of the rider
             # rider_location = get_rider_location(rider_uuid)
             parcels = coords[0]
@@ -75,13 +79,17 @@ class RealtimeTracking(AsyncWebsocketConsumer):
                         'lng': float(parcels.destination_lng),
                         },
                     'rider': {
-                        'lat': '',
-                        'lng': '',
+                        'lat': float(parcels.rider_lat),
+                        'lng': float(parcels.rider_lng),
                         }
                     }
                     }
             await self.send(text_data=json.dumps({"location_data": location_data}))
+            parcel = await get_tracking_data(parcel_number=self.tracking_number)
+            coords = [parcel]
             await asyncio.sleep(2)
+
+
             
     async def disconnect(self, close_code):
         print('Disconnected!!!')
@@ -95,5 +103,5 @@ class RealtimeTracking(AsyncWebsocketConsumer):
     async def receive(self, text_data):
         # get the tracking number
         data = json.loads(text_data)
-        self.tracking_number = data["parcel_number"]
+        self.tracking_number = data.get("parcel_number").upper()
         self.tracking_task = asyncio.create_task(self.track_parcel_loop())    

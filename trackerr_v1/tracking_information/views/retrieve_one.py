@@ -18,7 +18,7 @@ class RetrieveOne(APIView):
     permission_classes = [AllowAny,]
 
     def query_set(self, num:str):
-        track = get_object_or_404(Tracking_info, parcel_number=num)
+        track = get_object_or_404(Tracking_info, parcel_number=num.upper())
         return track
     # Swagger documentation
     @swagger_auto_schema(
