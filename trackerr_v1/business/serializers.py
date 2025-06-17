@@ -17,7 +17,7 @@ class Business_ownerSerializer(ModelSerializer):
     class Meta:
         model = Business_owner
       #  fields = '__all__'
-        exclude = ['business_owner_uuid']
+        exclude = ['business_owner_uuid', 'profile_pic_key']
 
     def to_internal_value(self, data):
         data = super().to_internal_value(data)

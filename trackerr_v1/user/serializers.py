@@ -15,13 +15,6 @@ class UsersSerializer(ModelSerializer):
         model = User
         fields = '__all__'
 
-
-    def get_logo(self, obj):
-        if obj.avatar:  # If logo field is not empty
-            return obj.avatar.url  # Assuming logo is a FileField or ImageField
-        else:
-            return None
-
     def to_internal_value(self, validated_data):
         # convert fields to lowercase for consistency
         validated_data = super().to_internal_value(validated_data)
@@ -32,6 +25,7 @@ class UsersSerializer(ModelSerializer):
         if validated_data.get('address'):
             validated_data['address'] = validated_data['address'].lower()
         if validated_data.get('avatar'):
+            print('data found')
             validated_data['avatar'] = validated_data['avatar']
         return validated_data
 
@@ -52,14 +46,7 @@ class UsersSerializer(ModelSerializer):
                 }
         
         if instance.avatar:
-            # get the avatar url
-            avatar_url = instance.avatar.url
-            # get the request object
-            request = self.context.get('request')
-            if request:
-                # build an absolute url
-                avatar_url = request.build_absolute_uri(avatar_url)
-                user_instance['avatar'] = avatar_url
+            user_instance['avatar'] = instance.avatar
         else:
             user_instance['avatar'] = ""
         return user_instance
