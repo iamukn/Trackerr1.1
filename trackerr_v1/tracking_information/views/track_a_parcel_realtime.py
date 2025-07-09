@@ -93,10 +93,10 @@ class RealtimeTracking(AsyncWebsocketConsumer):
             
     async def disconnect(self, close_code):
         print('Disconnected!!!')
-        if hasattr(self, 'tracking_task'):
-            self.tracking_task.cancel()
         try:
-            await self.tracking_task
+            if hasattr(self, 'tracking_task'):
+                self.tracking_task.cancel()
+                await self.tracking_task
         except asyncio.CancelledError:
             print("Tracking task cancelled cleanly.")
 

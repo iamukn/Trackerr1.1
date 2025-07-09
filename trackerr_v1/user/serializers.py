@@ -58,9 +58,9 @@ class UsersSerializer(ModelSerializer):
         if 'account_type' in validated_data:
             validated_data.pop('account_type')
         for attr, val in validated_data.items():
-            if attr == "avatar" and val:
+            #if attr == "avatar" and val:
                 # delete the previous avatar
-                instance.avatar.delete()
+                #instance.avatar.delete()
             setattr(instance, attr, val)
         setattr(instance, "updated_on", now())
         instance.save()

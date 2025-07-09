@@ -3,37 +3,34 @@ import boto3
 from io import BytesIO
 from shared.aws_config.s3 import s3
 
-def resize_and_upload(file_obj, uuid, bucket='trackerr-dp'):
+def resize_and_upload(file_obj,key, bucket='trackerr-dp'):
     # 1. Open and resize the image
-    content_type = file_obj.content_type
+    content_type = key.split('/')[-1]
+    content_type = f"image/{content_type}"
+    if isinstance(file_obj, bytes):
+        file_obj = BytesIO(file_obj)
+
     image = Image.open(file_obj)
-    filename = str(uuid)
     image = image.convert('RGB')  # in case it's RGBA or P
     image = image.resize((300, 300))
 
     # 2. Save the resized image to an in-memory buffer
     buffer = BytesIO()
 
-    if 'JPEG' in str(content_type).upper():
+    if 'JPEG' in str(key).upper():
         image.save(buffer, format='JPEG')
-        filename += '.jpeg'
+   #     filename += '.jpeg'
 
-    elif 'JPG' in str(content_type).upper():
+    elif 'JPG' in str(key).upper():
         image.save(buffer, format='JPG')
-        filename += '.jpg'
+   #     filename += '.jpg'
 
-    elif 'PNG' in str(content_type).upper():
+    elif 'PNG' in str(key).upper():
         image.save(buffer, format='PNG')
-        filename += '.png'
+   #     filename += '.png'
 
     buffer.seek(0)
 
-    print(filename)
-
-    Key = f'profile-pics/{filename}'
-
     # 3. Upload to S3
-    s3.upload_fileobj(buffer, bucket, f'{Key}', ExtraArgs={'ContentType': f'{content_type}'})
-
-    # 4. Return the Key
-    return [Key, f'https://{bucket}.s3.amazonaws.com/{Key}']
+    s3.upload_fileobj(buffer, bucket, f'{key}', ExtraArgs={'ContentType': f'{content_type}'})
+    print('Image uploaded successfully')

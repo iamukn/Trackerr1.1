@@ -10,7 +10,9 @@ from tracking_information.models import Tracking_info
 
 class ActivityChart(object):
     """  Fetches the counts for tracking generated in the last 7 days and month """
-    today = datetime.today()
+    def __init__(self):
+        self.today = datetime.today()
+
     def _get_query_set(self, user_id: int) -> List: 
         # fetches the data from the database
         try:
@@ -26,6 +28,8 @@ class ActivityChart(object):
         Return:
             Dictionary
         """
+    
+
         last_seven = {}
 
         query_set = self._get_query_set(user)
@@ -42,6 +46,7 @@ class ActivityChart(object):
         last_seven["Thur"] = last_seven.pop("Thu", 0)
         custom_order = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"]
         sorted_last_seven = {day: last_seven.get(day, 0) for day in custom_order}
+        print(sorted_last_seven)
         return sorted_last_seven
 
     def last_month_count(self, user: User) -> List:
@@ -58,4 +63,5 @@ class ActivityChart(object):
         week3 = query_set.filter(date_of_purchase__range=(self.today - timedelta(days=15), self.today - timedelta(days=9))).count()        
         week4 = query_set.filter(date_of_purchase__range=(self.today - timedelta(days=8), self.today)).count()
         weekly_count = {'Week One': week1, 'Week Two': week2, 'Week Three': week3, 'Week Four': week4}
+        print(weekly_count)
         return weekly_count

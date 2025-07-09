@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from django.http import HttpResponseNotAllowed
 from django.db import transaction
 from shared.celery_tasks.tracking_info_tasks.verify_address_task import verify_shipping_address
+from shared.celery_tasks.business_owners_task.upload_dp import upload_dp
 from shared.aws_config.s3 import s3
 from business.utils.resize_image import resize_image
 from django.db.utils import IntegrityError
@@ -18,9 +19,10 @@ from .business_owner_permission import IsBusinessOwner
 from business.models import Business_owner
 from user.models import User
 from uuid import uuid4
+from os import environ
 from django.shortcuts import (get_object_or_404, get_list_or_404)
 import botocore.exceptions
-from business.utils.resize_and_upload import resize_and_upload as upload_dp 
+#from business.utils.resize_and_upload import resize_and_upload as upload_dp 
 
 logger = setUp_logger(__name__, 'business.logs')
 
@@ -335,6 +337,7 @@ class Business_ownerRegistration(APIView):
                 user = UsersSerializer(data=request.data, context={'request': request})
                 
                 new_uuid = uuid4()
+                user_s3_key = ""
                 if avatar:
                     content_type = str(avatar.content_type).split('/')[-1]
                     print(content_type)
@@ -342,20 +345,26 @@ class Business_ownerRegistration(APIView):
                     if not content_type.lower() in ['jpg', 'jpeg', 'png']:
                         return Response({'error': "avatar must either be jpg, jpeg or png"}, status=status.HTTP_400_BAD_REQUEST)
 
+                    user_s3_key = f"profile-pics/{new_uuid}.{content_type}"
+
+                    
                 business_data = {
                     'business_name': request.data.get('business_name'),
                     'service': request.data.get('service'),
                     'latitude': address.get('latitude'),
                     'longitude': address.get('longitude'),
-                    'business_owner_uuid': str(new_uuid)
+                    'business_owner_uuid': str(new_uuid),
+                    'profile_pic_key': user_s3_key
                         }
                 business_owner = Business_ownerSerializer(data=business_data, context={'request': request})
             
 
                 if not business_owner.is_valid() and not user.is_valid():
+                    print(user.errors, business_owner.errors)
                     return Response((user.errors, business_owner.errors), status=status.HTTP_400_BAD_REQUEST)
             
                 elif not business_owner.is_valid():
+                    print(business_owner.errors)
                     return Response(business_owner.errors, status=status.HTTP_400_BAD_REQUEST)
 
                 elif not user.is_valid():
@@ -363,9 +372,9 @@ class Business_ownerRegistration(APIView):
             
                 elif business_owner.is_valid() and user.is_valid():
                     if avatar:
-                        s3_key, public_url = upload_dp(avatar, new_uuid)
-                        user.save(avatar=public_url)
-                        business_owner.save(user=self.query_set(User, user.instance.id), profile_pic_key=s3_key)
+                        upload_dp.delay(avatar.read(),user_s3_key)
+                        user.save(avatar=f"{environ.get('TRACKERR_CDN_URL')}/{user_s3_key}")
+                        business_owner.save(user=self.query_set(User, user.instance.id))
                     else:
                         user.save()
                         business_owner.save(user=self.query_set(User, user.instance.id))
