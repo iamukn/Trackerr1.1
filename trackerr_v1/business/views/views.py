@@ -518,7 +518,16 @@ class Business_ownerRoute(APIView):
         user = self.query_set(Business_owner, id)
         serializer = Business_ownerSerializer(user, context={'request': request})
         if user:
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            data = serializer.data
+            name = data.get('user').get('name')
+            if name:
+                name = name.split(' ')[0].capitalize()
+                data['user']['name'] = name
+            data['user'].pop('created_on')
+            data['user'].pop('updated_on')
+            data['user'].pop('phone_number')
+            print(data)
+            return Response(data, status=status.HTTP_200_OK)
         return Response({'error': 'user not found'}, status=status.HTTP_404_NOT_FOUND)
 
     @swagger_auto_schema(
