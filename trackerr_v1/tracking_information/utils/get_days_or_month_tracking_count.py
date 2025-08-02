@@ -7,7 +7,6 @@ from tracking_information.models import Tracking_info
 
 """ Fetches the counts for tracking generated in the last 7 days """
 
-
 class ActivityChart(object):
     """  Fetches the counts for tracking generated in the last 7 days and month """
 

@@ -522,7 +522,7 @@ class Business_ownerRoute(APIView):
             name = data.get('user').get('name')
             if name:
                 name = name.split(' ')[0].capitalize()
-                data['user']['name'] = name
+                data['user']['name'] = name + '👌'
             data['user'].pop('created_on')
             data['user'].pop('updated_on')
             data['user'].pop('phone_number')
