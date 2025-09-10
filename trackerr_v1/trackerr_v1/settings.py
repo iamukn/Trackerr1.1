@@ -173,7 +173,7 @@ DATABASES = {
     }
 }
 
-database_url= os.env('RENDER_PG_URL')
+database_url= env('RENDER_PG_URL')
 DATABASES['default'] = dj_database_url.parse(database_url, conn_max_age=600, ssl_require=True)
 
 # Password validation
