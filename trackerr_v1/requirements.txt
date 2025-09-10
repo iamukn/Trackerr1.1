@@ -28,6 +28,7 @@ cssselect==1.2.0
 cssutils==2.9.0
 daphne==4.1.2
 distro==1.9.0
+dj-database-url==0.5.0
 Django==4.2.10
 django-cors-headers==4.3.1
 django-environ==0.11.2

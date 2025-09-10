@@ -3988,3 +3988,5 @@ user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Ot
 user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Rena : 07/13/2025 10:07:14 PM
 user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Rena : 07/13/2025 10:07:14 PM
 user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to Rena : 07/13/2025 10:07:14 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to new user : 08/02/2025 01:36:24 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 25: :INFO 20: Otp created and assigned to ukaegbu : 09/10/2025 09:21:00 PM

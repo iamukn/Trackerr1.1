@@ -327,7 +327,7 @@ class Business_ownerRegistration(APIView):
                     data.pop('avatar')
 
                 address = verify_shipping_address.apply_async(kwargs={'address': data.get('address', '').capitalize()})
-                address = address.get(timeout=10)
+                address = address.get(timeout=60)
 
                 
                 # handle errors from address field
