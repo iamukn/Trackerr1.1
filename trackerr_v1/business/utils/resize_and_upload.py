@@ -3,7 +3,7 @@ import boto3
 from io import BytesIO
 from shared.aws_config.s3 import s3
 
-def resize_and_upload(file_obj,key, bucket='trackerr-dp'):
+def resize_and_upload(file_obj,key, bucket='trackerr-bucket'):
     # 1. Open and resize the image
     content_type = key.split('/')[-1]
     content_type = f"image/{content_type}"
