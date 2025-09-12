@@ -160,7 +160,6 @@ SWAGGER_SETTINGS = {
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-# postgresql://trackerr_db_instance_user:uRZNdR4wp28AD0yWg9khRrLrRy4rKxFq@dpg-d30a5u15pdvs73aqmjcg-a.oregon-postgres.render.com/trackerr_db_instance
 
 DATABASES = {
     "default": {
@@ -173,8 +172,8 @@ DATABASES = {
     }
 }
 
-database_url= env('RENDER_PG_URL')
-DATABASES['default'] = dj_database_url.parse(database_url, conn_max_age=600, ssl_require=True)
+#database_url= env('RENDER_PG_URL')
+#DATABASES['default'] = dj_database_url.parse(database_url, conn_max_age=600, ssl_require=True)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -220,9 +219,9 @@ MEDIA_ROOT = BASE_DIR / '/media'
 
 # CELERY CONFIG
 CELERY_BROKER_URL = env('CELERY_BROKER_URL')
-CELERY_BROKER_URL = "rediss://red-d30snpre5dus73dijg00:UP2ouc1uw5T2wT9QtWTE819bZvA333R4@oregon-keyvalue.render.com:6379"
+
 CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND')
-CELERY_RESULT_BACKEND = env('RENDER_CELERY_URL')
+
 CELERY_TIMEZONE = env('CELERY_TIMEZONE')
 CELERY_ENABLE_UTC = env('CELERY_ENABLE_UTC')
 CELERY_ACCEPT_CONTENT = [env('CELERY_ACCEPT_CONTENT')]
