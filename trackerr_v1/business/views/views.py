@@ -312,8 +312,10 @@ class Business_ownerRegistration(APIView):
          
         if not request.data.get('account_type') == 'business':
             logger.error('account_type is not business owner')
+            print('THERE')
             return Response({"error":"account type must be business"}, status=status.HTTP_400_BAD_REQUEST)
         if 'address' not in request.data:
+            print('HERE')
             return Response({'error': 'address is required'}, status=status.HTTP_400_BAD_REQUEST)
 
             #
@@ -373,12 +375,18 @@ class Business_ownerRegistration(APIView):
                 elif business_owner.is_valid() and user.is_valid():
                     if avatar:
                         upload_dp.delay(avatar.read(),user_s3_key)
-                        user.save(avatar=f"{environ.get('TRACKERR_CDN_URL')}/{user_s3_key}")
+                        user.save()
                         business_owner.save(user=self.query_set(User, user.instance.id))
                     else:
                         user.save()
                         business_owner.save(user=self.query_set(User, user.instance.id))
-                    return Response(business_owner.data, status=status.HTTP_201_CREATED)
+                    
+                    data = business_owner.data
+                    key = data.pop('profile_pic_key')
+                    # add the avatar url
+                    data['user']['avatar'] = f"{environ.get('TRACKERR_CDN_URL')}{key}"
+                    print(data)
+                    return Response(data, status=status.HTTP_201_CREATED)
                 return Response({'error': 'invalid data'}, status=status.HTTP_400_BAD_REQUEST)
 
         except IntegrityError as e:
@@ -520,12 +528,16 @@ class Business_ownerRoute(APIView):
         if user:
             data = serializer.data
             name = data.get('user').get('name')
+            avatar_key = data.pop('profile_pic_key')
+
             if name:
                 name = name.split(' ')[0].capitalize()
                 data['user']['name'] = name + '👌'
             data['user'].pop('created_on')
             data['user'].pop('updated_on')
             data['user'].pop('phone_number')
+            # compute the avatar url using the key
+            data['user']['avatar'] = f"{environ.get('TRACKERR_CDN_URL')}/{avatar_key}" 
             print(data)
             return Response(data, status=status.HTTP_200_OK)
         return Response({'error': 'user not found'}, status=status.HTTP_404_NOT_FOUND)
