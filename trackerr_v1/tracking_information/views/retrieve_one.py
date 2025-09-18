@@ -74,4 +74,6 @@ class RetrieveOne(APIView):
         serializer = Tracking_infoSerializer(data)
         data = serializer.data
         data.pop('owner')
+        data['shipping_address'] = data.get('shipping_address').title()
+        data['country'] = data.get('country').title()
         return Response(data, status=status.HTTP_200_OK)
