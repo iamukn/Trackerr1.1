@@ -24,6 +24,8 @@ class UsersSerializer(ModelSerializer):
             validated_data['email'] = validated_data['email'].lower()
         if validated_data.get('address'):
             validated_data['address'] = validated_data['address'].lower()
+        if validated_data.get('country'):
+            validated_data['country'] = validated_data['country'].lower()
         if validated_data.get('avatar'):
             print('data found')
             validated_data['avatar'] = validated_data['avatar']
@@ -39,6 +41,7 @@ class UsersSerializer(ModelSerializer):
             "is_verified": instance.is_active, 
             "account_type": instance.account_type,
             "address": instance.address,
+            "country": instance.country,
             "is_verified": instance.is_verified,
             "is_active": instance.is_active,
             "created_on": instance.date_joined,
@@ -62,6 +65,7 @@ class UsersSerializer(ModelSerializer):
                 # delete the previous avatar
                 #instance.avatar.delete()
             setattr(instance, attr, val)
+            print(attr, val)
         setattr(instance, "updated_on", now())
         instance.save()
         return instance

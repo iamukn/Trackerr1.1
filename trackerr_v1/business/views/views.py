@@ -22,6 +22,7 @@ from uuid import uuid4
 from os import environ
 from django.shortcuts import (get_object_or_404, get_list_or_404)
 import botocore.exceptions
+from datetime import datetime
 #from business.utils.resize_and_upload import resize_and_upload as upload_dp 
 
 logger = setUp_logger(__name__, 'business.logs')
@@ -330,6 +331,8 @@ class Business_ownerRegistration(APIView):
 
                 address = verify_shipping_address.apply_async(kwargs={'address': data.get('address', '').capitalize()})
                 address = address.get(timeout=60)
+                # added the country
+                data['country'] = address.get('country', '').lower()
 
                 
                 # handle errors from address field
@@ -359,7 +362,6 @@ class Business_ownerRegistration(APIView):
                     'profile_pic_key': user_s3_key
                         }
                 business_owner = Business_ownerSerializer(data=business_data, context={'request': request})
-            
 
                 if not business_owner.is_valid() and not user.is_valid():
                     print(user.errors, business_owner.errors)
@@ -370,9 +372,11 @@ class Business_ownerRegistration(APIView):
                     return Response(business_owner.errors, status=status.HTTP_400_BAD_REQUEST)
 
                 elif not user.is_valid():
+                    print(user.errors)
                     return Response(user.errors, status=status.HTTP_400_BAD_REQUEST)
             
                 elif business_owner.is_valid() and user.is_valid():
+                    print('Data: ', data)
                     if avatar:
                         upload_dp.delay(avatar.read(),user_s3_key)
                         user.save()
@@ -421,7 +425,7 @@ class Business_ownerRoute(APIView):
         return user
 
     permission_classes = [IsBusinessOwner,]
-    parser_classes = [JSONParser, MultiPartParser, FormParser]
+    parser_classes = (MultiPartParser, FormParser, JSONParser)
     
     def authorized(self, request, business_id):
         id = business_id
@@ -534,11 +538,26 @@ class Business_ownerRoute(APIView):
                 name = name.split(' ')[0].capitalize()
                 data['user']['name'] = name + '👌'
             data['user'].pop('created_on')
-            data['user'].pop('updated_on')
-            data['user'].pop('phone_number')
+            #data['user'].pop('updated_on')
+            #data['user'].pop('phone_number')
             # compute the avatar url using the key
-            data['user']['avatar'] = f"{environ.get('TRACKERR_CDN_URL')}/{avatar_key}" 
-            print(data)
+            if avatar_key:
+                data['user']['avatar'] = f"{environ.get('TRACKERR_CDN_URL')}/{avatar_key}" 
+            else:
+                data['user']['avatar'] = ''
+            data['business_name'] = data['business_name'].title()
+            data['service'] = data['service'].title()
+            data['user']['address'] = data['user']['address'].title()
+            data['user']['name'] = data['user']['name'].title()
+            if  data.get('business_owner_uuid'):
+                data['business_owner_uuid'] = data['business_owner_uuid'][-8:]
+            else:
+                data['business_owner_uuid'] = "##"
+            # convert the time to human readable for updated_on
+            if data['user']['updated_on']:
+                datetime_obj = data['user']['updated_on']
+                formatted_date = datetime_obj.strftime("%b %d, %Y")
+                data['user']['updated_on'] = formatted_date
             return Response(data, status=status.HTTP_200_OK)
         return Response({'error': 'user not found'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -751,9 +770,31 @@ class Business_ownerRoute(APIView):
         business = self.query_set(Business_owner, id)
         user = business.user
 
-        data = request.data
+        data = request.data.copy()
+        if not user.address == data.get('address').lower():
+            # verify shipping address
+            # get the lat and lng
+            # update the record
+            address = verify_shipping_address.apply_async(kwargs={'address': data.get('address', '').capitalize()}).get(timeout=30)
+           
+            print(address)
+            if 'error' in address:
+                return Response(address, status=status.HTTP_400_BAD_REQUEST)
+            data['latitude'] = address.get('latitude')
+            data['longitude'] = address.get('longitude')
+
         if 'password' in data:
             data.pop('password')
+
+        ## handle avatar upload
+        avatar = data.pop('avatar')
+        
+        if avatar:
+            try:
+                if not user.business_owner.profile_pic_key in avatar[0].name:
+                    update_avatar = upload_dp.delay(avatar[0].read(),user.business_owner.profile_pic_key)
+            except Exception as e:
+                print(e)
 
         with transaction.atomic():
             user_ser = UsersSerializer(user, data=data, partial=True)

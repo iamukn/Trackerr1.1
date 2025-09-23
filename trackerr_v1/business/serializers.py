@@ -16,8 +16,8 @@ class Business_ownerSerializer(ModelSerializer):
 
     class Meta:
         model = Business_owner
-        #fields = '__all__'
-        exclude = ['business_owner_uuid']
+        fields = '__all__'
+        #exclude = ['business_owner_uuid']
 
     def to_internal_value(self, data):
         data = super().to_internal_value(data)
@@ -28,11 +28,27 @@ class Business_ownerSerializer(ModelSerializer):
     def update(self, instance, validated_data):
         # Optional: fallback to raw request data (if fields are excluded from serializer)
         request = self.context.get('request').data
-        if request:
-           if 'profile_pic_key' in request:
-                instance.profile_pic_key = request.get('profile_pic_key')
-           if 'business_owner_uuid' in request:
-                instance.business_owner_uuid = request.get('business_owner_uuid')
+        #if request:
+        #   if 'profile_pic_key' in request:
+        #        instance.profile_pic_key = request.get('profile_pic_key')
+        #   if 'business_owner_uuid' in request:
+        #        instance.business_owner_uuid = request.get('business_owner_uuid')
+        #   if 'business_name' in request:
+        #       instance.business_name = request.get('business_name')
 
+        if request:
+            for key in request.keys():
+                if key in [
+                        'profile_pic_key',
+                        'business_owner_uuid',
+                        'business_name',
+                        'service',
+                        'latitude',
+                        'longitude',
+                        ]:
+                    # set the attribute
+                    setattr(instance, key, request.get(key))
+
+        print(instance.business_name)
         instance.save()
         return instance
