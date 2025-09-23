@@ -49,6 +49,11 @@ class GenerateView(APIView):
                     type=openapi.TYPE_STRING,
                     description='customers email'
                     ),
+                "phone": openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description="customers phone number"
+                    )
+                ,
                 'quantity': openapi.Schema(
                     type=openapi.TYPE_STRING,
                     description='quantity of the products'
@@ -63,10 +68,11 @@ class GenerateView(APIView):
                 "country": "United States of America",
                 "product": "shoes",
                 "customer_email": "johndoe@example.com",
+                "phone": "08028856692",
                 "quantity": "2",
                 "delivery_date": "2024-12-12"
                 },
-            required=["shipping_address", "country", "product", "customer_email", "quantity", "delivery_date"]
+            required=["shipping_address", "country","phone", "product", "customer_email", "quantity", "delivery_date"]
             ),
         # response
         responses={
@@ -95,6 +101,11 @@ class GenerateView(APIView):
                             type=openapi.TYPE_STRING,
                             description='customer email'
                             ),
+                        'phone': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            description='phone number'
+                            )
+                        ,
                         'delivery_date': openapi.Schema(
                             type=openapi.TYPE_STRING,
                             description='delivery date'
@@ -162,6 +173,7 @@ class GenerateView(APIView):
                         "shipping_address": "Bogobiri St, Calabar Municipal, Nigeria",
                         "latitude": None,
                         "longitude": None,
+                        "phone": "08028856629",
                         "destination_lat": "4.95896",
                         "destination_lng": "8.32666",
                         "rider_email": None,
@@ -212,8 +224,9 @@ class GenerateView(APIView):
                 "customer_email": request.data.get('customer_email').lower(),
                 "quantity": request.data.get('quantity'),
                 "delivery_date": request.data.get('delivery_date'),
-                "latitude": request.user.business_owner.latitude,
-                "longitude": request.user.business_owner.longitude
+                "business_owner_lat": request.user.business_owner.latitude,
+                "business_owner_lng": request.user.business_owner.longitude,
+                "customer_phone": request.data.get('phone')
                     }
             ser = Tracking_infoSerializer(data=data)
         except Exception as e:

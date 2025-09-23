@@ -14,6 +14,7 @@ from pathlib import Path
 #import environ
 from datetime import timedelta
 import os
+import dj_database_url
 
 
 #env = environ.Env(
@@ -32,6 +33,7 @@ env = os.environ.get
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = env('SECRET_KEY')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(env('DEBUG'))
@@ -74,12 +76,14 @@ SIMPLE_JWT = {
 }
 
 INSTALLED_APPS = [
+    "daphne",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'channels',
     "user",
     "business",
     "logistics",
@@ -96,6 +100,7 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    'tracking_information.middleware.RequestMiddleware',
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -114,6 +119,7 @@ CORS_ALLOW_METHODS = [
     'PATCH',
     'DELETE',
     'OPTIONS',
+    'HEAD',
 ]
 
 ROOT_URLCONF = "trackerr_v1.urls"
@@ -150,6 +156,8 @@ SWAGGER_SETTINGS = {
     'USE_SESSION_AUTH': False,
 }
 
+
+
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
@@ -163,6 +171,9 @@ DATABASES = {
         'PORT': 5432,
     }
 }
+
+#database_url= env('RENDER_PG_URL')
+#DATABASES['default'] = dj_database_url.parse(database_url, conn_max_age=600, ssl_require=True)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -208,7 +219,9 @@ MEDIA_ROOT = BASE_DIR / '/media'
 
 # CELERY CONFIG
 CELERY_BROKER_URL = env('CELERY_BROKER_URL')
+
 CELERY_RESULT_BACKEND = env('CELERY_RESULT_BACKEND')
+
 CELERY_TIMEZONE = env('CELERY_TIMEZONE')
 CELERY_ENABLE_UTC = env('CELERY_ENABLE_UTC')
 CELERY_ACCEPT_CONTENT = [env('CELERY_ACCEPT_CONTENT')]
@@ -228,3 +241,13 @@ EMAIL_HOST_PASSWORD = env('EMAIL_PASSWORD')
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = 'user.User'
+# Channels
+ASGI_APPLICATION = "trackerr_v1.asgi.application"
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [(env('CHANNEL_REDIS_HOST'), env('CHANNEL_REDIS_PORT') )],
+        },
+    },
+}

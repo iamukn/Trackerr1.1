@@ -9,6 +9,7 @@ from .views import (
         track_a_parcel_realtime,
         get_activity_chart,
         fetch_tracking_info_using_customer_email,
+        update_tracking_data,
         )
 
 """ tracking routes """
@@ -17,7 +18,8 @@ urlpatterns = [
     path('trackings/status-count/', retrieve_status_count.RetrieveStatusCount.as_view(), name='status-count'),
     path('trackings/history/', fetch_tracking_info_using_customer_email.Customer_history.as_view(), name='history'),
     path('trackings/generate-tracking/', generate_tracking_view.GenerateView.as_view(), name='generate-tracking'),
-    path('trackings/realtime/', track_a_parcel_realtime.RealtimeParcelTracking.as_view(), name='realtime-tracking'),
+#    path('trackings/realtime/', track_a_parcel_realtime.RealtimeParcelTracking.as_view(), name='realtime-tracking'),
+    path('tracking/<str:num>/', update_tracking_data.UpdateTracking.as_view(), name='update-one'),
     path('trackings/<str:num>/', retrieve_one.RetrieveOne.as_view(), name='track-one'),
     path('trackings/', retrieve_all_tracking.RetrieveAllView.as_view(), name='trackings'),
     path('trackings/charts/weekly/', get_activity_chart.GetWeeklyActivityChart.as_view(), name='weekly-activity'),

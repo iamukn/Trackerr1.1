@@ -5,38 +5,27 @@ include:
     - celery.yml
 services:
     trackerr:
-        build: ../
-        command: /bin/bash -c "python3 manage.py collectstatic --noinput && gunicorn trackerr_v1.wsgi:application --workers 3 --bind 0.0.0.0:8000"
-        ports: 
+        image: iamukn/trackerr:1.0.25
+        command: /bin/bash -c "python3 manage.py collectstatic --no-input && daphne -b 0.0.0.0 -p 8000 trackerr_v1.asgi:application"
+        ports:
             - "8000:8000"
-        environment:
-            - DEBUG
-            - PASSWORD
-            - ALLOWED_HOST
-            - SECRET_KEY
-            - EMAIL
-            - EMAIL_PASSWORD
-            - apikey
-            - DB_HOST
-            - POSTGRES_HOST
-            - CELERY_BROKER_URL
-            - CELERY_RESULT_BACKEND
-            - CELERY_TIMEZONE
-            - CELERY_ENABLE_UTC
-            - CELERY_ACCEPT_CONTENT
-            - CELERY_TASK_SERIALIZER
-            - SWAGGER_URL
+        env_file:
+          - .env
         depends_on:
             - postgres
             - redis
         volumes:
-            - ../:/app
-            - static_volume:/static
-            - media_volume:/media
+            - static_files:/static
+            - media_files:/media
         networks:
             - connect
+              #        develop:
+              #watch:
+              #  - action: sync
+              #    path: ../
+              #    target: /app
 networks:
     connect:
 volumes:
-    static_volume:
-    media_volume:
+  static_files:
+  media_files:

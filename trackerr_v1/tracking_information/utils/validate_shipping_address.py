@@ -30,7 +30,9 @@ def verify_address(address:str) -> Dict:
     params = {'q': address, 'apikey':api_key}
     try:
         response = get(url, params=params)
-        base = response.json().get('items')[0]
+        base = response.json().get('items')
+        # get the address data
+        base = base[0]
 
         data = {
             'address' : base.get('address').get('label'),
@@ -40,5 +42,9 @@ def verify_address(address:str) -> Dict:
             'longitude' : base.get('position').get('lng'),
                 }
         return data
+
+    except IndexError as e:
+        return {'error': 'incorrect address, please enter a correct address'}
+
     except Exception as error:
         return error

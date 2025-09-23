@@ -15,13 +15,6 @@ class UsersSerializer(ModelSerializer):
         model = User
         fields = '__all__'
 
-
-    def get_logo(self, obj):
-        if obj.avatar:  # If logo field is not empty
-            return obj.avatar.url  # Assuming logo is a FileField or ImageField
-        else:
-            return None
-
     def to_internal_value(self, validated_data):
         # convert fields to lowercase for consistency
         validated_data = super().to_internal_value(validated_data)
@@ -31,7 +24,10 @@ class UsersSerializer(ModelSerializer):
             validated_data['email'] = validated_data['email'].lower()
         if validated_data.get('address'):
             validated_data['address'] = validated_data['address'].lower()
+        if validated_data.get('country'):
+            validated_data['country'] = validated_data['country'].lower()
         if validated_data.get('avatar'):
+            print('data found')
             validated_data['avatar'] = validated_data['avatar']
         return validated_data
 
@@ -45,6 +41,7 @@ class UsersSerializer(ModelSerializer):
             "is_verified": instance.is_active, 
             "account_type": instance.account_type,
             "address": instance.address,
+            "country": instance.country,
             "is_verified": instance.is_verified,
             "is_active": instance.is_active,
             "created_on": instance.date_joined,
@@ -52,14 +49,7 @@ class UsersSerializer(ModelSerializer):
                 }
         
         if instance.avatar:
-            # get the avatar url
-            avatar_url = instance.avatar.url
-            # get the request object
-            request = self.context.get('request')
-            if request:
-                # build an absolute url
-                avatar_url = request.build_absolute_uri(avatar_url)
-                user_instance['avatar'] = avatar_url
+            user_instance['avatar'] = instance.avatar
         else:
             user_instance['avatar'] = ""
         return user_instance
@@ -71,10 +61,11 @@ class UsersSerializer(ModelSerializer):
         if 'account_type' in validated_data:
             validated_data.pop('account_type')
         for attr, val in validated_data.items():
-            if attr == "avatar" and val:
+            #if attr == "avatar" and val:
                 # delete the previous avatar
-                instance.avatar.delete()
+                #instance.avatar.delete()
             setattr(instance, attr, val)
+            print(attr, val)
         setattr(instance, "updated_on", now())
         instance.save()
         return instance

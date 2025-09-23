@@ -102,12 +102,17 @@ class CustomTokenObtainPairView(TokenObtainPairView):
               Sends a login notification email to the user asynchronously if login is successful.
         """
         # converts the email to lowercase
-        request.data['email'] = request.data['email'].lower()
+        data = request.data.copy()
+        
+        if 'email' in data:
+            data['email'] = data['email'].lower()
+
+        request.__full_data = data
         response = super().post(request, *args, **kwargs)
         if response.status_code == 200:
             email = request.data.get('email').lower()
             name = User.objects.get(email=email).name
-            # celery email sender
+            # sends a login email to the user
             email = send_login_email.apply_async(args=[name, email], retry=False)   
 
             return response

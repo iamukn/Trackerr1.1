@@ -18,7 +18,7 @@ class RetrieveOne(APIView):
     permission_classes = [AllowAny,]
 
     def query_set(self, num:str):
-        track = get_object_or_404(Tracking_info, parcel_number=num)
+        track = get_object_or_404(Tracking_info, parcel_number=num.upper())
         return track
     # Swagger documentation
     @swagger_auto_schema(
@@ -74,4 +74,6 @@ class RetrieveOne(APIView):
         serializer = Tracking_infoSerializer(data)
         data = serializer.data
         data.pop('owner')
+        data['shipping_address'] = data.get('shipping_address').title()
+        data['country'] = data.get('country').title()
         return Response(data, status=status.HTTP_200_OK)

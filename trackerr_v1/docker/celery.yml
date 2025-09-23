@@ -1,23 +1,10 @@
 version: "3.9"
 services:
-    celery:
-        build: ../
-        command: celery -A trackerr_v1 worker --loglevel info --concurrency=1
-        environment:
-            - DEBUG
-            - PASSWORD
-            - ALLOWED_HOST
-            - SECRET_KEY
-            - EMAIL
-            - EMAIL_PASSWORD
-            - apikey
-            - DB_HOST
-            - CELERY_BROKER_URL
-            - CELERY_RESULT_BACKEND
-            - CELERY_TIMEZONE
-            - CELERY_ENABLE_UTC
-            - CELERY_ACCEPT_CONTENT
-            - CELERY_TASK_SERIALIZER
+      celery:
+        image: iamukn/trackerr:1.0.25
+        command: celery -A trackerr_v1 worker --discard --loglevel info --concurrency=1
+        env_file:
+            - .env
         depends_on:
             - postgres
             - redis

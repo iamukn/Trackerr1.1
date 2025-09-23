@@ -6,6 +6,9 @@ from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from django.http import HttpResponseNotAllowed
 from django.db import transaction
 from shared.celery_tasks.tracking_info_tasks.verify_address_task import verify_shipping_address
+from shared.celery_tasks.business_owners_task.upload_dp import upload_dp
+from shared.aws_config.s3 import s3
+from business.utils.resize_image import resize_image
 from django.db.utils import IntegrityError
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
@@ -15,7 +18,12 @@ from business.serializers import Business_ownerSerializer
 from .business_owner_permission import IsBusinessOwner
 from business.models import Business_owner
 from user.models import User
+from uuid import uuid4
+from os import environ
 from django.shortcuts import (get_object_or_404, get_list_or_404)
+import botocore.exceptions
+from datetime import datetime
+#from business.utils.resize_and_upload import resize_and_upload as upload_dp 
 
 logger = setUp_logger(__name__, 'business.logs')
 
@@ -281,6 +289,21 @@ class Business_ownerRegistration(APIView):
                             'error': 'account type must be business'
                             }
                         )
+                    ),
+            "404": openapi.Response(
+                    description="Error: Address Not Found",
+                    schema=openapi.Schema(
+                        type=openapi.TYPE_OBJECT,
+                        properties={
+                            'error': openapi.Schema(
+                                type=openapi.TYPE_STRING,
+                                description='Error message describing the error'
+                                )
+                            },
+                        example={
+                            'error': 'address cannot be found on the map, enter a valid address'
+                            }
+                        )
                     )
                     }
                 )
@@ -290,50 +313,101 @@ class Business_ownerRegistration(APIView):
          
         if not request.data.get('account_type') == 'business':
             logger.error('account_type is not business owner')
+            print('THERE')
             return Response({"error":"account type must be business"}, status=status.HTTP_400_BAD_REQUEST)
         if 'address' not in request.data:
+            print('HERE')
             return Response({'error': 'address is required'}, status=status.HTTP_400_BAD_REQUEST)
+
             #
         try:
             with transaction.atomic(): 
-                
                 # get the lat and lng for the business owner
                 data = request.data
-                address = verify_shipping_address.apply_async(kwargs={'address': data.get('address').capitalize()}).get()
+                avatar = data.get('avatar')
+
+                if avatar:
+                    data.pop('avatar')
+
+                address = verify_shipping_address.apply_async(kwargs={'address': data.get('address', '').capitalize()})
+                address = address.get(timeout=60)
+                # added the country
+                data['country'] = address.get('country', '').lower()
+
                 
+                # handle errors from address field
+                if 'error' in address:
+                    return Response({'error': 'address cannot be found on the map, please enter a valid address'}, status=status.HTTP_404_NOT_FOUND)
+
                 user = UsersSerializer(data=request.data, context={'request': request})
                 
+                new_uuid = uuid4()
+                user_s3_key = ""
+                if avatar:
+                    content_type = str(avatar.content_type).split('/')[-1]
+                    print(content_type)
+
+                    if not content_type.lower() in ['jpg', 'jpeg', 'png']:
+                        return Response({'error': "avatar must either be jpg, jpeg or png"}, status=status.HTTP_400_BAD_REQUEST)
+
+                    user_s3_key = f"profile-pics/{new_uuid}.{content_type}"
+
+                    
                 business_data = {
                     'business_name': request.data.get('business_name'),
                     'service': request.data.get('service'),
                     'latitude': address.get('latitude'),
-                    'longitude': address.get('longitude')
+                    'longitude': address.get('longitude'),
+                    'business_owner_uuid': str(new_uuid),
+                    'profile_pic_key': user_s3_key
                         }
                 business_owner = Business_ownerSerializer(data=business_data, context={'request': request})
-            
 
                 if not business_owner.is_valid() and not user.is_valid():
+                    print(user.errors, business_owner.errors)
                     return Response((user.errors, business_owner.errors), status=status.HTTP_400_BAD_REQUEST)
             
                 elif not business_owner.is_valid():
+                    print(business_owner.errors)
                     return Response(business_owner.errors, status=status.HTTP_400_BAD_REQUEST)
 
                 elif not user.is_valid():
+                    print(user.errors)
                     return Response(user.errors, status=status.HTTP_400_BAD_REQUEST)
             
                 elif business_owner.is_valid() and user.is_valid():
-                    user.save()
-                    business_owner.save(user=self.query_set(User, user.instance.id))
-                    return Response(business_owner.data, status=status.HTTP_201_CREATED)
+                    print('Data: ', data)
+                    if avatar:
+                        upload_dp.delay(avatar.read(),user_s3_key)
+                        user.save()
+                        business_owner.save(user=self.query_set(User, user.instance.id))
+                    else:
+                        user.save()
+                        business_owner.save(user=self.query_set(User, user.instance.id))
+                    
+                    data = business_owner.data
+                    key = data.pop('profile_pic_key')
+                    # add the avatar url
+                    data['user']['avatar'] = f"{environ.get('TRACKERR_CDN_URL')}{key}"
+                    print(data)
+                    return Response(data, status=status.HTTP_201_CREATED)
                 return Response({'error': 'invalid data'}, status=status.HTTP_400_BAD_REQUEST)
 
         except IntegrityError as e:
             return Response(str(e.args[0].strip('\n')), status=status.HTTP_400_BAD_REQUEST)
+        
+        except botocore.exceptions.ClientError as e:
+            error_message = e.response['Error'].get('Message', 'S3 upload failed.')
+            return Response({"error": error_message}, status=500)
 
         except ValueError as e:
             logger.error(e)
             return Response(business_owner.errors, status=status.HTTP_400_BAD_REQUEST)
 
+        except Exception as e:
+            raise e
+            logger.error(e)
+            return Response({'error': str(e)})
 
 """
   Class to retrieve, modify and delete a business_owner
@@ -351,7 +425,7 @@ class Business_ownerRoute(APIView):
         return user
 
     permission_classes = [IsBusinessOwner,]
-    parser_classes = [JSONParser, MultiPartParser, FormParser]
+    parser_classes = (MultiPartParser, FormParser, JSONParser)
     
     def authorized(self, request, business_id):
         id = business_id
@@ -456,7 +530,35 @@ class Business_ownerRoute(APIView):
         user = self.query_set(Business_owner, id)
         serializer = Business_ownerSerializer(user, context={'request': request})
         if user:
-            return Response(serializer.data, status=status.HTTP_200_OK)
+            data = serializer.data
+            name = data.get('user').get('name')
+            avatar_key = data.pop('profile_pic_key')
+
+            if name:
+                name = name.split(' ')[0].capitalize()
+                data['user']['name'] = name + '👌'
+            data['user'].pop('created_on')
+            #data['user'].pop('updated_on')
+            #data['user'].pop('phone_number')
+            # compute the avatar url using the key
+            if avatar_key:
+                data['user']['avatar'] = f"{environ.get('TRACKERR_CDN_URL')}/{avatar_key}" 
+            else:
+                data['user']['avatar'] = ''
+            data['business_name'] = data['business_name'].title()
+            data['service'] = data['service'].title()
+            data['user']['address'] = data['user']['address'].title()
+            data['user']['name'] = data['user']['name'].title()
+            if  data.get('business_owner_uuid'):
+                data['business_owner_uuid'] = data['business_owner_uuid'][-8:]
+            else:
+                data['business_owner_uuid'] = "##"
+            # convert the time to human readable for updated_on
+            if data['user']['updated_on']:
+                datetime_obj = data['user']['updated_on']
+                formatted_date = datetime_obj.strftime("%b %d, %Y")
+                data['user']['updated_on'] = formatted_date
+            return Response(data, status=status.HTTP_200_OK)
         return Response({'error': 'user not found'}, status=status.HTTP_404_NOT_FOUND)
 
     @swagger_auto_schema(
@@ -668,9 +770,31 @@ class Business_ownerRoute(APIView):
         business = self.query_set(Business_owner, id)
         user = business.user
 
-        data = request.data
+        data = request.data.copy()
+        if not user.address == data.get('address').lower():
+            # verify shipping address
+            # get the lat and lng
+            # update the record
+            address = verify_shipping_address.apply_async(kwargs={'address': data.get('address', '').capitalize()}).get(timeout=30)
+           
+            print(address)
+            if 'error' in address:
+                return Response(address, status=status.HTTP_400_BAD_REQUEST)
+            data['latitude'] = address.get('latitude')
+            data['longitude'] = address.get('longitude')
+
         if 'password' in data:
             data.pop('password')
+
+        ## handle avatar upload
+        avatar = data.pop('avatar')
+        
+        if avatar:
+            try:
+                if not user.business_owner.profile_pic_key in avatar[0].name:
+                    update_avatar = upload_dp.delay(avatar[0].read(),user.business_owner.profile_pic_key)
+            except Exception as e:
+                print(e)
 
         with transaction.atomic():
             user_ser = UsersSerializer(user, data=data, partial=True)

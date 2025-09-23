@@ -61,7 +61,8 @@ class GetWeeklyActivityChart(APIView):
             return Response({'details': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
 
         try:
-            return Response(self.chart.last_seven_days(request.user), status=status.HTTP_200_OK)
+            last_seven = self.chart.last_seven_days(request.user)
+            return Response(last_seven, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(e, status=status.HTTP_400_BAD_REQUEST)
 

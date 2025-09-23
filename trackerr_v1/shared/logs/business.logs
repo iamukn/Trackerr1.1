@@ -957,3 +957,50 @@ business.views.views : views.py :views : post: 278: :ERROR 40: account_type is n
 business.views.views : views.py :views : post: 281: :ERROR 40: account_type is not business owner : 11/28/2024 09:13:47 PM
 business.views.views : views.py :views : post: 294: :ERROR 40: account_type is not business owner : 11/28/2024 09:20:16 PM
 user.views.change_password : change_password.py :change_password : post: 168: :ERROR 40: Failed to enqueue email task: 'NoneType' object is not callable : 12/16/2024 03:41:39 PM
+business.views.views : views.py :views : post: 292: :ERROR 40: account_type is not business owner : 12/17/2024 10:42:48 AM
+business.views.views : views.py :views : post: 292: :ERROR 40: account_type is not business owner : 03/09/2025 08:48:37 AM
+business.views.views : views.py :views : post: 343: :ERROR 40: TypeError('Object of type IndexError is not JSON serializable') : 03/09/2025 10:06:59 AM
+business.views.views : views.py :views : post: 343: :ERROR 40: TypeError('Object of type IndexError is not JSON serializable') : 03/09/2025 10:07:42 AM
+business.views.views : views.py :views : post: 343: :ERROR 40: TypeError('Object of type IndexError is not JSON serializable') : 03/09/2025 10:10:14 AM
+business.views.views : views.py :views : post: 343: :ERROR 40: TypeError('Object of type IndexError is not JSON serializable') : 03/09/2025 10:11:08 AM
+business.views.views : views.py :views : post: 344: :ERROR 40: TypeError('Object of type IndexError is not JSON serializable') : 03/09/2025 10:17:31 AM
+business.views.views : views.py :views : post: 344: :ERROR 40: TypeError('Object of type IndexError is not JSON serializable') : 03/09/2025 10:21:07 AM
+business.views.views : views.py :views : post: 344: :ERROR 40: TypeError('Object of type IndexError is not JSON serializable') : 03/09/2025 10:21:27 AM
+business.views.views : views.py :views : post: 361: :ERROR 40: Cannot set both 'fields' and 'exclude' options on serializer Business_ownerSerializer. : 06/05/2025 06:49:27 PM
+business.views.views : views.py :views : post: 308: :ERROR 40: account_type is not business owner : 06/14/2025 08:27:47 PM
+business.views.views : views.py :views : post: 377: :ERROR 40: Unable to locate credentials : 06/14/2025 08:45:49 PM
+business.views.views : views.py :views : post: 377: :ERROR 40: Unable to locate credentials : 06/14/2025 08:48:35 PM
+business.views.views : views.py :views : post: 377: :ERROR 40: Unable to locate credentials : 06/14/2025 08:50:11 PM
+business.views.views : views.py :views : post: 377: :ERROR 40: An error occurred (AccessControlListNotSupported) when calling the PutObject operation: The bucket does not allow ACLs : 06/14/2025 08:53:16 PM
+business.views.views : views.py :views : post: 377: :ERROR 40: An error occurred (AccessControlListNotSupported) when calling the PutObject operation: The bucket does not allow ACLs : 06/14/2025 08:59:20 PM
+business.views.views : views.py :views : post: 388: :ERROR 40: 'JpegImageFile' object has no attribute 'content_type' : 06/14/2025 09:35:35 PM
+business.views.views : views.py :views : post: 388: :ERROR 40: '_io.BytesIO' object has no attribute 'content_type' : 06/14/2025 09:38:28 PM
+business.views.views : views.py :views : post: 388: :ERROR 40: '_io.BytesIO' object has no attribute 'content_type' : 06/14/2025 09:40:46 PM
+business.views.views : views.py :views : post: 388: :ERROR 40: '_io.BytesIO' object has no attribute 'content_type' : 06/14/2025 09:42:43 PM
+business.views.views : views.py :views : post: 388: :ERROR 40: '_io.BytesIO' object has no attribute 'content_type' : 06/14/2025 09:44:23 PM
+business.views.views : views.py :views : post: 388: :ERROR 40: '_io.BytesIO' object has no attribute 'content_type' : 06/14/2025 09:46:27 PM
+business.views.views : views.py :views : post: 388: :ERROR 40: '_io.BytesIO' object has no attribute 'content_type' : 06/14/2025 09:46:37 PM
+business.views.views : views.py :views : post: 388: :ERROR 40: '_io.BytesIO' object has no attribute 'content_type' : 06/14/2025 09:48:21 PM
+business.views.views : views.py :views : post: 388: :ERROR 40: '_io.BytesIO' object has no attribute 'content_type' : 06/14/2025 09:48:25 PM
+business.views.views : views.py :views : post: 388: :ERROR 40: '_io.BytesIO' object has no attribute 'content_type' : 06/14/2025 09:49:13 PM
+business.views.views : views.py :views : post: 388: :ERROR 40: '_io.BytesIO' object has no attribute 'content_type' : 06/14/2025 09:49:22 PM
+business.views.views : views.py :views : post: 388: :ERROR 40: '_io.BytesIO' object has no attribute 'content_type' : 06/14/2025 09:50:30 PM
+business.views.views : views.py :views : post: 388: :ERROR 40: '_io.BytesIO' object has no attribute 'content_type' : 06/14/2025 09:52:47 PM
+business.views.views : views.py :views : post: 388: :ERROR 40: '_io.BytesIO' object has no attribute 'content_type' : 06/14/2025 09:53:28 PM
+business.views.views : views.py :views : post: 388: :ERROR 40: '_io.BytesIO' object has no attribute 'content_type' : 06/14/2025 09:53:31 PM
+business.views.views : views.py :views : post: 388: :ERROR 40: '_io.BytesIO' object has no attribute 'content_type' : 06/14/2025 09:54:10 PM
+business.views.views : views.py :views : post: 388: :ERROR 40: cannot identify image file <InMemoryUploadedFile: Ndukwe, Ukaegbu updated-SE-CV-Jun25.pdf (application/pdf)> : 06/14/2025 09:58:30 PM
+business.views.views : views.py :views : post: 396: :ERROR 40: 'Business_ownerSerializer' object has no attribute 'business_owner_uuid' : 06/16/2025 10:14:51 PM
+business.views.views : views.py :views : post: 397: :ERROR 40: You must call `.is_valid()` before accessing `.validated_data`. : 06/16/2025 10:19:01 PM
+business.views.views : views.py :views : post: 383: :ERROR 40: 'list' object has no attribute 'content_type' : 06/16/2025 11:05:42 PM
+business.views.views : views.py :views : post: 384: :ERROR 40: 'list' object has no attribute 'content_type' : 06/16/2025 11:06:53 PM
+business.views.views : views.py :views : post: 386: :ERROR 40: 'list' object has no attribute 'content_type' : 06/16/2025 11:08:44 PM
+business.views.views : views.py :views : post: 387: :ERROR 40: 'avatar' : 06/16/2025 11:10:54 PM
+business.views.views : views.py :views : post: 387: :ERROR 40: 'avatar' : 06/16/2025 11:11:27 PM
+business.views.views : views.py :views : post: 387: :ERROR 40: Unable to locate credentials : 06/16/2025 11:13:50 PM
+business.views.views : views.py :views : post: 386: :ERROR 40: name 'satus' is not defined : 06/16/2025 11:31:53 PM
+business.views.views : views.py :views : post: 386: :ERROR 40: name 'satus' is not defined : 06/16/2025 11:34:50 PM
+business.views.views : views.py :views : post: 386: :ERROR 40: name 'satus' is not defined : 06/16/2025 11:36:58 PM
+business.views.views : views.py :views : post: 386: :ERROR 40: name 'satus' is not defined : 06/16/2025 11:38:40 PM
+business.views.views : views.py :views : post: 384: :ERROR 40: name 'avatar_url' is not defined : 06/16/2025 11:49:49 PM
+business.views.views : views.py :views : post: 384: :ERROR 40: 'str' object has no attribute 'url' : 06/16/2025 11:50:37 PM
