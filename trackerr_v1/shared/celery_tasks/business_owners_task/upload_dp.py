@@ -10,4 +10,5 @@ def upload_dp(self,file_obj, key, bucket='trackerr-bucket'):
         res = resize_and_upload.resize_and_upload(file_obj=file_obj, key=key, bucket=bucket)
         return(0) #res
     except Exception as e:
+        raise e
         return {"error": str(e)}

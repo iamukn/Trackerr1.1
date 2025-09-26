@@ -1004,3 +1004,4 @@ business.views.views : views.py :views : post: 386: :ERROR 40: name 'satus' is n
 business.views.views : views.py :views : post: 386: :ERROR 40: name 'satus' is not defined : 06/16/2025 11:38:40 PM
 business.views.views : views.py :views : post: 384: :ERROR 40: name 'avatar_url' is not defined : 06/16/2025 11:49:49 PM
 business.views.views : views.py :views : post: 384: :ERROR 40: 'str' object has no attribute 'url' : 06/16/2025 11:50:37 PM
+business.views.views : views.py :views : post: 315: :ERROR 40: account_type is not business owner : 09/25/2025 12:46:43 AM

@@ -14,4 +14,4 @@ class Logistics_partnerSerializer(ModelSerializer):
 
     class Meta:
         model = Logistics_partner
-        fields = '__all__'
+        exclude = ['vehicle_image_key']

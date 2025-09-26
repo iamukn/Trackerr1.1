@@ -65,7 +65,6 @@ class UsersSerializer(ModelSerializer):
                 # delete the previous avatar
                 #instance.avatar.delete()
             setattr(instance, attr, val)
-            print(attr, val)
         setattr(instance, "updated_on", now())
         instance.save()
         return instance

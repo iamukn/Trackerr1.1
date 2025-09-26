@@ -22,7 +22,7 @@ def resize_and_upload(file_obj,key, bucket='trackerr-bucket'):
    #     filename += '.jpeg'
 
     elif 'JPG' in str(key).upper():
-        image.save(buffer, format='JPG')
+        image.save(buffer, format='JPEG')
    #     filename += '.jpg'
 
     elif 'PNG' in str(key).upper():

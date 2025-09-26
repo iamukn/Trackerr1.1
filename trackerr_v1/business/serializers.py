@@ -26,29 +26,13 @@ class Business_ownerSerializer(ModelSerializer):
         return data
 
     def update(self, instance, validated_data):
-        # Optional: fallback to raw request data (if fields are excluded from serializer)
-        request = self.context.get('request').data
-        #if request:
-        #   if 'profile_pic_key' in request:
-        #        instance.profile_pic_key = request.get('profile_pic_key')
-        #   if 'business_owner_uuid' in request:
-        #        instance.business_owner_uuid = request.get('business_owner_uuid')
-        #   if 'business_name' in request:
-        #       instance.business_name = request.get('business_name')
 
-        if request:
-            for key in request.keys():
-                if key in [
-                        'profile_pic_key',
-                        'business_owner_uuid',
-                        'business_name',
-                        'service',
-                        'latitude',
-                        'longitude',
-                        ]:
-                    # set the attribute
-                    setattr(instance, key, request.get(key))
-
-        print(instance.business_name)
+        for key in ['profile_pic_key', 'business_owner_uuid', 'business_name', 'service', 'latitude', 'longitude']:
+            if key in validated_data:
+                setattr(instance, key, validated_data[key])
+            else:
+                request_data = self.context.get('request').data
+                if key in request_data:
+                    setattr(instance, key, request_data.get(key))
         instance.save()
         return instance
