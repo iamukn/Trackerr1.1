@@ -126,7 +126,7 @@ class Rider(APIView):
                 return Response({'msg': 'you are not unauthorized to delete this user'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
-            rider = rider.delete()
+            rider = rider.user.delete()
             return Response({'msg': f'rider: {user.name} deleted successfully'}, status=status.HTTP_200_OK)
 
         except Exception as e:

@@ -10,6 +10,7 @@ from django.db import transaction
 from django.contrib.auth.models import AnonymousUser
 from django.shortcuts import get_object_or_404
 from shared.celery_tasks.business_owners_task.upload_dp import upload_dp
+from logistics.utils.generate_password import generate_password
 import uuid
 
 
@@ -23,7 +24,9 @@ class RegisterRider(APIView):
         rider_uuid = uuid.uuid4()
 
 
-    
+        if 'password' in data:
+            data.pop('password')
+
         if 'avatar' in data:
             avatar =  data.pop('avatar')[0]
             file_extension = avatar.content_type.split('/')[-1]
@@ -55,7 +58,14 @@ class RegisterRider(APIView):
         try:
             with transaction.atomic():
 
+                password = generate_password()
+
+                data['password'] = password
+
                 new_user =  UsersSerializer(data=data)
+
+                if request.user.account_type == 'business':
+                    data['owner'] = int(request.user.business_owner.id)
                 new_rider = Logistics_partnerSerializer(data=data)
 
                 if new_user.is_valid() and new_rider.is_valid():

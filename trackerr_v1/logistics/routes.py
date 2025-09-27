@@ -3,7 +3,7 @@ from .views import (logistics_users_count,
                     update_riders_location,
                     create_rider,
                     read_update_delete_rider,
-                    get_all_business_owners_riders
+                    get_all_business_owners_riders,
                     )
 urlpatterns = [
     path('logistics/signup/', create_rider.RegisterRider.as_view(), name='logistics-signup'),

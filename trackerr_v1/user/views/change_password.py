@@ -13,6 +13,7 @@ from django.shortcuts import get_object_or_404
 from user.utils.shortcuts import get_otp_or_none
 from django.db import transaction
 from user.models import Otp
+from logistics.permissions.logistics_owner_permissions import IsRider
 
 # logger
 logger = setUp_logger(__name__, 'business.logs')
@@ -21,7 +22,7 @@ logger = setUp_logger(__name__, 'business.logs')
 
 class ChangePassword(Recover_password):
     ''' Route for password change for authenticated users '''
-    permission_classes = [IsBusinessOrLogisticsOwner,]
+    permission_classes = [IsBusinessOrLogisticsOwner, IsRider]
     
     # swagger docs
     @swagger_auto_schema(

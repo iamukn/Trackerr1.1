@@ -17,6 +17,7 @@ class Tracking_info(models.Model):
     shipping_address = models.CharField(max_length=255, null=False, blank=False)
   #  latitude = models.CharField(max_length=255, null=True, blank=True, default=None)
   #  longitude = models.CharField(max_length=255, null=True, blank=True, default=None)
+    is_assigned = models.BooleanField(null=False, blank=False, default=False)
     destination_lat = models.CharField(max_length=255, null=False, blank=False)
     destination_lng = models.CharField(max_length=255, null=False, blank=False)
     business_owner_lat = models.CharField(max_length=30, null=True, blank=True)

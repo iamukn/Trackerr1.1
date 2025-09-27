@@ -27,4 +27,4 @@ class Business_owner(models.Model):
         Return:
             The Business owner
         """
-        return "Business owner model"
+        return f"Business Name: {self.business_name}"
