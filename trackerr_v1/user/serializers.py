@@ -45,7 +45,7 @@ class UsersSerializer(ModelSerializer):
             "is_verified": instance.is_verified,
             "is_active": instance.is_active,
             "created_on": instance.date_joined,
-            "updated_on": instance.updated_on
+            "updated_on": instance.updated_on,
                 }
         
         if instance.avatar:

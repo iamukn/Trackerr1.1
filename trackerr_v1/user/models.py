@@ -27,6 +27,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
     is_verified = models.BooleanField(default=False)
+    wants_marketing_emails = models.BooleanField(null=False, blank=False, default=True)
+
     updated_on = models.DateTimeField(null=True, blank=True)
 
     USERNAME_FIELD = 'email'

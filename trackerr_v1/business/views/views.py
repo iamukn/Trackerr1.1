@@ -772,7 +772,7 @@ class Business_ownerRoute(APIView):
         user = business.user
 
         data = request.data.copy()
-        if not user.address == data.get('address').lower():
+        if data.get('address') and not user.address == data.get('address').lower():
             # verify shipping address
             # get the lat and lng
             # update the record
@@ -783,12 +783,14 @@ class Business_ownerRoute(APIView):
                 return Response(address, status=status.HTTP_400_BAD_REQUEST)
             data['latitude'] = address.get('latitude')
             data['longitude'] = address.get('longitude')
+            data['country'] = address.get('country').lower()
 
         if 'password' in data:
             data.pop('password')
 
         ## handle avatar upload
-        avatar = data.pop('avatar')
+        avatar = data.pop('avatar') if 'avatar' in data else ""
+        #avatar = data.pop('avatar')
         uuid = ''
         new_profile_pic_key = ''
         if avatar:

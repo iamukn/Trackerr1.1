@@ -8,7 +8,7 @@ class Wallet(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     
     # Link to user
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='wallets')
+    owner = models.OneToOneField(User, on_delete=models.CASCADE, related_name='wallet')
     
     # Balance using DecimalField (avoid float for money)
     balance = models.DecimalField(max_digits=18, decimal_places=8, default=Decimal('0.0'))
@@ -33,5 +33,5 @@ class Wallet(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return f"{self.user.username} - {self.currency} Wallet"
+        return f"{self.owner.name} - {self.currency} Wallet"
 

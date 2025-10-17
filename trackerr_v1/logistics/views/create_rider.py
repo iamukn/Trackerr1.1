@@ -27,14 +27,17 @@ class RegisterRider(APIView):
         if 'password' in data:
             data.pop('password')
 
+        avatar = ""
+        vehicle_image = "" 
+
         if 'avatar' in data:
             avatar =  data.pop('avatar')[0]
             file_extension = avatar.content_type.split('/')[-1]
             profile_pic_key = f'riders_dp/{rider_uuid}.{file_extension}'
             data['profile_pic_key'] = profile_pic_key
 
-        if not 'vehicle_image' in data:
-            return Response({'msg': 'vehicle image is required'}, status=status.HTTP_400_BAD_REQUEST)
+ #       if not 'vehicle_image' in data:
+ #           return Response({'msg': 'vehicle image is required'}, status=status.HTTP_400_BAD_REQUEST)
 
         if 'vehicle_image' in data:
             vehicle_image = data.pop('vehicle_image')[0]
@@ -69,10 +72,12 @@ class RegisterRider(APIView):
                 new_rider = Logistics_partnerSerializer(data=data)
 
                 if new_user.is_valid() and new_rider.is_valid():
-                    # upload avatar
-                    upload_dp.delay(avatar.read(), profile_pic_key)
-                    # upload vehicle image
-                    upload_dp.delay(vehicle_image.read(), vehicle_image_key)
+                    if avatar:
+                        # upload avatar
+                        upload_dp.delay(avatar.read(), profile_pic_key)
+                    if vehicle_image:
+                        # upload vehicle image
+                        upload_dp.delay(vehicle_image.read(), vehicle_image_key)
 
                     new_user.save()
                     new_rider.save(user=get_object_or_404(User, pk=new_user.instance.id))
@@ -88,4 +93,4 @@ class RegisterRider(APIView):
                     return Response({'msg': error}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             print(e)
-            return Response({'msg': 'internal server error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'msg': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 from user.models import User
+from decimal import Decimal
 import uuid
 """
     The Logistic parner model that inherits from
@@ -14,18 +15,22 @@ class Logistics_partner(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     lat = models.CharField(max_length=55, null=True, blank=True)
     lng = models.CharField(max_length=55, null=True, blank=True)
-    identity_card_type = models.CharField(max_length=120, null=False, blank=False)
-    id_number = models.CharField(max_length=50, null=False, blank=False, unique=True)
-    plate_number = models.CharField(max_length=50, unique=True, null=False, blank=False)
+    identity_card_type = models.CharField(max_length=120, null=True, blank=True)
+    id_number = models.CharField(max_length=50, null=True, blank=True, unique=True)
+    plate_number = models.CharField(max_length=50, unique=True, null=True, blank=True)
     owner = models.IntegerField(blank=True, null=True)
-    nationality = models.CharField(max_length=50, null=False, blank=False)
-    vehicle_model = models.CharField(max_length=50, null=False, blank=False)
+    nationality = models.CharField(max_length=50, null=True, blank=True)
+    vehicle_model = models.CharField(max_length=50, null=True, blank=True)
     logistics_owner_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     profile_pic_key = models.CharField(max_length=300, null=True, blank=True)
-    vehicle_color = models.CharField(max_length=50, null=False, blank=False)
+    vehicle_color = models.CharField(max_length=50, null=True, blank=True)
     vehicle_image_key = models.CharField(max_length=300, null=True, blank=True)
     referral_code = models.CharField(max_length=50, null=True, blank=True)
-    terms_and_condition = models.BooleanField(null=False, blank=False)
+    terms_and_condition = models.BooleanField(null=True, blank=True)
+    total_delivery = models.IntegerField(blank=False, null=False, default=0)
+    total_assigned_orders = models.IntegerField(blank=False, null=False, default=0)
+    rating = models.FloatField(blank=False, null=False, default=float(0))
+    status = models.CharField(max_length=50, null=False, blank=False, default='inactive')
 
 
     # add rider uuid here
