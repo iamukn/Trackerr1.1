@@ -6,9 +6,6 @@ from tracking_information.utils.track_gen import tracking_number_gen
 
 def uniquefy(num: str, vendor: str) -> str:
     ''' Checks to see if the tracking doesn't exists in the database '''
-    if not Tracking_info.objects.filter(parcel_number=num).exists():
-        
-        return num.upper()
-    # If the tracking exist in  the database, a recursive call is made
-    num = tracking_number_gen(user=vendor)
-    uniquefy(num=num, vendor=vendor)
+    while Tracking_info.objects.filter(parcel_number=num).exists():
+        num = tracking_number_gen(user=vendor)
+    return num.upper()
