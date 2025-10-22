@@ -4552,3 +4552,183 @@ user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Ot
 user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/14/2025 06:39:33 PM
 user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/14/2025 06:39:33 PM
 user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/14/2025 06:39:33 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Doe : 10/22/2025 06:02:38 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:38 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:02:39 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:39 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:02:39 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:39 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:02:39 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:39 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:02:39 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:39 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:02:39 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:39 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:02:39 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:39 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to richard : 10/22/2025 06:02:39 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to richard with balance 500.00 NGN : 10/22/2025 06:02:39 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:02:40 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:40 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:02:40 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:40 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:02:40 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:40 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:02:40 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:40 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to John Doe : 10/22/2025 06:02:40 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:40 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to John Doe : 10/22/2025 06:02:40 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:40 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:02:41 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:41 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:02:42 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:42 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:02:42 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:42 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:02:42 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:42 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:02:42 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:42 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:02:43 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:43 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:02:43 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:43 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:02:43 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:43 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:02:44 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:44 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:02:45 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:45 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:02:49 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:49 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to John Doe : 10/22/2025 06:02:49 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:49 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:02:49 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:49 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:02:49 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:49 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:02:49 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:49 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:02:49 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:02:49 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Doe : 10/22/2025 06:09:07 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:07 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:09:10 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:10 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:09:10 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:10 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:09:10 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:10 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:09:10 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:10 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:09:11 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:11 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:09:11 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:11 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to richard : 10/22/2025 06:09:12 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to richard with balance 500.00 NGN : 10/22/2025 06:09:12 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:09:12 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:12 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:09:12 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:12 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:09:13 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:13 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:09:13 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:13 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to John Doe : 10/22/2025 06:09:13 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:13 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to John Doe : 10/22/2025 06:09:13 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:13 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:09:14 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:14 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:09:14 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:14 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:09:15 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:15 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:09:15 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:15 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:09:15 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:15 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:09:15 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:15 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:09:16 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:16 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:09:16 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:16 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:09:17 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:17 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:09:18 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:18 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:09:23 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:23 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to John Doe : 10/22/2025 06:09:23 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:23 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:09:23 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:23 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:09:23 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:23 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:09:23 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:23 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:09:24 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:09:24 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Doe : 10/22/2025 06:11:04 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:04 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:11:07 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:07 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:11:07 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:07 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:11:08 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:08 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:11:08 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:08 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:11:08 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:08 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:11:08 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:08 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to richard : 10/22/2025 06:11:09 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to richard with balance 500.00 NGN : 10/22/2025 06:11:09 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:11:10 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:10 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:11:10 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:10 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:11:10 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:10 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:11:10 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:10 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to John Doe : 10/22/2025 06:11:11 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:11 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to John Doe : 10/22/2025 06:11:11 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:11 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:11:11 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:11 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:11:12 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:12 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:11:12 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:12 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:11:12 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:12 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:11:13 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:13 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:11:13 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:13 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:11:13 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:13 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:11:14 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:14 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:11:15 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:15 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:11:16 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:16 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 10/22/2025 06:11:22 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:22 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to John Doe : 10/22/2025 06:11:22 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:22 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:11:22 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:22 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:11:22 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:22 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:11:22 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:22 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 10/22/2025 06:11:22 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 10/22/2025 06:11:22 PM

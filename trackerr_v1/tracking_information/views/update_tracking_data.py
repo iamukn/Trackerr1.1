@@ -53,15 +53,6 @@ class UpdateTracking(APIView):
                                 rider_serializer.save()
                         serializer.save()
 
-                        # handles the total delivery done by a rider
-#                        if data.get('status').lower() == 'delivered':
-#                            auth_user = request.user.account_type
-#                            if auth_user.lower() == 'logistics':
-#                                rider = request.user
-#                                rider_serializer = Logistics_partnerSerializer(rider, data={ "total_delivery" : int(rider.total_delivery + 1)}, partial=True)
-#                                if rider_serializer.is_valid():
-#                                    rider_serializer.save()
-#                        serializer.save()
                         # Send Emails
                         tracking_status = data.get('status')
 
