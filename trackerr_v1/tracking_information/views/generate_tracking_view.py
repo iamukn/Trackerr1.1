@@ -251,15 +251,6 @@ class GenerateView(APIView):
             logger.error(ser.errors)
             return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            print(e)
+            raise(e)
             logger.error(e)
             return Response({"error":e}, status=status.HTTP_400_BAD_REQUEST)
-            #raise ValueError("An Error occured while creating the Tracking number")
-
-#        if ser.is_valid():
-#            ser.save()
-#            data = ser.data
-#            data.pop('owner')
-#            return Response(data, status=status.HTTP_201_CREATED)
-#        logger.error(ser.errors)
-#        return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)       
