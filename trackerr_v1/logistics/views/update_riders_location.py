@@ -27,17 +27,23 @@ class UpdateLocation(APIView):
         lat = data.get('lat')
         lng = data.get('lng')
         # get the users model
-        user = get_object_or_404(Logistics_partner, user=request.user.id)
+        #user = get_object_or_404(Logistics_partner, user=request.user.id)
         # serializes the data
-        with transaction.atomic():
-            serializer = Logistics_partnerSerializer(user, data=request.data, partial=True)
-            if serializer.is_valid():
-                # saves the model with the new data
-                serializer.save()
-                # removes the users data from the object
-                data = serializer.data
-                data.pop('user')
-                # returns a 206
-                return Response(data, status=status.HTTP_206_PARTIAL_CONTENT)
-            # returns a 400 if the incorrect fields are passed
-            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+        try:
+            with transaction.atomic():
+                user = Logistics_partner.objects.select_for_update().get(user=request.user.id)
+                serializer = Logistics_partnerSerializer(user, data=request.data, partial=True)
+                if serializer.is_valid():
+                    # saves the model with the new data
+                    serializer.save()
+                    # removes the users data from the object
+                    data = serializer.data
+                    data.pop('user')
+                    # returns a 206
+                    return Response(data, status=status.HTTP_206_PARTIAL_CONTENT)
+                # returns a 400 if the incorrect fields are passed
+                return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
+        except Logistics_partner.DoesNotExist:
+            return Response({'msg': 'rider does not exist'}, status=HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'msg': 'an error occurred'}, status=HTTP_400_BAD_REQUEST)

@@ -19,6 +19,7 @@ def get_tracking_data(parcel_number):
 
 
 class RealtimeTracking(AsyncWebsocketConsumer):
+
     async def connect(self):
         await self.accept()
         print('Connected!!!')
@@ -26,10 +27,13 @@ class RealtimeTracking(AsyncWebsocketConsumer):
     async def track_parcel_loop(self):
         coords = []
         rider_uuid = None
+        cached_coord = {'parcel_number': 'TEST345678909876'}
+
         while True:
             if not coords:
                 # fetch the latest coordinates
                 parcel = await get_tracking_data(parcel_number=self.tracking_number)
+                
 
                 if parcel:
                     coords.append(parcel)
@@ -71,11 +75,8 @@ class RealtimeTracking(AsyncWebsocketConsumer):
                     'parcel_number': self.tracking_number,
                     'status': parcels.status,
                     },
+                'country': parcels.country.lower(),
                 'locations': {
-                   # 'business_owner': {
-                   #     'lat': float(parcels.business_owner_lat),
-                   #     'lng': float(parcels.business_owner_lng)
-                   #     },
                     'customer': {
                         'lat': float(parcels.destination_lat),
                         'lng': float(parcels.destination_lng),

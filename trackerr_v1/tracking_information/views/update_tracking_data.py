@@ -10,44 +10,47 @@ from logistics.models import Logistics_partner
 from logistics.serializer import Logistics_partnerSerializer
 from shared.celery_tasks.tracking_info_tasks.verify_address_task import verify_shipping_address as validate
 from shared.celery_tasks.utils_tasks.send_tracking_email import send_tracking_updates_email as send_tracking_updates
+from django.core.exceptions import ValidationError
 from django.db import transaction
 
 class UpdateTracking(APIView):
     permission_classes = [IsBusinessOwner,]
 
     def get_queryset(self, num):
-        obj = get_object_or_404(klass=Tracking_info, parcel_number=num.upper())
+        #obj = get_object_or_404(klass=Tracking_info, parcel_number=num.upper())
+        obj = Tracking_info.objects.select_for_update().get(parcel_number=num.upper())
         return obj
     
 
     def patch(self, request, num, *args, **kwargs):
-        print(num, request.user)
-        obj = self.get_queryset(num=num)
-        
-        if obj.owner == request.user:
-            # get the data and update it
-            data = request.data
-            old_addr = data.get('shipping_address')
-            address = data.pop('shipping_address') if 'shipping_address' in data else ""
+        with transaction.atomic():
+            print('ran inside of patch')
+            obj = self.get_queryset(num=num)
             
-            if old_addr and address:
-                if not address.lower() == obj.shipping_address.lower():
-                    # get the address coordinate
-                    # add the coordinate to destination_lat and destination_lng
-                    # add the full address to shipping_address
-                    address = validate.apply_async(kwargs={'address': address}).get()
-                    data['country'] = address.get('country').lower()
-                    data['shipping_address'] = old_addr.lower()
-                    data['destination_lat'] = str(address.get('latitude')).lower()
-                    data['destination_lng'] = str(address.get('longitude')).lower()
+            if obj.owner == request.user:
+                # get the data and update it
+                data = request.data
+                old_addr = data.get('shipping_address')
+                address = data.pop('shipping_address') if 'shipping_address' in data else ""
+                
+                if old_addr and address:
+                    if not address.lower() == obj.shipping_address.lower():
+                        # get the address coordinate
+                        # add the coordinate to destination_lat and destination_lng
+                        # add the full address to shipping_address
+                        address = validate.apply_async(kwargs={'address': address}).get()
+                        data['country'] = address.get('country').lower()
+                        data['shipping_address'] = old_addr.lower()
+                        data['destination_lat'] = str(address.get('latitude')).lower()
+                        data['destination_lng'] = str(address.get('longitude')).lower()
 
-            # initiate an atomic transaction
-            try:
-                with transaction.atomic():
+                # initiate an atomic transaction
+                try:
                     serializer = Tracking_infoSerializer(obj, data=data, partial=True)
                     if serializer.is_valid():
                         if 'rider_uuid' in data:
-                            rider = get_object_or_404(Logistics_partner, logistics_owner_uuid=data.get('rider_uuid'))
+                            #rider = get_object_or_404(Logistics_partner, logistics_owner_uuid=data.get('rider_uuid'))
+                            rider = Logistics_partner.objects.select_for_update().get(logistics_owner_uuid=data.get('rider_uuid'))
                             rider_serializer = Logistics_partnerSerializer(rider, data={ "total_assigned_orders" : int(rider.total_assigned_orders + 1)}, partial=True)
                             if rider_serializer.is_valid():
                                 rider_serializer.save()
@@ -119,7 +122,11 @@ class UpdateTracking(APIView):
                         return Response(status=status.HTTP_204_NO_CONTENT)
                     print(serializer.errors)
                     return Response({'msg': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
-            except Exception as e:
-                raise(e)
-                return Response({'msg': 'an error occurred while updated your data'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        return Response({'msg': 'you are not authorized to view this resource'}, status=status.HTTP_401_UNAUTHORIZED)
+
+                except ValidationError:
+                    return Response({'msg': 'Invalid user uuid'}, status=status.HTTP_400_BAD_REQUEST)
+
+                except Exception as e:
+                    raise(e)
+                    return Response({'msg': 'an error occurred while updated your data'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response({'msg': 'you are not authorized to view this resource'}, status=status.HTTP_401_UNAUTHORIZED)
