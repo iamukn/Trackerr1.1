@@ -19,16 +19,16 @@ class TestRetrieveAllTracking(APITestCase):
         self.user = User.objects.create(
                 name='Jane Doe',
                 email='Jane.Doe@tester.com',
-                phone_number='09015885211',
+                phone_number='9015885211',
                 address='Lagos',
                 password='password',
                 account_type='business'
                 )
         self.business = Business_owner.objects.create(user=self.user, business_name='Hue Logistics')
-        self.data = {'product': 'Medicine','shipping_address':'Authority avenue ikotun lagos','customer_email':'JohnDoe@gmail.com', 'country': 'Nigeria', 'quantity': 2, 'delivery_date': '2024-12-12'}
+        self.data = {'product': 'Medicine','shipping_address':'Authority avenue ikotun lagos','customer_name': 'Uwebs','customer_email':'JohnDoe@gmail.com', 'country': 'Nigeria', 'quantity': 2, 'delivery_date': '2024-12-12'}
         self.token = AccessToken.for_user(self.user)
         self.client.credentials(HTTP_AUTHORIZATION="Bearer %s"% self.token)
-        self.return_value = {'address': 'Authority Ave, Alimosho, Nigeria', 'customer_email':self.data['customer_email'],'city': 'Lagos', 'country': 'Nigeria', 'latitude': 6.54219, 'longitude': 3.22122}
+        self.return_value = {'address': 'Authority Ave, Alimosho, Nigeria', 'customer_email':self.data['customer_email'],'customer_name': 'Uwebs','city': 'Lagos', 'country': 'Nigeria', 'latitude': 6.54219, 'longitude': 3.22122}
         self.track_num = 'J123456778OE'
 
     @patch('tracking_information.views.generate_tracking_view.verify_shipping_address.apply_async')

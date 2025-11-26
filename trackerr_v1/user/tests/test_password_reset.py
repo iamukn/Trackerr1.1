@@ -23,7 +23,7 @@ class TestPasswordRecoveryEmailandChange(APITestCase):
         self.user = User.objects.create(
             name = 'Jane Doe',
             email = 'officialtrackerr@gmail.com',
-            phone_number='09023456789',
+            phone_number='9023456789',
             address='Ikeja, Lagos',
             password='password',
             account_type='business'

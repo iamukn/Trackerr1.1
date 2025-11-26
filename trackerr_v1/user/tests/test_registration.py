@@ -13,7 +13,7 @@ class RegistrationTest(TestCase):
         # test to see if the registration functionality for the user model works 
         # with partial data or will raise a ValidationError
         with self.assertRaises(ValidationError):
-            user = User.objects.create(name="John Doe", email='johndoe@gmail.com', phone_number='07037676797', address='Lagos', account_type='Business')
+            user = User.objects.create(name="John Doe", email='johndoe@gmail.com', phone_number='7037676797', address='Lagos', account_type='Business')
             if not user.full_clean():
                 raise ValidationError
     
