@@ -224,6 +224,7 @@ class GenerateView(APIView):
                 "country": address.get('country').capitalize(),
                 "product_name": request.data.get('product').lower(),
                 "customer_email": request.data.get('customer_email').lower(),
+                "customer_name":  request.data.get('customer_name').lower(),
                 "quantity": request.data.get('quantity'),
                 "delivery_date": request.data.get('delivery_date'),
                 "business_owner_lat": request.user.business_owner.latitude,
@@ -238,7 +239,7 @@ class GenerateView(APIView):
                 # send confirmation email
                 send_tracking_updates.apply_async(kwargs={
                     "email": request.data.get('customer_email'),
-                    "customer_name": "There",
+                    "customer_name": request.data.get('customer_name').title(),
                     "parcel_number": data.get('parcel_number'),
                     "vendor": data.get('vendor'),
                     "delivery_address": data.get('shipping_address'),
