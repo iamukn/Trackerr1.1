@@ -40,3 +40,9 @@ class Logistics_partner(models.Model):
         """
         return "Rider: {} {}".format(self.user.name, self.identity_card_type)
 
+
+class LogisticsOwnerStatusLog(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    status = models.CharField(max_length=20)   # "active" or "inactive"
+    timestamp = models.DateTimeField(auto_now_add=True)
+

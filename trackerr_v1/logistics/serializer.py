@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Logistics_partner
+from .models import Logistics_partner, LogisticsOwnerStatusLog
 from user.serializers import UsersSerializer
 from logistics.signals import logistics_partner_created
 
@@ -37,3 +37,11 @@ class Logistics_partnerSerializer(serializers.ModelSerializer):
         )
 
         return logistics_partner
+
+
+
+class LogisticsOwnerStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LogisticsOwnerStatusLog
+        fields = "__all__"
+        read_only_fields = ["timestamp"]
