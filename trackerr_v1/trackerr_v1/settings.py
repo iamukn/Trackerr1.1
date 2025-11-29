@@ -87,6 +87,7 @@ INSTALLED_APPS = [
     "user",
     "business",
     "logistics",
+    "wallet",
     "rest_framework",
     "authentication",
     "tracking_information",

@@ -19,6 +19,7 @@ def get_tracking_data(parcel_number):
 
 
 class RealtimeTracking(AsyncWebsocketConsumer):
+
     async def connect(self):
         await self.accept()
         print('Connected!!!')
@@ -26,10 +27,13 @@ class RealtimeTracking(AsyncWebsocketConsumer):
     async def track_parcel_loop(self):
         coords = []
         rider_uuid = None
+        cached_coord = {'parcel_number': 'TEST345678909876'}
+
         while True:
             if not coords:
                 # fetch the latest coordinates
                 parcel = await get_tracking_data(parcel_number=self.tracking_number)
+                
 
                 if parcel:
                     coords.append(parcel)
@@ -42,7 +46,7 @@ class RealtimeTracking(AsyncWebsocketConsumer):
             parcels = coords[0]
 
             # return only the business owner and destination location if status is either pending, delivered or returned
-            if parcels.status in ['pending', 'delivered', 'returned']:
+            if parcels.status in ['pending', 'delivered', 'returned', 'canceled']:
     
                 location_data = {
                     'parcel': {
@@ -60,6 +64,8 @@ class RealtimeTracking(AsyncWebsocketConsumer):
                             }
                         }
                         }
+
+                print({'location_data': location_data})
                 await self.send(text_data=json.dumps({'location_data': location_data}))
                 break
                 
@@ -69,11 +75,8 @@ class RealtimeTracking(AsyncWebsocketConsumer):
                     'parcel_number': self.tracking_number,
                     'status': parcels.status,
                     },
+                'country': parcels.country.lower(),
                 'locations': {
-                    'business_owner': {
-                        'lat': float(parcels.business_owner_lat),
-                        'lng': float(parcels.business_owner_lng)
-                        },
                     'customer': {
                         'lat': float(parcels.destination_lat),
                         'lng': float(parcels.destination_lng),
@@ -87,7 +90,7 @@ class RealtimeTracking(AsyncWebsocketConsumer):
             await self.send(text_data=json.dumps({"location_data": location_data}))
             parcel = await get_tracking_data(parcel_number=self.tracking_number)
             coords = [parcel]
-            await asyncio.sleep(2)
+            await asyncio.sleep(5)
 
 
             

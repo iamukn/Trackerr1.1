@@ -8,6 +8,7 @@ from tracking_information.utils.tracking_class import Track_gen
 from tracking_information.serializer import Tracking_infoSerializer
 from tracking_information.models import Tracking_info
 from shared.celery_tasks.tracking_info_tasks.verify_address_task import verify_shipping_address
+from shared.celery_tasks.utils_tasks.send_tracking_email import send_tracking_updates_email as send_tracking_updates
 from rest_framework.permissions import IsAuthenticated 
 from business.views.business_owner_permission import IsBusinessOwner
 from shared.logger import setUp_logger
@@ -211,6 +212,7 @@ class GenerateView(APIView):
         try:
             # retrieve the location data using celery
             address = verify_shipping_address.apply_async(kwargs={'address': request.data.get('shipping_address').capitalize()}).get()
+            #parcel_number = self.Track_gen.generate_tracking(vendor=request.user.name)
             # retrieves all the data from the requuest, generate a tracking number and return to user
             data = {
                 "shipping_address": address.get('address').capitalize(),
@@ -222,6 +224,7 @@ class GenerateView(APIView):
                 "country": address.get('country').capitalize(),
                 "product_name": request.data.get('product').lower(),
                 "customer_email": request.data.get('customer_email').lower(),
+                "customer_name":  request.data.get('customer_name').lower(),
                 "quantity": request.data.get('quantity'),
                 "delivery_date": request.data.get('delivery_date'),
                 "business_owner_lat": request.user.business_owner.latitude,
@@ -229,16 +232,26 @@ class GenerateView(APIView):
                 "customer_phone": request.data.get('phone')
                     }
             ser = Tracking_infoSerializer(data=data)
+            if ser.is_valid():
+                ser.save()
+                data = ser.data
+                data.pop('owner')
+                # send confirmation email
+                send_tracking_updates.apply_async(kwargs={
+                    "email": request.data.get('customer_email'),
+                    "customer_name": request.data.get('customer_name').title(),
+                    "parcel_number": data.get('parcel_number'),
+                    "vendor": data.get('vendor'),
+                    "delivery_address": data.get('shipping_address'),
+                    "items": data.get('product_name'),
+                    "eta": data.get('delivery_date'),
+                    "status": data.get('status')
+                    })
+                
+                return Response(data, status=status.HTTP_201_CREATED)
+            logger.error(ser.errors)
+            return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            print(e)
+            raise(e)
             logger.error(e)
             return Response({"error":e}, status=status.HTTP_400_BAD_REQUEST)
-            #raise ValueError("An Error occured while creating the Tracking number")
-
-        if ser.is_valid():
-            ser.save()
-            data = ser.data
-            data.pop('owner')
-            return Response(data, status=status.HTTP_201_CREATED)
-        logger.error(ser.errors)
-        return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)       

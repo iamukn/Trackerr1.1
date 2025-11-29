@@ -23,7 +23,8 @@ from os import environ
 from django.shortcuts import (get_object_or_404, get_list_or_404)
 import botocore.exceptions
 from datetime import datetime
-#from business.utils.resize_and_upload import resize_and_upload as upload_dp 
+from shared.celery_tasks.utils_tasks.delete_existing_file import delete_old_file
+
 
 logger = setUp_logger(__name__, 'business.logs')
 
@@ -313,10 +314,10 @@ class Business_ownerRegistration(APIView):
          
         if not request.data.get('account_type') == 'business':
             logger.error('account_type is not business owner')
-            print('THERE')
+        
             return Response({"error":"account type must be business"}, status=status.HTTP_400_BAD_REQUEST)
         if 'address' not in request.data:
-            print('HERE')
+            
             return Response({'error': 'address is required'}, status=status.HTTP_400_BAD_REQUEST)
 
             #
@@ -550,7 +551,7 @@ class Business_ownerRoute(APIView):
             data['user']['address'] = data['user']['address'].title()
             data['user']['name'] = data['user']['name'].title()
             if  data.get('business_owner_uuid'):
-                data['business_owner_uuid'] = data['business_owner_uuid'][-8:]
+                data['business_owner_uuid'] = data['business_owner_uuid'].split('-')[-1]
             else:
                 data['business_owner_uuid'] = "##"
             # convert the time to human readable for updated_on
@@ -654,12 +655,14 @@ class Business_ownerRoute(APIView):
         """
         if not self.authorized(request, id):
             return Response({'error': 'forbidded'}, status=status.HTTP_403_FORBIDDEN)
-        business = self.query_set(Business_owner, id)
-        user = business.user
+        #business = self.query_set(Business_owner, id)
+        #user = business.user
         data = request.data
         if 'password' in data:
             data.pop('password')
         with transaction.atomic():
+            business = Business_owner.objects.select_for_update().get(id=id)
+            user = business.user
             user_serializer = UsersSerializer(user, data=data, partial=True)
             business_serializer = Business_ownerSerializer(business, data=data, context={'request': request}, partial=True)
                 
@@ -766,43 +769,60 @@ class Business_ownerRoute(APIView):
         """
         if not self.authorized(request, id):
             return Response({'error': 'forbidded'}, status=status.HTTP_403_FORBIDDEN)
-
-        business = self.query_set(Business_owner, id)
-        user = business.user
-
-        data = request.data.copy()
-        if not user.address == data.get('address').lower():
-            # verify shipping address
-            # get the lat and lng
-            # update the record
-            address = verify_shipping_address.apply_async(kwargs={'address': data.get('address', '').capitalize()}).get(timeout=30)
-           
-            print(address)
-            if 'error' in address:
-                return Response(address, status=status.HTTP_400_BAD_REQUEST)
-            data['latitude'] = address.get('latitude')
-            data['longitude'] = address.get('longitude')
-
-        if 'password' in data:
-            data.pop('password')
-
-        ## handle avatar upload
-        avatar = data.pop('avatar')
         
-        if avatar:
-            try:
-                if not user.business_owner.profile_pic_key in avatar[0].name:
-                    update_avatar = upload_dp.delay(avatar[0].read(),user.business_owner.profile_pic_key)
-            except Exception as e:
-                print(e)
-
         with transaction.atomic():
+            business = Business_owner.objects.select_for_update().get(id=id)
+            user = business.user
+
+            data = request.data.copy()
+            if data.get('address') and not user.address == data.get('address').lower():
+                # verify shipping address
+                # get the lat and lng
+                # update the record
+                address = verify_shipping_address.apply_async(kwargs={'address': data.get('address', '').capitalize()}).get(timeout=30)
+                if 'error' in address:
+                    return Response(address, status=status.HTTP_400_BAD_REQUEST)
+                data['latitude'] = address.get('latitude')
+                data['longitude'] = address.get('longitude')
+                data['country'] = address.get('country').lower()
+
+            if 'password' in data:
+                data.pop('password')
+
+            ## handle avatar upload
+            avatar = data.pop('avatar') if 'avatar' in data else ""
+            #avatar = data.pop('avatar')
+            uuid = ''
+            new_profile_pic_key = ''
+            if avatar:
+                try:
+                    
+                    if not str(user.business_owner.profile_pic_key) in str(avatar[0].name):
+                        if str(user.business_owner.profile_pic_key).lower() == 'none':
+                            uuid = uuid4()
+                            data['business_owner_uuid'] = uuid
+                            print('uuid: ', data['business_owner_uuid'])
+                            new_profile_pic_key = str(uuid) + '.' + str(avatar[0].name).split('.')[-1]
+                        else:
+                            old_profile_pic_key = user.business_owner.profile_pic_key
+                            new_profile_pic_key = old_profile_pic_key.split('.')[0] + '.' + str(avatar[0].name).split('.')[-1]
+
+                        data['profile_pic_key'] = new_profile_pic_key
+                        
+                        if not old_profile_pic_key == new_profile_pic_key:
+                            delete_old_file.delay(oldKey=old_profile_pic_key)
+                        update_avatar = upload_dp.delay(avatar[0].read(), new_profile_pic_key)
+                        #update_avatar = upload_dp.delay(avatar[0].read(),user.business_owner.profile_pic_key)
+                except Exception as e:
+                    print(e)
+
             user_ser = UsersSerializer(user, data=data, partial=True)
             business_ser = Business_ownerSerializer(business, data=data, context={'request': request}, partial=True)
         
             if user_ser.is_valid() and business_ser.is_valid():
                 user_ser.save()
                 business_ser.save()
+                print('Valid: ', business_ser.data)
                 return Response(business_ser.data, status=status.HTTP_206_PARTIAL_CONTENT)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 

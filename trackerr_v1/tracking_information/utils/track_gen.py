@@ -11,7 +11,7 @@ def tracking_number_gen(user: str) -> str:
         A string of a tracking number
     '''
     if not isinstance(user, str):
-        return "Users name or email must be a string!"
+        return TypeError("Users name or email must be a string!")
     rand_num = randint(123456000,567890000)
 
     # checks to see if the user has more than a word in its name

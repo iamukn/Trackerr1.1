@@ -23,7 +23,7 @@ class TestPasswordRecoveryEmailandChange(APITestCase):
         self.user = User.objects.create(
             name = 'Jane Doe',
             email = 'officialtrackerr@gmail.com',
-            phone_number='09023456789',
+            phone_number='9023456789',
             address='Ikeja, Lagos',
             password='password',
             account_type='business'
@@ -50,6 +50,7 @@ class TestPasswordRecoveryEmailandChange(APITestCase):
         url = reverse('change-password')
         data = {'password1': 'password', 'password2': 'password'}
         res = self.client.post(url, data=data, format='json')
+        print(res.json())
         self.assertTrue(res.status_code == 206)
  
     @patch('user.views.change_password.send_update_email.delay')

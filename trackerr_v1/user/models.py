@@ -16,7 +16,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     """
     name = models.CharField(max_length=500, null=False, blank=False, verbose_name=_('Name'))
     email = models.EmailField(max_length=255, null=False, blank=False, unique=True, verbose_name=_('Email Address'))
-    phone_number = models.CharField(max_length=20, null=False, blank=False, unique=True, verbose_name=_('Phone'))
+    phone_number = models.CharField(max_length=10, null=False, blank=False, unique=True, verbose_name=_('Phone'))
     address = models.CharField(max_length=500, null=False, blank=False, verbose_name=_('Address'))
     country = models.CharField(max_length=500, null=True, blank=True, verbose_name=_('Country'))
     account_type = models.CharField(max_length=15, null=False, blank=False, verbose_name=_('account_type'))
@@ -27,6 +27,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_superuser = models.BooleanField(default=False)
     date_joined = models.DateTimeField(auto_now_add=True)
     is_verified = models.BooleanField(default=False)
+    wants_marketing_emails = models.BooleanField(null=False, blank=False, default=True)
+
     updated_on = models.DateTimeField(null=True, blank=True)
 
     USERNAME_FIELD = 'email'

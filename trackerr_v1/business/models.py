@@ -19,6 +19,8 @@ class Business_owner(models.Model):
     business_name = models.CharField(max_length=500, null=False, blank=False, unique=True, verbose_name=_('business name'))
     business_owner_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     profile_pic_key = models.CharField(max_length=200, null=True, blank=True)
+    subscription_type = models.CharField(max_length=20, null=False, blank=False, default="trial")
+    terms_and_condition = models.BooleanField(null=True, blank=True)
 
     def __str__(self):
         """ string representation of the business owner
@@ -27,4 +29,4 @@ class Business_owner(models.Model):
         Return:
             The Business owner
         """
-        return "Business owner model"
+        return f"Business Name: {self.business_name}"

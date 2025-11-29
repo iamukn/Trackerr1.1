@@ -1,22 +1,29 @@
 #!/usr/bin/env python3
 from datetime import date
 import time
+from django.utils import timezone
 from django.db import models
 from logistics.models import Logistics_partner
 from user.models import User
 
 """ Tracking model """
 
+def get_current_time_str():
+    return timezone.now().strftime('%H:%Mhrs')
+
 class Tracking_info(models.Model):
     parcel_number = models.CharField(max_length=15, unique=True, null=False, blank=False)
     date_of_purchase = models.DateField(auto_now_add=date.today, null=False, blank=False)
-    time_of_purchase = models.CharField(default=time.strftime('%H:%M' + 'hrs'), null=False, blank=False)
+    time_of_purchase = models.CharField(default=get_current_time_str, null=False, blank=False)
+    #time_of_purchase = models.TimeField(auto_now_add=True)
     customer_email = models.CharField(max_length=255, null=True, blank=True)
-    customer_phone = models.CharField(max_length=15, null=True, blank=True)
+    customer_name = models.CharField(max_length=255, null=True, blank=True)
+    customer_phone = models.CharField(max_length=20, null=True, blank=True)
     delivery_date = models.DateField(default=date.today, null=False, blank=False) 
     shipping_address = models.CharField(max_length=255, null=False, blank=False)
-  #  latitude = models.CharField(max_length=255, null=True, blank=True, default=None)
-  #  longitude = models.CharField(max_length=255, null=True, blank=True, default=None)
+  # latitude = models.CharField(max_length=255, null=True, blank=True, default=None)
+  # longitude = models.CharField(max_length=255, null=True, blank=True, default=None)
+    is_assigned = models.BooleanField(null=False, blank=False, default=False)
     destination_lat = models.CharField(max_length=255, null=False, blank=False)
     destination_lng = models.CharField(max_length=255, null=False, blank=False)
     business_owner_lat = models.CharField(max_length=30, null=True, blank=True)
@@ -26,7 +33,8 @@ class Tracking_info(models.Model):
     rider_uuid = models.CharField(max_length=500, null=True, blank=True)
     rider_lat = models.CharField(max_length=30, null=True, blank=True)
     rider_lng = models.CharField(max_length=30, null=True, blank=True)
-    realtime_location = models.CharField(max_length=255, null=True, blank=True)
+    rider_name = models.CharField(max_length=200, null=True, blank=True)
+    rider_phone = models.CharField(max_length=15, null=True, blank=True)
     country = models.CharField(max_length=255, null=False, blank=False, default='Nigeria')
     product_name = models.CharField(max_length=255, null=False, blank=False, default='unknown product')
     quantity = models.IntegerField(null=False, blank=False, default=1)

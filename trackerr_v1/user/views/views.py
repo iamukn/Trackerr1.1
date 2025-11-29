@@ -317,16 +317,21 @@ class UserView(UsersView):
     def put(self, request, pk,  *args, **kwargs):
         try:
             with atomic():
-                user = self.queryset().get(id=pk)
+                user = User.objects.select_for_update().get(id=pk)
                 serializer = UsersSerializer(user, data=request.data, partial=True)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status.HTTP_206_PARTIAL_CONTENT)
+                return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
         except User.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         
-        if serializer.is_valid():
-            serializer.save()
+#        if serializer.is_valid():
+#            serializer.save()
 
-            return Response(serializer.data, status.HTTP_206_PARTIAL_CONTENT)
-        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+#            return Response(serializer.data, status.HTTP_206_PARTIAL_CONTENT)
+#        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
     # Swagger documentation
     @swagger_auto_schema(
