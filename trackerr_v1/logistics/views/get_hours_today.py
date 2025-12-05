@@ -10,10 +10,4 @@ class GetHoursToday(APIView):
 
     def get(self, request, *args, **kwargs):
         get_time = get_today_active_hours(rider=request.user.id)
-        print(get_time)
-
-        if (float(get_time) < 1.0):
-            m = str(get_time).split('.')[-1]
-            return Response({'msg': f'{m}m'}, status=status.HTTP_200_OK)
-
-        return Response({'msg': f'{get_time}h'}, status=status.HTTP_200_OK)
+        return Response({'msg': f'{get_time}'}, status=status.HTTP_200_OK)

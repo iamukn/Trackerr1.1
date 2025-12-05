@@ -1,7 +1,9 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
-from business.views.business_owner_permission import IsBusinessOwner
+#from business.views.business_owner_permission import IsBusinessOwner
+#from logistics.views.logistics_owner_permission import IsLogisticsOwner
+from tracking_information.permissions.permissions import IsBusinessOrLogistics
 from rest_framework.permissions import AllowAny
 from django.shortcuts import get_object_or_404
 from tracking_information.models import Tracking_info
@@ -14,7 +16,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 
 class UpdateTracking(APIView):
-    permission_classes = [IsBusinessOwner,]
+    permission_classes = [IsBusinessOrLogistics, ]
 
     def get_queryset(self, num):
         #obj = get_object_or_404(klass=Tracking_info, parcel_number=num.upper())
@@ -24,12 +26,19 @@ class UpdateTracking(APIView):
 
     def patch(self, request, num, *args, **kwargs):
         with transaction.atomic():
-            print('ran inside of patch')
             obj = self.get_queryset(num=num)
             
-            if obj.owner == request.user:
+            if obj.owner == request.user or obj.rider.user == request.user:
+
                 # get the data and update it
                 data = request.data
+                # handle pending
+                if data.get('status') == 'pending':
+                    serializer = Tracking_infoSerializer(obj, data=data, partial=True)
+                    if serializer.is_valid():
+                        serializer.save()
+                        return Response(status=status.HTTP_204_NO_CONTENT)
+                        
                 old_addr = data.get('shipping_address')
                 address = data.pop('shipping_address') if 'shipping_address' in data else ""
                 
@@ -64,7 +73,7 @@ class UpdateTracking(APIView):
                             if data.get('status').lower() == 'delivered':
                                 auth_user = request.user.account_type
                                 if auth_user.lower() == 'logistics':
-                                    rider = request.user
+                                    rider = request.user.logistics_partner
                                     rider_serializer = Logistics_partnerSerializer(rider, data={ "total_delivery" : int(rider.total_delivery + 1)}, partial=True)
                                     if rider_serializer.is_valid():
                                         rider_serializer.save()

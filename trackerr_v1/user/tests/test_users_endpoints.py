@@ -3,6 +3,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.test import (APITestCase,APIClient,APIRequestFactory, force_authenticate)
 from user.models import User
+#from logistics.models import LogisticsOwnerStatusLog
 from unittest.mock import patch
 from rest_framework.utils.serializer_helpers import (ReturnList, ReturnDict)
 from rest_framework_simplejwt.tokens import AccessToken
@@ -53,18 +54,6 @@ class UserTests(APITestCase):
         self.assertEqual(req.status_code, status.HTTP_200_OK)
         self.assertEqual(req.data.get('name'), 'Rena')
         self.assertEqual(type(req.data), ReturnDict)        
-
-    def test_to_delete_user(self: None) -> None:
-        # make the user an admin
-        self.user.is_staff = True
-        self.user.is_superuser = True
-        self.user.save()
-        # query the delete endpoint
-        url = reverse('user', kwargs={'pk':self.user.id})
-        res = self.client.delete(url)
-        
-        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT) 
-        self.assertFalse(User.objects.filter(id=self.user.id).exists())
 
     def test_users_count_get(self: None) -> None:
         

@@ -1,5 +1,5 @@
-from django.utils import timezone
 from logistics.models import LogisticsOwnerStatusLog
+from django.utils import timezone
 
 def get_today_active_hours(rider):
     now = timezone.now()
@@ -20,9 +20,11 @@ def get_today_active_hours(rider):
             total_seconds += (log.timestamp - last_active_time).total_seconds()
             last_active_time = None
 
-    # If rider is STILL active right now
     if last_active_time:
         total_seconds += (now - last_active_time).total_seconds()
 
-    hours = total_seconds / 3600
-    return round(hours, 2)  # e.g. 6.5 hours
+    hours = int(total_seconds // 3600)
+    minutes = int((total_seconds % 3600) // 60)
+
+    return f"{hours}h {minutes}m"
+
