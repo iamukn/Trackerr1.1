@@ -27,6 +27,7 @@ class Logistics_partner(models.Model):
     vehicle_image_key = models.CharField(max_length=300, null=True, blank=True)
     referral_code = models.CharField(max_length=50, null=True, blank=True)
     terms_and_condition = models.BooleanField(null=True, blank=True)
+    is_busy = models.BooleanField(null=False, blank=False, default=False)
     total_delivery = models.IntegerField(blank=False, null=False, default=0)
     total_assigned_orders = models.IntegerField(blank=False, null=False, default=0)
     rating = models.FloatField(blank=False, null=False, default=float(0))
@@ -45,4 +46,3 @@ class LogisticsOwnerStatusLog(models.Model):
     rider = models.ForeignKey(User, on_delete=models.CASCADE)
     status = models.CharField(max_length=20)   # "active" or "inactive"
     timestamp = models.DateTimeField(auto_now_add=True)
-

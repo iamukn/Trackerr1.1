@@ -12,15 +12,18 @@ import os
 from django.core.asgi import get_asgi_application
 from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
+from .middleware import JWTAuthMiddleware
 import tracking_information.routing
+import logistics.wsgi_routes
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "trackerr_v1.settings")
 
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
-    "websocket": AuthMiddlewareStack(
+    "websocket": JWTAuthMiddleware(
         URLRouter(
-            tracking_information.routing.websocket_urlpatterns  # handles WebSocket URLs
+            tracking_information.routing.websocket_urlpatterns +  # handles WebSocket URLs
+            logistics.wsgi_routes.websocket_urlpatterns,
         )
     ),
 })
