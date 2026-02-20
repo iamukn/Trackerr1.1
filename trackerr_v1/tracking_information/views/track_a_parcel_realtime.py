@@ -24,87 +24,102 @@ class RealtimeTracking(AsyncWebsocketConsumer):
         await self.accept()
         print('Connected!!!')
 
-    async def track_parcel_loop(self):
-        coords = []
-        rider_uuid = None
-        cached_coord = {'parcel_number': 'TEST345678909876'}
-
-        while True:
-            if not coords:
-                # fetch the latest coordinates
-                parcel = await get_tracking_data(parcel_number=self.tracking_number)
-                
-
-                if parcel:
-                    coords.append(parcel)
-                else:
-                    print('Parcel not found')
-                    await self.send(text_data=json.dumps({'error': 'parcel not found!'}))
-                    return
-            # get the location of the rider
-            # rider_location = get_rider_location(rider_uuid)
-            parcels = coords[0]
-
-            # return only the business owner and destination location if status is either pending, delivered or returned
-            if parcels.status in ['pending', 'delivered', 'returned', 'canceled']:
-    
-                location_data = {
-                    'parcel': {
-                        'parcel_number': self.tracking_number,
-                        'status': parcels.status,
-                        },
-                    'locations': {
-                        'business_owner': {
-                            'lat': float(parcels.business_owner_lat),
-                            'lng': float(parcels.business_owner_lng)
-                            },
-                        'customer': {
-                            'lat': float(parcels.destination_lat),
-                            'lng': float(parcels.destination_lng)
-                            }
-                        }
-                        }
-
-                print({'location_data': location_data})
-                await self.send(text_data=json.dumps({'location_data': location_data}))
-                break
-                
-            
-            location_data = {
-                'parcel': {
-                    'parcel_number': self.tracking_number,
-                    'status': parcels.status,
-                    },
-                'country': parcels.country.lower(),
-                'locations': {
-                    'customer': {
-                        'lat': float(parcels.destination_lat),
-                        'lng': float(parcels.destination_lng),
-                        },
-                    'rider': {
-                        'lat': float(parcels.rider_lat),
-                        'lng': float(parcels.rider_lng),
-                        }
-                    }
-                    }
-            await self.send(text_data=json.dumps({"location_data": location_data}))
-            parcel = await get_tracking_data(parcel_number=self.tracking_number)
-            coords = [parcel]
-            await asyncio.sleep(5)
 
 
-            
     async def disconnect(self, close_code):
-        print('Disconnected!!!')
-        try:
-            if hasattr(self, 'tracking_task'):
-                self.tracking_task.cancel()
-                await self.tracking_task
-        except asyncio.CancelledError:
-            print("Tracking task cancelled cleanly.")
+        print("WebSocket disconnected")
+        # Remove from group if assigned
+        if hasattr(self, 'rider_group_name'):
+            await self.channel_layer.group_discard(
+                self.rider_group_name, self.channel_name
+            )            
+
 
     async def receive(self, text_data):
-        # get the tracking number
+        """
+        Receive tracking number from client and join the rider's group.
+        """
         data = json.loads(text_data)
         self.tracking_number = data.get("parcel_number").upper()
-        self.tracking_task = asyncio.create_task(self.track_parcel_loop())    
+
+        # Fetch parcel info once
+        parcel = await get_tracking_data(self.tracking_number)
+        if not parcel:
+            await self.send(json.dumps({"error": "Parcel not found"}))
+            await self.close()
+            return
+
+        # Store required fields for reuse during broadcasts
+        self.parcel_status = parcel.status
+        self.country = parcel.country.lower()
+        self.customer_lat = float(parcel.destination_lat)
+        self.customer_lng = float(parcel.destination_lng)
+
+        # Create a group per rider (broadcast updates to this group)
+        self.rider_group_name = f"rider_{parcel.rider_uuid}"
+        print('Rider_Group_Joined:', parcel.rider_uuid)
+        await self.channel_layer.group_add(
+            self.rider_group_name, self.channel_name
+        )
+
+        # Send initial parcel info (status + business_owner & customer)
+        location_data = {
+            "parcel": {
+                "parcel_number": self.tracking_number,
+                "status": parcel.status,
+            },
+            "locations": {
+                "business_owner": {
+                    "lat": float(parcel.business_owner_lat),
+                    "lng": float(parcel.business_owner_lng)
+                },
+                "customer": {
+                    "lat": float(parcel.destination_lat),
+                    "lng": float(parcel.destination_lng)
+                }
+            }
+        }
+        await self.send(text_data=json.dumps({"location_data": location_data}))
+
+    async def rider_location_update(self, event):
+        """
+        Called when the rider endpoint broadcasts a new location.
+        """
+        lat = event["lat"]
+        lng = event["lng"]
+
+        location_data = {
+            'parcel': {
+                'parcel_number': self.tracking_number,
+                },
+            'locations': {
+                'rider': {
+                    'lat': float(lat),
+                    'lng': float(lng),
+                }
+            }
+        }
+
+        location_data = {
+            "parcel": {
+                "parcel_number": self.tracking_number,
+                "status": self.parcel_status,
+            },
+            "country": self.country,
+            "locations": {
+                "customer": {
+                    "lat": self.customer_lat,
+                    "lng": self.customer_lng,
+                },
+                "rider": {
+                    "lat": float(lat),
+                    "lng": float(lng),
+                }
+            }
+        }
+
+        # Send the updated rider location to the client
+        await self.send(text_data=json.dumps({
+            'location_data': location_data
+            }
+        ))
