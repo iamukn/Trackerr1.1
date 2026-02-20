@@ -5,11 +5,12 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from asgiref.sync import async_to_sync
 from channels.layers import get_channel_layer
+from logistics.permissions.logistics_owner_permissions import IsRider
 
 
 class BroadcastLocation(APIView):
     ''' receives the riders latitude and longitude for broadcast to connected clients '''
-    permission_classes = [AllowAny,]
+    permission_classes = [IsRider,]
 
     def post(self, request, *args, **kwargs):
         # gets the rider uuid and the cordinates sent from the rider app
