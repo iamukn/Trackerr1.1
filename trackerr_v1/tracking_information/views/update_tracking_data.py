@@ -56,6 +56,7 @@ class UpdateTracking(APIView):
                 # initiate an atomic transaction
                 try:
                     serializer = Tracking_infoSerializer(obj, data=data, partial=True)
+                    tracking_status = data.get('status')
                     if serializer.is_valid():
                         if 'rider_uuid' in data:
                             #rider = get_object_or_404(Logistics_partner, logistics_owner_uuid=data.get('rider_uuid'))
@@ -67,6 +68,8 @@ class UpdateTracking(APIView):
 
                         # Send Emails
                         tracking_status = data.get('status')
+
+                        print(request.data)
 
                         if tracking_status:
                             #handles the total delivery done by a rider
@@ -85,7 +88,7 @@ class UpdateTracking(APIView):
                                     send_tracking_updates.apply_async(
                                             kwargs={
                                                 'email': t_data.get('customer_email'),
-                                                'customer_name': 'There',
+                                                'customer_name': t_data.get('customer_name').capitalize(),
                                                 'parcel_number': t_data.get('parcel_number'),
                                                 'vendor': t_data.get('vendor'),
                                                 'status': t_data.get('status'),
@@ -98,7 +101,7 @@ class UpdateTracking(APIView):
                                     send_tracking_updates.apply_async(
                                             kwargs={
                                                 'email': t_data.get('customer_email'),
-                                                'customer_name': 'There',
+                                                'customer_name': t_data.get('customer_name').capitalize(),
                                                 'parcel_number': t_data.get('parcel_number'),
                                                 'status': t_data.get('status'),
                                                 'vendor': t_data.get('vendor'),
@@ -109,7 +112,7 @@ class UpdateTracking(APIView):
                                     send_tracking_updates.apply_async(
                                              kwargs={
                                                  'email': t_data.get('customer_email'),
-                                                 'customer_name': 'There',
+                                                 'customer_name': t_data.get('customer_name').capitalize(),
                                                  'parcel_number': t_data.get('parcel_number'),
                                                  'status': t_data.get('status'),
                                                  'vendor': t_data.get('vendor'),
