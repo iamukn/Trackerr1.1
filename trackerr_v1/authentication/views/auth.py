@@ -31,7 +31,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 'password': openapi.Schema(type=openapi.TYPE_STRING, title='Password', minLength=1),
                 },
             example={
-                'email': 'testuser@gmail.com',
+                'email': 'n.u.kingsley@gmail.com',
                 'password': 'password'
                 },
             required=['email', 'password']

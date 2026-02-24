@@ -32,6 +32,7 @@ class Logistics_partner(models.Model):
     total_assigned_orders = models.IntegerField(blank=False, null=False, default=0)
     rating = models.FloatField(blank=False, null=False, default=float(0))
     status = models.CharField(max_length=50, null=False, blank=False, default='inactive')
+    updated_on = models.DateTimeField(auto_now=True)
 
 
     # add rider uuid here

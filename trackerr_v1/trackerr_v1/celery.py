@@ -19,3 +19,11 @@ app.autodiscover_tasks()
 @app.task(bind=True, ignore_result=True)
 def debug_task(self):
     print(f'Request: {self.request!r}')
+
+
+
+# Scheduled tasks
+@app.on_after_configure.connect
+def setup_periodic_tasks(sender: Celery, **kwargs):
+    from shared.celery_tasks.scheduled_tasks.rider_tasks import handle_rider_status
+    sender.add_periodic_task(3.0, handle_rider_status.s(), name='check if a rider is still online every 15s')
