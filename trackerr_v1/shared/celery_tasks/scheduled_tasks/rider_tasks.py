@@ -6,6 +6,7 @@ from django.utils import timezone
 def set_rider_offline(rider_instance):
     rider_instance.status = 'inactive'
     rider_instance.save()
+    print(rider_instance.user.name, ' now inactive')
 
 def handle_rider_state():
     from logistics.models import Logistics_partner as Riders
@@ -20,8 +21,7 @@ def handle_rider_state():
         
         if time_diff > 120:
             # uncomment the set_rider call below so that the heartbeat can function
-            #set_rider_offline(rider)
-            ...
+            set_rider_offline(rider)
 
 @shared_task(bind=True, name='rider_online_offline')
 def handle_rider_status(self,):

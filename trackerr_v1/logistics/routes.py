@@ -12,7 +12,7 @@ from .views import (logistics_users_count,
 from tracking_information.views import fetch_deliveries
 
 urlpatterns = [
-    path('rider/location/broadcast', broadcast.BroadcastLocation.as_view(), name='rider_location_broadcast'),
+    path('rider/location/broadcast/', broadcast.BroadcastLocation.as_view(), name='rider_location_broadcast'),
     path('logistics/signup/', create_rider.RegisterRider.as_view(), name='logistics-signup'),
     path('logistics/riders/<int:id>/', read_update_delete_rider.Rider.as_view(), name='get-rider'),
     path('logistics/business-owners/riders/', get_all_business_owners_riders.Business_Riders.as_view(), name='get-business-owners-rider'),

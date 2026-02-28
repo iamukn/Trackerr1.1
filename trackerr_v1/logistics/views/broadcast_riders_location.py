@@ -20,6 +20,8 @@ class BroadcastLocation(APIView):
 
         channel_layer = get_channel_layer()
 
+        print('Arrived: ', lat, lng)
+
         # Broadcast to relevant WebSocket groups
         async_to_sync(channel_layer.group_send)(
             f"rider_{rider_uuid}",
