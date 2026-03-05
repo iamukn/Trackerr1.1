@@ -5,7 +5,8 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAdminUser, AllowAny, IsAuthenticated
 from django.http import HttpResponseNotAllowed
 from django.db import transaction
-from shared.celery_tasks.tracking_info_tasks.verify_address_task import verify_shipping_address
+#from shared.celery_tasks.tracking_info_tasks.verify_address_task import verify_shipping_address
+from tracking_information.utils.validate_shipping_address import verify_address
 from shared.celery_tasks.business_owners_task.upload_dp import upload_dp
 from shared.aws_config.s3 import s3
 from business.utils.resize_image import resize_image
@@ -330,8 +331,9 @@ class Business_ownerRegistration(APIView):
                 if avatar:
                     data.pop('avatar')
 
-                address = verify_shipping_address.apply_async(kwargs={'address': data.get('address', '').capitalize()})
-                address = address.get(timeout=60)
+                #address = verify_address.apply_async(kwargs={'address': data.get('address', '').capitalize()})
+                #address = address.get(timeout=60)
+                address = verify_address(address=data.get('address', '').capitalize())
                 # added the country
                 data['country'] = address.get('country', '').lower()
 
@@ -779,7 +781,8 @@ class Business_ownerRoute(APIView):
                 # verify shipping address
                 # get the lat and lng
                 # update the record
-                address = verify_shipping_address.apply_async(kwargs={'address': data.get('address', '').capitalize()}).get(timeout=30)
+                #address = verify_shipping_address.apply_async(kwargs={'address': data.get('address', '').capitalize()}).get(timeout=30)
+                address = verify_address(address=data.get('address').capitalize())
                 if 'error' in address:
                     return Response(address, status=status.HTTP_400_BAD_REQUEST)
                 data['latitude'] = address.get('latitude')
