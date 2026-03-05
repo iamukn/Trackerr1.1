@@ -8,12 +8,14 @@ from .views import (logistics_users_count,
                     fetch_tracking_info_linked_to_rider as rider,
                     get_hours_today,
                     broadcast_riders_location as broadcast,
+                    finish_signup,
                     )
 from tracking_information.views import fetch_deliveries
 
 urlpatterns = [
     path('rider/location/broadcast/', broadcast.BroadcastLocation.as_view(), name='rider_location_broadcast'),
     path('logistics/signup/', create_rider.RegisterRider.as_view(), name='logistics-signup'),
+    path('logistics/signup/update-profile/', finish_signup.CompleteSignup.as_view(), name='finish-signup'),
     path('logistics/riders/<int:id>/', read_update_delete_rider.Rider.as_view(), name='get-rider'),
     path('logistics/business-owners/riders/', get_all_business_owners_riders.Business_Riders.as_view(), name='get-business-owners-rider'),
     path('logistics-owners-count/', logistics_users_count.Logistics_owners_count.as_view(), name='logistics-count'),
