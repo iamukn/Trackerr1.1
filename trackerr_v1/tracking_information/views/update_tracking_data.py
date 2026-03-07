@@ -10,10 +10,12 @@ from tracking_information.models import Tracking_info
 from tracking_information.serializer import Tracking_infoSerializer
 from logistics.models import Logistics_partner
 from logistics.serializer import Logistics_partnerSerializer
-from shared.celery_tasks.tracking_info_tasks.verify_address_task import verify_shipping_address as validate
+#from shared.celery_tasks.tracking_info_tasks.verify_address_task import verify_shipping_address as validate
+from tracking_information.utils.validate_shipping_address import verify_address
 from shared.celery_tasks.utils_tasks.send_tracking_email import send_tracking_updates_email as send_tracking_updates
 from django.core.exceptions import ValidationError
 from django.db import transaction
+from django.core.cache import cache
 
 class UpdateTracking(APIView):
     permission_classes = [IsBusinessOrLogistics, ]
@@ -47,7 +49,8 @@ class UpdateTracking(APIView):
                         # get the address coordinate
                         # add the coordinate to destination_lat and destination_lng
                         # add the full address to shipping_address
-                        address = validate.apply_async(kwargs={'address': address}).get()
+                        #address = validate.apply_async(kwargs={'address': address}).get()
+                        address = verify_address(address=address.capitalize())
                         data['country'] = address.get('country').lower()
                         data['shipping_address'] = old_addr.lower()
                         data['destination_lat'] = str(address.get('latitude')).lower()
@@ -65,11 +68,11 @@ class UpdateTracking(APIView):
                             if rider_serializer.is_valid():
                                 rider_serializer.save()
                         serializer.save()
+                        # delete cache
+                        cache.delete(f'tracking_{num}_data')
 
                         # Send Emails
                         tracking_status = data.get('status')
-
-                        print(request.data)
 
                         if tracking_status:
                             #handles the total delivery done by a rider
@@ -132,7 +135,6 @@ class UpdateTracking(APIView):
                                     print('Status is not one of the required statuses')
                                     ...
                         return Response(status=status.HTTP_204_NO_CONTENT)
-                    print(serializer.errors)
                     return Response({'msg': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
                 except ValidationError:

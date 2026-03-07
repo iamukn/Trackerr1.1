@@ -13,6 +13,7 @@ from django.http import Http404
 from shared.celery_tasks.business_owners_task.upload_dp import upload_dp
 from shared.celery_tasks.utils_tasks.delete_existing_file import delete_old_file
 from os import environ
+from django.core.cache import cache
 
 
 class Rider(APIView):
@@ -34,11 +35,13 @@ class Rider(APIView):
         elif request.user.account_type == 'business' and not rider.owner == request.user.business_owner.id:
             return Response({'msg': 'you are not unauthorized to view this resource'}, status=status.HTTP_401_UNAUTHORIZED)
 
+        if cache.has_key(f'rider_{id}_data'):
+            return Response({'msg':  cache.get(f'rider_{id}_data')}, status=status.HTTP_200_OK)
         rider_serializer = Logistics_partnerSerializer(rider)
-
         data = rider_serializer.data
         data['user']['avatar'] = f"{environ.get('TRACKERR_CDN_URL')}/{data.get('profile_pic_key')}"
 
+        cache.set(f'rider_{id}_data', data, timeout=300)
         return Response({'msg': rider_serializer.data}, status=status.HTTP_200_OK)
 
     def patch(self, request, id,  *args, **kwargs):
@@ -98,6 +101,7 @@ class Rider(APIView):
                 if rider_serializer.is_valid() and user_serializer.is_valid():
                     rider_serializer.save()
                     user_serializer.save()
+                    cache.delete(f'rider_{id}_data')
                     return Response({'msg': 'rider updated successfully'}, status=status.HTTP_200_OK)
 
                 elif not rider_serializer.is_valid():
@@ -127,6 +131,7 @@ class Rider(APIView):
 
 
             rider = rider.user.delete()
+            cache.delete(f'rider_{id}_data')
             return Response({'msg': f'rider: {user.name} deleted successfully'}, status=status.HTTP_200_OK)
 
         except Exception as e:

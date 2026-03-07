@@ -6,6 +6,7 @@ from business.models import Business_owner
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from rest_framework.decorators import api_view
+from django.core.cache import cache
 
 """ View that returns the business owners count"""
 
@@ -55,6 +56,8 @@ class Business_count(APIView):
             )
     def get(self, request, *args, **kwargs):
         # Returns the count of only the business owners
+        if cache.has_key('admin:business_owners_count'):
+            return Response( cache.get('admin:business_owners_count'), status=status.HTTP_200_OK)
         counts = Business_owner.objects.all().count()
-
+        cache.set('admin:business_owners_count', counts, timeout=120)
         return Response(counts, status=status.HTTP_200_OK)

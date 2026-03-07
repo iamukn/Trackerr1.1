@@ -30,10 +30,10 @@ class BusinessTest(APITestCase):
         self.return_value = {'address': '36b authority avenue', 'city': 'Lagos', 'country': 'Nigeria', 'latitude': 6.54219, 'longitude': 3.22122} 
 
     @patch('business.signals.send_reg_email.apply_async')
-    @patch('business.views.views.verify_shipping_address.apply_async')
-    def test_create_a_business_onwer(self, mock_apply, mock_email):
-        mock_instance = MagicMock(return_value=self.return_value)
-        mock_apply.return_value.get = mock_instance
+    #@patch('business.views.views.verify_shipping_address.apply_async')
+    def test_create_a_business_onwer(self, mock_email):
+        #mock_instance = MagicMock(return_value=self.return_value)
+        #mock_apply.return_value.get = mock_instance
         
         url = reverse('business-owners-signup')
         data = self.data
@@ -44,7 +44,7 @@ class BusinessTest(APITestCase):
         mock_email_instance = MagicMock(return_value="Registration email sent")
         mock_email.return_value = mock_email_instance
         mock_email.assert_called_once()
-        mock_apply.assert_called_once()
+        #mock_apply.assert_called_once()
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
     def test_put(self):

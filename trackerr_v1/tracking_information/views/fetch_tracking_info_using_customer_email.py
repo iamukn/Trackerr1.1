@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from tracking_information.utils.get_tracking_history_using_email import retrieve_history
+from django.core.cache import cache
 
 
 """ Retrieve all tracking information shipped to a unique customer """
@@ -116,5 +117,10 @@ class Customer_history(APIView):
         email = request.query_params.get('email')
         if not email:
             return Response({'detail': 'enter a valid email address!'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if cache.has_key(f'all_orders_{email}'):
+            return Response(cache.get(f'all_orders_{email}'), status=status.HTTP_200_OK)
+
         customer_history = retrieve_history(email)
+        cache.set(f'all_orders_{email}', customer_history, timeout=60)
         return Response(customer_history, status=status.HTTP_200_OK)

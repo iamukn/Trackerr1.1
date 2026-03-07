@@ -45,3 +45,12 @@ class Tracking_info(models.Model):
     
     def __str__(self):
         return f"{self.parcel_number}, {self.owner}, {self.country}, {self.vendor}, {self.status}"
+
+    class Meta:
+        indexes = [
+            models.Index(fields=['owner']),
+            models.Index(fields=['date_of_purchase']),
+            models.Index(fields=['customer_email']),
+            models.Index(fields=['status']),
+            models.Index(fields=['owner', 'date_of_purchase']),
+        ]

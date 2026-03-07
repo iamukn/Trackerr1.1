@@ -6,7 +6,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from business.views.business_owner_permission import IsBusinessOwner
 from tracking_information.utils.fetch_tracking_status_count import tracking_status_count as status_count
-
+from django.core.cache import cache
 
 """ 
     Route that handles the tracking data counts on the business owner dashboard
@@ -56,9 +56,14 @@ class RetrieveStatusCount(APIView):
             )
     def get(self, request, *args, **kwargs):
         # fetches the tracking number counts for a unique user
+        user = request.user.business_owner
+        if cache.has_key(f'business_owner_{user.id}tracking_count'):
+            data = cache.get(f'business_owner_{user.id}tracking_count')
+            return Response(data, status=status.HTTP_404_NOT_FOUND)
+
         data = status_count(request.user)
 
         if not len(data) < 2:
+            cache.set(f'business_owner_{user.id}tracking_count', data, timeout=120)
             return Response(data, status=status.HTTP_200_OK)
-
         return Response(data, status=status.HTTP_404_NOT_FOUND)

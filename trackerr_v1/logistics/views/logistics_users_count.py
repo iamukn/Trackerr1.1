@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAdminUser
 from rest_framework.views import APIView
 from logistics.models import Logistics_partner
+from django.core.cache import cache
 
 """ View that returns the logistics owners count"""
 
@@ -58,7 +59,9 @@ class Logistics_owners_count(APIView):
             )
     def get(self, request, *args, **kwargs):
         # Returns the count of the logistics partners 
+        if cache.has_key('admin:total_logistics_partner'):
+            return Response(cache.get('admin:total_logistics_partner'), status=status.HTTP_200_OK)
         counts = Logistics_partner.objects.all().count()
         counts = {'total_riders': counts}
-
+        cache.set('admin:total_logistics_partner', counts, timeout=3000)
         return Response(counts, status=status.HTTP_200_OK)

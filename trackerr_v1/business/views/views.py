@@ -25,6 +25,7 @@ from django.shortcuts import (get_object_or_404, get_list_or_404)
 import botocore.exceptions
 from datetime import datetime
 from shared.celery_tasks.utils_tasks.delete_existing_file import delete_old_file
+from django.core.cache import cache
 
 
 logger = setUp_logger(__name__, 'business.logs')
@@ -530,6 +531,9 @@ class Business_ownerRoute(APIView):
         """
         if not self.authorized(request, id):
             return Response({'error': 'forbidden'}, status=status.HTTP_403_FORBIDDEN)
+
+        if cache.has_key(f'business_owner_{id}_data'):
+            return Response(cache.get(f'business_owner_{id}_data'), status=status.HTTP_200_OK) 
         user = self.query_set(Business_owner, id)
         serializer = Business_ownerSerializer(user, context={'request': request})
         if user:
@@ -541,8 +545,6 @@ class Business_ownerRoute(APIView):
                 name = name.split(' ')[0].capitalize()
                 data['user']['name'] = name + '👌'
             data['user'].pop('created_on')
-            #data['user'].pop('updated_on')
-            #data['user'].pop('phone_number')
             # compute the avatar url using the key
             if avatar_key:
                 data['user']['avatar'] = f"{environ.get('TRACKERR_CDN_URL')}/{avatar_key}" 
@@ -561,6 +563,7 @@ class Business_ownerRoute(APIView):
                 datetime_obj = data['user']['updated_on']
                 formatted_date = datetime_obj.strftime("%b %d, %Y")
                 data['user']['updated_on'] = formatted_date
+            cache.set(f'business_owner_{id}_data', data, timeout=600)
             return Response(data, status=status.HTTP_200_OK)
         return Response({'error': 'user not found'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -672,6 +675,8 @@ class Business_ownerRoute(APIView):
                 user_serializer.save()
                 business_serializer.save()
 
+                # delete pending cache
+                cache.delete(f'business_owner_{id}_data')
                 return Response(business_serializer.data, status=status.HTTP_206_PARTIAL_CONTENT)
             return Response(user_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
@@ -804,7 +809,7 @@ class Business_ownerRoute(APIView):
                         if str(user.business_owner.profile_pic_key).lower() == 'none':
                             uuid = uuid4()
                             data['business_owner_uuid'] = uuid
-                            print('uuid: ', data['business_owner_uuid'])
+                          
                             new_profile_pic_key = str(uuid) + '.' + str(avatar[0].name).split('.')[-1]
                         else:
                             old_profile_pic_key = user.business_owner.profile_pic_key
@@ -825,7 +830,7 @@ class Business_ownerRoute(APIView):
             if user_ser.is_valid() and business_ser.is_valid():
                 user_ser.save()
                 business_ser.save()
-                print('Valid: ', business_ser.data)
+                cache.delete(f'business_owner_{id}_data')
                 return Response(business_ser.data, status=status.HTTP_206_PARTIAL_CONTENT)
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -896,7 +901,7 @@ class Business_ownerRoute(APIView):
                 user = User.objects.get(id=id)
 
                 user.delete()
-            
+                cache.delete(f'business_owner_{id}_data')
                 return Response({"status": "successfully deleted"}, status=status.HTTP_204_NO_CONTENT)
 
             except User.DoesNotExist:

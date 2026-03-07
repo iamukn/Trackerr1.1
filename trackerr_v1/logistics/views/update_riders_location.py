@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from logistics.models import Logistics_partner
 from logistics.serializer import Logistics_partnerSerializer
 from .logistics_owner_permission import IsLogisticsOwner
+from django.core.cache import cache
 
 """ Update Riders Location """
 
@@ -39,6 +40,7 @@ class UpdateLocation(APIView):
                     # removes the users data from the object
                     data = serializer.data
                     data.pop('user')
+                    cache.delete(f'rider_{user.id}_data')
                     # returns a 206
                     return Response(data, status=status.HTTP_206_PARTIAL_CONTENT)
                 # returns a 400 if the incorrect fields are passed

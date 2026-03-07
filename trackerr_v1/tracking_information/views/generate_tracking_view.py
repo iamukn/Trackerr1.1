@@ -7,7 +7,8 @@ from rest_framework.views import APIView
 from tracking_information.utils.tracking_class import Track_gen
 from tracking_information.serializer import Tracking_infoSerializer
 from tracking_information.models import Tracking_info
-from shared.celery_tasks.tracking_info_tasks.verify_address_task import verify_shipping_address
+#from shared.celery_tasks.tracking_info_tasks.verify_address_task import verify_shipping_address
+from tracking_information.utils.validate_shipping_address import verify_address
 from shared.celery_tasks.utils_tasks.send_tracking_email import send_tracking_updates_email as send_tracking_updates
 from rest_framework.permissions import IsAuthenticated 
 from business.views.business_owner_permission import IsBusinessOwner
@@ -211,7 +212,8 @@ class GenerateView(APIView):
     def post(self, request, *args, **kwargs):
         try:
             # retrieve the location data using celery
-            address = verify_shipping_address.apply_async(kwargs={'address': request.data.get('shipping_address').capitalize()}).get()
+            # address = verify_shipping_address.apply_async(kwargs={'address': request.data.get('shipping_address').capitalize()}).get()
+            address = verify_address(address=request.data.get('shipping_address').capitalize())
             #parcel_number = self.Track_gen.generate_tracking(vendor=request.user.name)
             # retrieves all the data from the requuest, generate a tracking number and return to user
             data = {

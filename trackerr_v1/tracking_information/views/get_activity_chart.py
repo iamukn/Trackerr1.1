@@ -9,6 +9,7 @@ from tracking_information.utils.get_days_or_month_tracking_count import Activity
 from business.views.business_owner_permission import IsBusinessOwner
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
+from django.core.cache import cache
 
 class GetWeeklyActivityChart(APIView):
     """ returns the activity charts for the last 7 days """
@@ -61,7 +62,12 @@ class GetWeeklyActivityChart(APIView):
             return Response({'details': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
 
         try:
+            user = request.user.business_owner
+            if cache.has_key(f'business_owner_{user.id}_activity'):
+                return Response( cache.get(f'business_owner_{user.id}_activity'), status=status.HTTP_200_OK)
+
             last_seven = self.chart.last_seven_days(request.user)
+            cache.set(f'business_owner_{user.id}_activity', last_seven, timeout=60)
             return Response(last_seven, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(e, status=status.HTTP_400_BAD_REQUEST)
@@ -110,6 +116,11 @@ class GetMonthlyActivityChart(GetWeeklyActivityChart):
         if isinstance(request.user,Anon):
             return Response({'details': 'Unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
         try:
-            return Response(self.chart.last_month_count(request.user), status=status.HTTP_200_OK)
+            user = request.user.business_owner
+            if cache.has_key(f'business_owner{user.id}_monthly'):
+                return Response(cache.get(f'business_owner{user.id}_monthly'))
+            data = self.chart.last_month_count(request.user)
+            cache.set(f'business_owner{user.id}_monthly', data, timeout=60)
+            return Response( data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response(e, status=status.HTTP_400_BAD_REQUEST)

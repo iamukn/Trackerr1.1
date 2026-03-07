@@ -8,6 +8,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from tracking_information.models import Tracking_info
 from tracking_information.serializer import Tracking_infoSerializer
+from django.core.cache import cache
 
 
 """ Retrieves tracking information for a tracking number """
@@ -68,6 +69,9 @@ class RetrieveOne(APIView):
             )
     def get(self, request, num:str, *args, **kwargs):
         """ handles retrieving tracking information for a unique tracking number """
+        if cache.has_key(f'tracking_{num}_data'):
+            data = cache.get(f'tracking_{num}_data')
+            return Response(data, status=status.HTTP_200_OK)
         data = self.query_set(num)
         # checks if a data was returned from the database
         # if yes, it serializes it and send to the user
@@ -76,4 +80,5 @@ class RetrieveOne(APIView):
         data.pop('owner')
         data['shipping_address'] = data.get('shipping_address').title()
         data['country'] = data.get('country').title()
+        cache.set(f'tracking_{num}_data', data, timeout=60)
         return Response(data, status=status.HTTP_200_OK)

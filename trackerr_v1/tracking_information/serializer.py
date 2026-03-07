@@ -18,12 +18,20 @@ class Tracking_infoSerializer(ModelSerializer):
 
         # calc distance between origin and dest
 
-        dist = calc_distance(
-            float(instance.business_owner_lat),
-            float(instance.business_owner_lng),
-            float(instance.destination_lat),
-            float(instance.destination_lng),
-                )
+        if not instance.business_owner_lat or not instance.business_owner_lng:
+             dist = calc_distance(
+                     float(instance.destination_lat),
+                     float(instance.destination_lng),
+                     float(instance.destination_lat),
+                     float(instance.destination_lng),
+                    )
+        else:
+            dist = calc_distance(
+                float(instance.business_owner_lat),
+                float(instance.business_owner_lng),
+                float(instance.destination_lat),
+                float(instance.destination_lng),
+                    )
 
         eta = calc_eta(dist, 30)
 

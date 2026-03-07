@@ -9,6 +9,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 from user.models import User
+from django.core.cache import cache
 
 class Business_ownerBalance(APIView):
     """
@@ -93,21 +94,27 @@ class Business_ownerBalance(APIView):
         owner = request.user
         country = owner.country
         try:
+            if cache.has_key(f'balance_{owner.id}'):
+                return Response(cache.get(f'balance_{owner.id}'), status=status.HTTP_200_OK)
             balance = format(owner.wallet.balance, '.2f')
 
             if country.lower() == 'nigeria': 
                 # handles the balance if it's nigeria
-                return Response({'msg': 'success',
+                data = {'msg': 'success',
                         'balance': balance,
                         'symbol': '₦',
                         'currency': 'NGN',
-                    }, status=status.HTTP_200_OK)
+                        }
+                cache.set(f'balance_{owner.id}', data, timeout=60)
+                return Response(data, status=status.HTTP_200_OK)
             # handles if it's ghana; tweak for other countries as we expand
-            return Response({'msg': 'success',
+            data = {'msg': 'success',
                     'balance': balance,
                     'symbol': '₵',
                     'currency': 'GHS',
-                    }, status=status.HTTP_200_OK)
+                    }
+            cache.set(f'balance_{owner.id}', data, timeout=60)
+            return Response(data, status=status.HTTP_200_OK)
 
         except User.wallet.RelatedObjectDoesNotExist:
             return Response({'error': 'user does not have a wallet, contact admin'}, status=status.HTTP_400_BAD_REQUEST)
