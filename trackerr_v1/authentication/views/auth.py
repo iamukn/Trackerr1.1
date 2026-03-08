@@ -114,5 +114,4 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             name = User.objects.get(email=email).name
             # sends a login email to the user
             email = send_login_email.apply_async(args=[name, email], retry=False)   
-
             return response

@@ -70,8 +70,8 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=60),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=120),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=2),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=14),
     "ROTATE_REFRESH_TOKENS": True,
 }
 

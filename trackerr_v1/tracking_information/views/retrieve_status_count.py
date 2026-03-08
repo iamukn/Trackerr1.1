@@ -59,11 +59,12 @@ class RetrieveStatusCount(APIView):
         user = request.user.business_owner
         if cache.has_key(f'business_owner_{user.id}tracking_count'):
             data = cache.get(f'business_owner_{user.id}tracking_count')
-            return Response(data, status=status.HTTP_404_NOT_FOUND)
+            return Response(data, status=status.HTTP_200_OK)
 
         data = status_count(request.user)
 
-        if not len(data) < 2:
+        #if not le(data) < 2:
+        if len(data) > 1:
             cache.set(f'business_owner_{user.id}tracking_count', data, timeout=120)
             return Response(data, status=status.HTTP_200_OK)
-        return Response(data, status=status.HTTP_404_NOT_FOUND)
+        return Response(data, status=status.HTTP_200_OK)
