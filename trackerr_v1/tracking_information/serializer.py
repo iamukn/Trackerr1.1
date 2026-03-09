@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from .models import Tracking_info
 from rest_framework.serializers import ModelSerializer
-from tracking_information.models import Tracking_info
+from tracking_information.models import Tracking_info, GeoLocationData
 from tracking_information.utils.distance import calc_distance
 from tracking_information.utils.calc_eta import calculate_eta as calc_eta
 
@@ -41,3 +41,9 @@ class Tracking_infoSerializer(ModelSerializer):
         data['eta'] = eta
 
         return data
+
+
+class GeoLocationSerializer(ModelSerializer):
+    class Meta:
+        model = GeoLocationData
+        fields = '__all__'

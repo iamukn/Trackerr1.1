@@ -332,9 +332,14 @@ class Business_ownerRegistration(APIView):
                 if avatar:
                     data.pop('avatar')
 
-                #address = verify_address.apply_async(kwargs={'address': data.get('address', '').capitalize()})
-                #address = address.get(timeout=60)
-                address = verify_address(address=data.get('address', '').capitalize())
+                # check cache for already geocoded added or code a new address
+                cached_addr = cache.get(f'addr_info:{data.get("address").lower()}')
+                
+                if cached_addr:
+                    print('cached data')
+                    address = cached_addr
+                else:
+                    address = verify_address(address=data.get('address', '').capitalize())
                 # added the country
                 data['country'] = address.get('country', '').lower()
 
@@ -787,7 +792,13 @@ class Business_ownerRoute(APIView):
                 # get the lat and lng
                 # update the record
                 #address = verify_shipping_address.apply_async(kwargs={'address': data.get('address', '').capitalize()}).get(timeout=30)
-                address = verify_address(address=data.get('address').capitalize())
+                cached_addr = cache.get(f'addr_info:{data.get("address").capitalize()}')
+                if cached_addr:
+                    print('Cached')
+                    address = cached_addr
+                else:
+                    print('Not cached')
+                    address = verify_address(address=data.get('address').capitalize())
                 if 'error' in address:
                     return Response(address, status=status.HTTP_400_BAD_REQUEST)
                 data['latitude'] = address.get('latitude')
@@ -802,9 +813,8 @@ class Business_ownerRoute(APIView):
             #avatar = data.pop('avatar')
             uuid = ''
             new_profile_pic_key = ''
-            if avatar:
+            if not type(avatar[0]) == str and avatar:
                 try:
-                    
                     if not str(user.business_owner.profile_pic_key) in str(avatar[0].name):
                         if str(user.business_owner.profile_pic_key).lower() == 'none':
                             uuid = uuid4()

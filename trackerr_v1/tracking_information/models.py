@@ -54,3 +54,23 @@ class Tracking_info(models.Model):
             models.Index(fields=['status']),
             models.Index(fields=['owner', 'date_of_purchase']),
         ]
+
+
+class GeoLocationData(models.Model):
+    raw_address = models.CharField(max_length=400, null=False, blank=False, unique=True, default='')
+    address = models.CharField(max_length=400, null=False, blank=False, unique=True)
+    city = models.CharField(max_length=100, null=False, blank=False)
+    latitude = models.CharField(max_length=15, null=False, blank=False)
+    longitude = models.CharField(max_length=15, null=False, blank=False)
+    country = models.CharField(max_length=15, null=False, blank=False)
+
+
+    def __str__(self,):
+        return f"{self.address}"
+
+    class Meta:
+        indexes = [
+                models.Index(fields=['raw_address']),
+                models.Index(fields=['raw_address', 'country']),
+                ]
+
