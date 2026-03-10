@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Dict
 from django.core.cache import cache
 from tracking_information.serializer import GeoLocationSerializer
+from tracking_information.models import GeoLocationData
 
 
 env = Env(
@@ -29,6 +30,16 @@ def verify_address(address:str) -> Dict:
     if cached_addr:
         print('from cache')
         return cached_addr
+
+
+    # if it's not in the check if it's in the db
+    data = GeoLocationData.objects.get(raw_address=old_addr.lower())
+    if data:
+        serializer = GeoLocationSerializer(data=data)
+        if serializer.is_valid():
+            cache.set(f'addr_info:{old_addr.lower()}', serializer.data, timeout=None)
+            print('Removed from DB and added to cache')
+            return serializer.data
 
     # else, geocode the address
 
