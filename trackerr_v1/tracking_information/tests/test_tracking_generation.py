@@ -33,38 +33,33 @@ class TestTrackingGenerationEndpoint(APITestCase):
         self.track_num = 'J123456778OE'
 
     @patch('tracking_information.views.generate_tracking_view.Track_gen')
-    #@patch('tracking_information.views.generate_tracking_view.verify_shipping_address.apply_async')
-    def test_tracking_generation_by_business_owner(self, mock_track_gen):
+    @patch('tracking_information.views.generate_tracking_view.verify_address')
+    def test_tracking_generation_by_business_owner(self, mock_verify, mock_track_gen):
         # test to ensure that business users only creates tracking
         url = reverse('generate-tracking')
         # mock the tracking generation method
         mock_track_gen_instance = MagicMock(return_value=self.track_num)
         # mock the generate_tracking method called by Track_gen 
         mock_track_gen.return_value.generate_tracking = mock_track_gen_instance
+        mock_verify.return_value = self.return_value
 
-        # mock the apply_async method
-        #mock_apply = MagicMock(return_value=self.return_value)
-        # mock the get method called by apply_async
-        #mock_apply_async.return_value.get = mock_apply
 
         res = self.client.post(url, data=self.data, format='json')
         # assert
-        #mock_apply.assert_called_once()
         mock_track_gen.assert_called_once()
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertTrue(type(res.data), ReturnDict)
 
-    #@patch('tracking_information.views.generate_tracking_view.verify_shipping_address.apply_async')
+    @patch('tracking_information.views.generate_tracking_view.verify_address')
     @patch('tracking_information.views.generate_tracking_view.Track_gen')
-    def test_raises_a_404_for_missing_required_fields(self, mock_track_gen):
+    def test_raises_a_404_for_missing_required_fields(self, mock_track_gen, mock_verify):
         # test to ensure that a 404 is raised if required fields aren't provided
         mock_track_gen_instance = MagicMock()
         mock_track_gen_instance.return_value = self.track_num
         mock_track_gen.return_value.generate_tracking = mock_track_gen_instance
 
-        #mock_verify_address_instance = MagicMock()
-        #mock_verify_address_instance.return_value = self.return_value
-        #mock_verify_address.return_value.get = mock_verify_address_instance
+        mock_verify.return_value = self.return_value
+        
 
         data = self.data
         data.pop('quantity')
@@ -90,16 +85,16 @@ class TestTrackingGenerationEndpoint(APITestCase):
         res = self.client.post(url, data=self.data, format='json')
         self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
 
-    #@patch('tracking_information.views.generate_tracking_view.verify_shipping_address.apply_async')
+    @patch('tracking_information.views.generate_tracking_view.verify_address')
     @patch('tracking_information.views.generate_tracking_view.Track_gen')
-    def test_return_tracking_history_for_a_unique_email(self, mock_track_gen, ):
+    def test_return_tracking_history_for_a_unique_email(self, mock_track_gen, mock_verify ):
         mock_track_gen_instance = MagicMock()
         #mock_verify_address_instance = MagicMock()
         mock_track_gen_instance.return_value = self.track_num
         #mock_verify_address_instance.return_value = self.return_value
 
         mock_track_gen.return_value.generate_tracking = mock_track_gen_instance
-        #mock_verify_address.return_value.get = mock_verify_address_instance
+        mock_verify.return_value = self.return_value
 
         url = reverse('generate-tracking')
         res = self.client.post(url, data=self.data, format='json')

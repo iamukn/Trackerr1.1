@@ -341,7 +341,10 @@ class Business_ownerRegistration(APIView):
                 else:
                     address = verify_address(address=data.get('address', '').capitalize())
                 # added the country
-                data['country'] = address.get('country', '').lower()
+                data['country'] = address.get('country', '')
+                
+                if data['country']:
+                    data['country']=data['country'].lower()
 
                 
                 # handle errors from address field
@@ -803,7 +806,10 @@ class Business_ownerRoute(APIView):
                     return Response(address, status=status.HTTP_400_BAD_REQUEST)
                 data['latitude'] = address.get('latitude')
                 data['longitude'] = address.get('longitude')
-                data['country'] = address.get('country').lower()
+                data['country'] = address.get('country')
+
+                if data['country']:
+                    data['country'] = data['country'].lower()
 
             if 'password' in data:
                 data.pop('password')
@@ -813,7 +819,7 @@ class Business_ownerRoute(APIView):
             #avatar = data.pop('avatar')
             uuid = ''
             new_profile_pic_key = ''
-            if not type(avatar[0]) == str and avatar:
+            if avatar and not isinstance(type(avatar[0]), str):
                 try:
                     if not str(user.business_owner.profile_pic_key) in str(avatar[0].name):
                         if str(user.business_owner.profile_pic_key).lower() == 'none':

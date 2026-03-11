@@ -7,6 +7,7 @@ from user.serializers import UsersSerializer
 from unittest.mock import patch, MagicMock
 from rest_framework.test import APITestCase
 from rest_framework_simplejwt.tokens import AccessToken
+from tracking_information.models import GeoLocationData
 
 """ testing the HTTP methods [PUT, PATCH, DELETE] requests on the business app """
 
@@ -30,21 +31,20 @@ class BusinessTest(APITestCase):
         self.return_value = {'address': '36b authority avenue', 'city': 'Lagos', 'country': 'Nigeria', 'latitude': 6.54219, 'longitude': 3.22122} 
 
     @patch('business.signals.send_reg_email.apply_async')
-    #@patch('business.views.views.verify_shipping_address.apply_async')
-    def test_create_a_business_onwer(self, mock_email):
-        #mock_instance = MagicMock(return_value=self.return_value)
-        #mock_apply.return_value.get = mock_instance
-        
+    @patch('business.views.views.verify_address')
+    def test_create_a_business_onwer(self,mock_verify, mock_email):
+        mock_verify.return_value = self.return_value
+        mock_email.return_value = 'Registration email sent'
+
         url = reverse('business-owners-signup')
         data = self.data
         data['service'] = 'parcel delivery'
         data['email'] = 'janedoe1212@gmail.com'
         res = self.client.post(url, data=data, format='json')
-        # mock email
-        mock_email_instance = MagicMock(return_value="Registration email sent")
-        mock_email.return_value = mock_email_instance
+        # mock email and verify function
         mock_email.assert_called_once()
-        #mock_apply.assert_called_once()
+        mock_verify.assert_called_once()
+        
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
     def test_put(self):
