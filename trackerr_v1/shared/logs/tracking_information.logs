@@ -394,3 +394,56 @@ tracking_information.views.generate_tracking_view : generate_tracking_view.py :g
 tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 254: :ERROR 40: {'quantity': [ErrorDetail(string='This field may not be null.', code='null')]} : 03/11/2026 05:45:11 PM
 tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 254: :ERROR 40: {'quantity': [ErrorDetail(string='This field may not be null.', code='null')]} : 03/11/2026 05:46:31 PM
 tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 254: :ERROR 40: {'quantity': [ErrorDetail(string='This field may not be null.', code='null')]} : 03/11/2026 05:47:58 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: ['Insuffient balance, please top up!'] : 03/11/2026 07:27:58 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: ['Insuffient balance, please top up!'] : 03/11/2026 07:28:09 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: ['Insuffient balance, please top up!'] : 03/11/2026 07:35:43 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: ['Insuffient balance, please top up!'] : 03/11/2026 07:38:10 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: ['Insuffient balance, please top up!'] : 03/11/2026 07:45:56 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: ['Insuffient balance, please top up!'] : 03/11/2026 07:52:47 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: ['Insuffient balance, please top up!'] : 03/11/2026 07:53:25 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: ['Insuffient balance, please top up!'] : 03/11/2026 07:53:57 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: ['Insuffient balance, please top up!'] : 03/11/2026 07:54:34 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: Insuffient balance, please top up!❌ : 03/11/2026 07:55:47 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: Insuffient balance, please top up!❌ : 03/11/2026 07:56:40 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: User has no wallet. : 03/11/2026 07:59:34 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: User has no wallet. : 03/11/2026 07:59:34 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: User has no wallet. : 03/11/2026 07:59:34 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: User has no wallet. : 03/11/2026 07:59:35 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: User has no wallet. : 03/11/2026 07:59:35 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: User has no wallet. : 03/11/2026 07:59:35 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: User has no wallet. : 03/11/2026 08:02:32 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: User has no wallet. : 03/11/2026 08:02:32 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: User has no wallet. : 03/11/2026 08:02:33 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: User has no wallet. : 03/11/2026 08:02:33 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: User has no wallet. : 03/11/2026 08:02:33 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: User has no wallet. : 03/11/2026 08:04:58 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: User has no wallet. : 03/11/2026 08:04:58 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 262: :ERROR 40: User has no wallet. : 03/11/2026 08:04:58 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 263: :ERROR 40: User has no wallet. : 03/11/2026 08:10:36 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 263: :ERROR 40: User has no wallet. : 03/11/2026 08:10:37 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 263: :ERROR 40: User has no wallet. : 03/11/2026 08:10:37 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 263: :ERROR 40: User has no wallet. : 03/11/2026 08:11:34 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 263: :ERROR 40: User has no wallet. : 03/11/2026 08:11:34 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 263: :ERROR 40: User has no wallet. : 03/11/2026 08:11:34 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 263: :ERROR 40: 'NoneType' object has no attribute 'lower' : 03/11/2026 08:12:29 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 263: :ERROR 40: 'NoneType' object has no attribute 'lower' : 03/11/2026 08:12:29 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 263: :ERROR 40: User has no wallet. : 03/11/2026 08:12:30 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 263: :ERROR 40: User has no wallet. : 03/11/2026 08:12:30 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 263: :ERROR 40: User has no wallet. : 03/11/2026 08:12:30 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 263: :ERROR 40: 'NoneType' object has no attribute 'lower' : 03/11/2026 08:13:44 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 263: :ERROR 40: 'NoneType' object has no attribute 'lower' : 03/11/2026 08:13:45 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 263: :ERROR 40: User has no wallet. : 03/11/2026 08:13:45 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 263: :ERROR 40: User has no wallet. : 03/11/2026 08:13:45 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 263: :ERROR 40: User has no wallet. : 03/11/2026 08:13:45 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 263: :ERROR 40: 'NoneType' object has no attribute 'lower' : 03/11/2026 08:18:55 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 263: :ERROR 40: 'NoneType' object has no attribute 'lower' : 03/11/2026 08:18:56 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 263: :ERROR 40: User has no wallet. : 03/11/2026 08:18:56 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 263: :ERROR 40: User has no wallet. : 03/11/2026 08:18:56 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 263: :ERROR 40: User has no wallet. : 03/11/2026 08:18:57 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 263: :ERROR 40: User has no wallet. : 03/11/2026 08:28:35 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 263: :ERROR 40: User has no wallet. : 03/11/2026 08:28:36 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 263: :ERROR 40: User has no wallet. : 03/11/2026 08:28:36 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 259: :ERROR 40: {'quantity': [ErrorDetail(string='This field may not be null.', code='null')]} : 03/11/2026 08:31:00 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 259: :ERROR 40: {'quantity': [ErrorDetail(string='This field may not be null.', code='null')]} : 03/11/2026 08:31:42 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 259: :ERROR 40: {'quantity': [ErrorDetail(string='This field may not be null.', code='null')]} : 03/11/2026 08:34:17 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 259: :ERROR 40: {'quantity': [ErrorDetail(string='This field may not be null.', code='null')]} : 03/11/2026 08:35:33 PM

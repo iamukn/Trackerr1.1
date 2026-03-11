@@ -32,15 +32,17 @@ def verify_address(address:str) -> Dict:
         return cached_addr
 
 
-    # if it's not in the check if it's in the db
-    data = GeoLocationData.objects.get(raw_address=old_addr.lower())
-    if data:
-        serializer = GeoLocationSerializer(data=data)
-        if serializer.is_valid():
-            cache.set(f'addr_info:{old_addr.lower()}', serializer.data, timeout=None)
-            print('Removed from DB and added to cache')
-            return serializer.data
-
+    # if it's not in the cache check if it's in the db
+    try:
+        data = GeoLocationData.objects.get(raw_address=old_addr.lower())
+        if data:
+            serializer = GeoLocationSerializer(data=data)
+            if serializer.is_valid():
+                cache.set(f'addr_info:{old_addr.lower()}', serializer.data, timeout=None)
+                print('Removed from DB and added to cache')
+                return serializer.data
+    except GeoLocationData.DoesNotExist:
+        ...
     # else, geocode the address
 
     if not isinstance(address, str):

@@ -33,5 +33,5 @@ class Wallet(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return f"{self.owner.name} - {self.currency} Wallet"
+        return f"{self.owner.name} - {self.balance}{self.currency} Wallet"
 
