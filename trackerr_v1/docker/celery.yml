@@ -11,3 +11,14 @@ services:
             - trackerr
         networks:
             - connect
+      celery_beat:
+        image: iamukn/trackerr:1.0.25
+        command: celery -A trackerr_v1 beat --loglevel=info
+        env_file:
+            - .env
+        depends_on:
+            - postgres
+            - redis
+            - trackerr
+        networks:
+            - connect
