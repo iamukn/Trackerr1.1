@@ -1,6 +1,7 @@
 from wallet.models import Wallet
 from django.core.exceptions import ValidationError
 from django.core.cache import cache
+from decimal import Decimal
 
 def deduct_wallet(user):
     wallet = user.wallet
@@ -10,7 +11,7 @@ def deduct_wallet(user):
         amount = 150
     elif country.lower() == 'ghana':
         # deduct 4 cedis from Ghanian accounts
-        amount = 1.2
+        amount = Decimal('1.2')
 
     balance = wallet.balance
 

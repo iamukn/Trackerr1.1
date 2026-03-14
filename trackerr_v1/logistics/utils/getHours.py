@@ -13,6 +13,9 @@ def get_today_active_hours(rider):
     total_seconds = 0
     last_active_time = None
 
+    if len(logs) == 0:
+        return f"0h 0m"
+
     for log in logs:
         if log.status == "active":
             last_active_time = log.timestamp

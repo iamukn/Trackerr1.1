@@ -14,7 +14,9 @@ from rest_framework.permissions import IsAuthenticated
 from business.views.business_owner_permission import IsBusinessOwner
 from shared.logger import setUp_logger
 from django.db import transaction
+from django.core.exceptions import ValidationError
 from wallet.utils.deduct_wallet import deduct_wallet
+from django.core.cache import cache
 
 # logger
 logger = setUp_logger(__name__, 'tracking_information.logs')
@@ -214,6 +216,8 @@ class GenerateView(APIView):
     def post(self, request, *args, **kwargs):
         with transaction.atomic():
             try:
+                # get user
+                user = request.user.business_owner
                 # deduct balance from the user
                 deduct_wallet(user=request.user)
                
@@ -241,6 +245,8 @@ class GenerateView(APIView):
                 if ser.is_valid():
                     ser.save()
                     data = ser.data
+                    # remove old cache
+                    cache.delete(f'business_owner_{user.id}_generated_tracking')
                     data.pop('owner')
                     # send confirmation email
                     send_tracking_updates.apply_async(kwargs={
@@ -258,6 +264,9 @@ class GenerateView(APIView):
                 logger.error(ser.errors)
                 return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
 
+            except ValidationError as e:
+                print('error:', e.message)
+                return Response({"error": e.message}, status=status.HTTP_400_BAD_REQUEST)
             except Exception as e:
                 logger.error(e)
                 return Response({"error":e}, status=status.HTTP_400_BAD_REQUEST)

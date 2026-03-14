@@ -130,7 +130,13 @@ class Rider(APIView):
                 return Response({'msg': 'you are not unauthorized to delete this user'}, status=status.HTTP_401_UNAUTHORIZED)
 
 
+
+            owner = request.user
+            if not owner.account_type == 'business':
+                return Response({'msg': 'you cannot delete a rider'}, status=status.HTTP_400_BAD_REQUEST)
             rider = rider.user.delete()
+            # cache the resource
+            cache.delete('business_owner_riders:{owner.id}')
             cache.delete(f'rider_{id}_data')
             return Response({'msg': f'rider: {user.name} deleted successfully'}, status=status.HTTP_200_OK)
 

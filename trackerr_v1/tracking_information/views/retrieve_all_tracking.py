@@ -17,7 +17,8 @@ class RetrieveAllView(APIView):
 
     def __init__(self):
         
-        self.all_tracking = Tracking_info.objects.all()
+        #self.all_tracking = Tracking_info.objects.all()
+        ...
 
     class CustomPaginator(PageNumberPagination):
         page_size = 10  # Number of items per page
@@ -191,9 +192,9 @@ class RetrieveAllView(APIView):
             if cache.has_key(f'business_owner_{user.id}_generated_tracking'):
                 all_tracking = cache.get(f'business_owner_{user.id}_generated_tracking')
 
-            else:
-                all_tracking = self.all_tracking.filter(owner=user.id).order_by('-id')
-                cache.set(f'business_owner_{user.id}_generated_tracking', all_tracking, timeout=60)
+            #else:
+            all_tracking = Tracking_info.objects.filter(owner=user).order_by('-id')
+            cache.set(f'business_owner_{user.id}_generated_tracking', all_tracking, timeout=60)
             # Apply pagination
             paginator = self.CustomPaginator()
             paginated_queryset = paginator.paginate_queryset(all_tracking, request)

@@ -12,6 +12,7 @@ from django.shortcuts import get_object_or_404
 from shared.celery_tasks.business_owners_task.upload_dp import upload_dp
 from logistics.utils.generate_password import generate_password
 import uuid
+from django.core.cache import cache
 
 
 class RegisterRider(APIView):
@@ -22,6 +23,7 @@ class RegisterRider(APIView):
 
         data = request.data.copy()
         rider_uuid = uuid.uuid4()
+        vendor = request.user.business_owner
 
 
         if 'password' in data:
@@ -64,6 +66,8 @@ class RegisterRider(APIView):
                 password = generate_password()
 
                 data['password'] = password
+                # country of rider should come from the business owners country
+                data['country'] = request.user.country.lower()
 
                 new_user =  UsersSerializer(data=data)
 
@@ -81,6 +85,8 @@ class RegisterRider(APIView):
 
                     new_user.save()
                     new_rider.save(user=get_object_or_404(User, pk=new_user.instance.id))
+                    # delete old cache
+                    cache.delete(f'business_owner_riders:{vendor.business_owner_uuid}')
 
                     print(new_rider.instance.profile_pic_key)
                     
