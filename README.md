@@ -10,7 +10,7 @@ Before installing the Python requirements, make sure to install the following sy
 
 ```bash
 sudo apt install -y libpq-dev gcc python3-dev
-
+```
 
 ## Clone the repository
 
