@@ -13,7 +13,7 @@ class TestLogisticsEndpoint(APITestCase):
         self.user = User.objects.create(
             name = 'John Doe',
             email = 'Johndoe@janedoe,com',
-            phone_number='+2347037******',
+            phone_number='7037******',
             address='Lagos',
             account_type='Business',
             password='johndoe123'

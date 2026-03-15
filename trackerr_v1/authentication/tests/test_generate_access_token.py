@@ -19,7 +19,7 @@ class TestTokenObtainPair(APITestCase):
         self.user = User.objects.create(
            name = 'Doe',
            email = 'iamukn@yahoo.com',
-           phone_number = '09015885144',
+           phone_number = '9015885144',
            address = '1234 county avenue, Washinton DC',
            account_type = 'logistics',
                 )

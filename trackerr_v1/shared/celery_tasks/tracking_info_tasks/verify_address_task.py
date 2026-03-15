@@ -7,5 +7,8 @@ from tracking_information.utils.validate_shipping_address import verify_address
 @shared_task(bind=True, name='verify shipping address')
 
 def verify_shipping_address(self, address:str):
-    addr = verify_address(address=address)
-    return addr
+    try:
+        addr = verify_address(address=address)
+        return addr
+    except IndexError as e:
+        return {'error': 'address not found'} 

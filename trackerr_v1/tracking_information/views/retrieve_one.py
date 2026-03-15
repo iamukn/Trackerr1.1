@@ -8,6 +8,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.views import APIView
 from tracking_information.models import Tracking_info
 from tracking_information.serializer import Tracking_infoSerializer
+from django.core.cache import cache
 
 
 """ Retrieves tracking information for a tracking number """
@@ -18,7 +19,7 @@ class RetrieveOne(APIView):
     permission_classes = [AllowAny,]
 
     def query_set(self, num:str):
-        track = get_object_or_404(Tracking_info, parcel_number=num)
+        track = get_object_or_404(Tracking_info, parcel_number=num.upper())
         return track
     # Swagger documentation
     @swagger_auto_schema(
@@ -68,10 +69,16 @@ class RetrieveOne(APIView):
             )
     def get(self, request, num:str, *args, **kwargs):
         """ handles retrieving tracking information for a unique tracking number """
+        if cache.has_key(f'tracking_{num}_data'):
+            data = cache.get(f'tracking_{num}_data')
+            return Response(data, status=status.HTTP_200_OK)
         data = self.query_set(num)
         # checks if a data was returned from the database
         # if yes, it serializes it and send to the user
         serializer = Tracking_infoSerializer(data)
         data = serializer.data
         data.pop('owner')
+        data['shipping_address'] = data.get('shipping_address').title()
+        data['country'] = data.get('country').title()
+        cache.set(f'tracking_{num}_data', data, timeout=60)
         return Response(data, status=status.HTTP_200_OK)

@@ -1,95 +1,125 @@
 #!/usr/bin/python3
 """ Realtime parcel location retrieving route """
 
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.permissions import AllowAny
-from rest_framework.views import APIView
-from tracking_information.utils.fetch_parcel_location import RetrieveParcelLocation
-from drf_yasg import openapi
-from drf_yasg.utils import swagger_auto_schema
+from channels.generic.websocket import AsyncWebsocketConsumer
+import json
+import asyncio
+from channels.db import database_sync_to_async
 
 
-class RealtimeParcelTracking(APIView):
-    permission_classes = [AllowAny,]
-    
-    # swagger 
-    @swagger_auto_schema(
-        operation_summary='Retrieve realtime information of a tracking number',
-        operation_description='Endpoint that retrieves information for a tracking number',
-        manual_parameters= [
-            openapi.Parameter(
-            'parcel_number',
-            openapi.IN_QUERY,
-            type=openapi.TYPE_STRING,
-            properties={
-                'parcel_number': openapi.Schema(type=openapi.TYPE_STRING, title='tracking number', description='parcel number', minLength=1)
-                },
-            required=True,
-            example={
-                'parcel_number': 'JO223603848OE'
-                }
-            )
-            ],
-        responses={
-            '200': openapi.Response(
-                description='Successful',
-                schema=openapi.Schema(
-                    type=openapi.TYPE_OBJECT,
-                    properties={
-                        'rider_id': openapi.Schema(type=openapi.TYPE_INTEGER, description='Unique ID of rider'),
-                        'parcel_number': openapi.Schema(type=openapi.TYPE_STRING, description='Unique tracking number'),
-                        'destination': openapi.Schema(type=openapi.TYPE_STRING, description='destination address'),
-                        'destination_lat': openapi.Schema(type=openapi.TYPE_STRING, description='destination latitude'),
-                        'destination_lng': openapi.Schema(type=openapi.TYPE_STRING, description='destination longitude'),
-                        'lng': openapi.Schema(type=openapi.TYPE_STRING, description='riders longitude'),
-                        'lat': openapi.Schema(type=openapi.TYPE_STRING, description='riders latitude'),
-                        'rider_address': openapi.Schema(type=openapi.TYPE_STRING, description='riders current address'),
-                        },
-                    example={
-                        "rider_id": None,
-                        "parcel_number": "JO223603848OE",
-                        "destination": "Bogobiri St, Calabar Municipal, Nigeria",
-                        "destination_lat": "4.95896",
-                        "destination_lng": "8.32666",
-                        "lng": None,
-                        "lat": None,
-                        "rider_address": None
-                    }
+# receiving tracking informations as query_params
+# db async query method
+@database_sync_to_async
+def get_tracking_data(parcel_number):
+    from tracking_information.models import Tracking_info
+    try:
+        return Tracking_info.objects.get(parcel_number=parcel_number)
+    except Tracking_info.DoesNotExist:
+        return None
 
-                    ),
-                ),
-            '400': openapi.Response(
-                description='Error: Bad Request',
-                type=openapi.TYPE_OBJECT,
-                properties={
-                    'detail': openapi.Schema(type=openapi.TYPE_STRING, description='A tracking number is required!')
-                    },
-                example={
-                    'detail': 'A tracking number is required!'
-                    }
-                ),
-            '404': openapi.Response(
-                description='Error: Not Found',
-                schema=openapi.Schema(
-                    type=openapi.TYPE_OBJECT,
-                    properties={
-                        'detail': openapi.Schema(type=openapi.TYPE_STRING, description='Tracking number not valid!')
-                        },
-                    example={
-                        'detail': 'Tracking number not valid!'
-                        }
-                    )
-                )
-            }
+
+class RealtimeTracking(AsyncWebsocketConsumer):
+
+    async def connect(self):
+        await self.accept()
+        print('Connected!!!')
+
+
+
+    async def disconnect(self, close_code):
+        print("WebSocket disconnected")
+        # Remove from group if assigned
+        if hasattr(self, 'rider_group_name'):
+            await self.channel_layer.group_discard(
+                self.rider_group_name, self.channel_name
+            )            
+
+
+    async def receive(self, text_data):
+        """
+        Receive tracking number from client and join the rider's group.
+        """
+        data = json.loads(text_data)
+        self.tracking_number = data.get("parcel_number").upper()
+
+        # Fetch parcel info once
+        parcel = await get_tracking_data(self.tracking_number)
+        if not parcel:
+            await self.send(json.dumps({"error": "Parcel not found"}))
+            await self.close()
+            return
+
+        # Store required fields for reuse during broadcasts
+        self.parcel_status = parcel.status
+        self.country = parcel.country.lower()
+        self.customer_lat = float(parcel.destination_lat)
+        self.customer_lng = float(parcel.destination_lng)
+
+        # Create a group per rider (broadcast updates to this group)
+        self.rider_group_name = f"rider_{parcel.rider_uuid}"
+        print('Rider_Group_Joined:', parcel.rider_uuid)
+        await self.channel_layer.group_add(
+            self.rider_group_name, self.channel_name
         )
-    # receiving tracking informations as query_params
-    def get(self, request, *args, **kwargs):
-        if not request.query_params or not 'parcel_number' in request.query_params:
-            return Response({"detail": "A tracking number is required!"}, status=status.HTTP_400_BAD_REQUEST)       
-        parcel_number = request.query_params.get('parcel_number')
-        
-        track = RetrieveParcelLocation().get_parcel_location(parcel_number)
-        if 'parcel_number' in track:
-            return Response(track, status=status.HTTP_200_OK)
-        return Response(track, status=status.HTTP_404_NOT_FOUND)
+
+        # Send initial parcel info (status + business_owner & customer)
+        location_data = {
+            "parcel": {
+                "parcel_number": self.tracking_number,
+                "status": parcel.status,
+            },
+            "locations": {
+                "business_owner": {
+                    "lat": float(parcel.business_owner_lat),
+                    "lng": float(parcel.business_owner_lng)
+                },
+                "customer": {
+                    "lat": float(parcel.destination_lat),
+                    "lng": float(parcel.destination_lng)
+                }
+            }
+        }
+        await self.send(text_data=json.dumps({"location_data": location_data}))
+
+    async def rider_location_update(self, event):
+        """
+        Called when the rider endpoint broadcasts a new location.
+        """
+        lat = event["lat"]
+        lng = event["lng"]
+
+        location_data = {
+            'parcel': {
+                'parcel_number': self.tracking_number,
+                },
+            'locations': {
+                'rider': {
+                    'lat': float(lat),
+                    'lng': float(lng),
+                }
+            }
+        }
+
+        location_data = {
+            "parcel": {
+                "parcel_number": self.tracking_number,
+                "status": self.parcel_status,
+            },
+            "country": self.country,
+            "locations": {
+                "customer": {
+                    "lat": self.customer_lat,
+                    "lng": self.customer_lng,
+                },
+                "rider": {
+                    "lat": float(lat),
+                    "lng": float(lng),
+                }
+            }
+        }
+
+        # Send the updated rider location to the client
+        await self.send(text_data=json.dumps({
+            'location_data': location_data
+            }
+        ))

@@ -7,11 +7,16 @@ from rest_framework.views import APIView
 from tracking_information.utils.tracking_class import Track_gen
 from tracking_information.serializer import Tracking_infoSerializer
 from tracking_information.models import Tracking_info
-from shared.celery_tasks.tracking_info_tasks.verify_address_task import verify_shipping_address
+#from shared.celery_tasks.tracking_info_tasks.verify_address_task import verify_shipping_address
 from tracking_information.utils.validate_shipping_address import verify_address
+from shared.celery_tasks.utils_tasks.send_tracking_email import send_tracking_updates_email as send_tracking_updates
 from rest_framework.permissions import IsAuthenticated 
 from business.views.business_owner_permission import IsBusinessOwner
 from shared.logger import setUp_logger
+from django.db import transaction
+from django.core.exceptions import ValidationError
+from wallet.utils.deduct_wallet import deduct_wallet
+from django.core.cache import cache
 
 # logger
 logger = setUp_logger(__name__, 'tracking_information.logs')
@@ -31,7 +36,7 @@ class GenerateView(APIView):
         operation_summary='Endpoint that generates a tracking number',
         operation_description='Generate a tracking number',
         tags=['trackings'],
-        request_data=openapi.Schema(
+        request_body=openapi.Schema(
             type=openapi.TYPE_OBJECT,
             properties={
                 'shipping_address': openapi.Schema(
@@ -50,6 +55,11 @@ class GenerateView(APIView):
                     type=openapi.TYPE_STRING,
                     description='customers email'
                     ),
+                "phone": openapi.Schema(
+                    type=openapi.TYPE_STRING,
+                    description="customers phone number"
+                    )
+                ,
                 'quantity': openapi.Schema(
                     type=openapi.TYPE_STRING,
                     description='quantity of the products'
@@ -64,10 +74,11 @@ class GenerateView(APIView):
                 "country": "United States of America",
                 "product": "shoes",
                 "customer_email": "johndoe@example.com",
+                "phone": "08028856692",
                 "quantity": "2",
                 "delivery_date": "2024-12-12"
                 },
-            required=["shipping_address", "country", "product", "customer_email", "quantity", "delivery_date"]
+            required=["shipping_address", "country","phone", "product", "customer_email", "quantity", "delivery_date"]
             ),
         # response
         responses={
@@ -96,6 +107,11 @@ class GenerateView(APIView):
                             type=openapi.TYPE_STRING,
                             description='customer email'
                             ),
+                        'phone': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            description='phone number'
+                            )
+                        ,
                         'delivery_date': openapi.Schema(
                             type=openapi.TYPE_STRING,
                             description='delivery date'
@@ -163,6 +179,7 @@ class GenerateView(APIView):
                         "shipping_address": "Bogobiri St, Calabar Municipal, Nigeria",
                         "latitude": None,
                         "longitude": None,
+                        "phone": "08028856629",
                         "destination_lat": "4.95896",
                         "destination_lng": "8.32666",
                         "rider_email": None,
@@ -197,34 +214,59 @@ class GenerateView(APIView):
             )
     # method that handles the POST request
     def post(self, request, *args, **kwargs):
-        try:
-            # retrieve the location data using celery
-            address = verify_shipping_address.apply_async(kwargs={'address': request.data.get('shipping_address').capitalize()}).get()
-            # retrieves all the data from the requuest, generate a tracking number and return to user
-            data = {
-                "shipping_address": address.get('address').capitalize(),
-                "destination_lat": address.get('latitude'),
-                "destination_lng": address.get('longitude'),
-                "vendor": request.user.business_owner.business_name,
-                "owner": request.user.id,
-                "parcel_number": self.Track_gen.generate_tracking(vendor=request.user.name),
-                "country": address.get('country').capitalize(),
-                "product_name": request.data.get('product').lower(),
-                "customer_email": request.data.get('customer_email').lower(),
-                "quantity": request.data.get('quantity'),
-                "delivery_date": request.data.get('delivery_date'),
-                    }
-            ser = Tracking_infoSerializer(data=data)
-        except Exception as e:
-            print(e)
-            logger.error(e)
-            return Response({"error":e}, status=status.HTTP_400_BAD_REQUEST)
-            #raise ValueError("An Error occured while creating the Tracking number")
+        with transaction.atomic():
+            try:
+                # get user
+                user = request.user.business_owner
+                # deduct balance from the user
+                deduct_wallet(user=request.user)
+               
+                address = verify_address(address=request.data.get('shipping_address').capitalize())
+                #parcel_number = self.Track_gen.generate_tracking(vendor=request.user.name)
+                # retrieves all the data from the requuest, generate a tracking number and return to user
+                data = {
+                    "shipping_address": address.get('address').capitalize(),
+                    "destination_lat": address.get('latitude'),
+                    "destination_lng": address.get('longitude'),
+                    "vendor": request.user.business_owner.business_name,
+                    "owner": request.user.id,
+                    "parcel_number": self.Track_gen.generate_tracking(vendor=request.user.name),
+                    "country": address.get('country').capitalize(),
+                    "product_name": request.data.get('product').lower(),
+                    "customer_email": request.data.get('customer_email').lower(),
+                    "customer_name":  request.data.get('customer_name').lower(),
+                    "quantity": request.data.get('quantity'),
+                    "delivery_date": request.data.get('delivery_date'),
+                    "business_owner_lat": request.user.business_owner.latitude,
+                    "business_owner_lng": request.user.business_owner.longitude,
+                    "customer_phone": request.data.get('phone')
+                        }
+                ser = Tracking_infoSerializer(data=data)
+                if ser.is_valid():
+                    ser.save()
+                    data = ser.data
+                    # remove old cache
+                    cache.delete(f'business_owner_{user.id}_generated_tracking')
+                    data.pop('owner')
+                    # send confirmation email
+                    send_tracking_updates.apply_async(kwargs={
+                        "email": request.data.get('customer_email'),
+                        "customer_name": request.data.get('customer_name').title(),
+                        "parcel_number": data.get('parcel_number'),
+                        "vendor": data.get('vendor'),
+                        "delivery_address": data.get('shipping_address'),
+                        "items": data.get('product_name'),
+                        "eta": data.get('delivery_date'),
+                        "status": data.get('status')
+                        })
+                    
+                    return Response(data, status=status.HTTP_201_CREATED)
+                logger.error(ser.errors)
+                return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        if ser.is_valid():
-            ser.save()
-            data = ser.data
-            data.pop('owner')
-            return Response(data, status=status.HTTP_201_CREATED)
-        logger.error(ser.errors)
-        return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)       
+            except ValidationError as e:
+                print('error:', e.message)
+                return Response({"error": e.message}, status=status.HTTP_400_BAD_REQUEST)
+            except Exception as e:
+                logger.error(e)
+                return Response({"error":e}, status=status.HTTP_400_BAD_REQUEST)

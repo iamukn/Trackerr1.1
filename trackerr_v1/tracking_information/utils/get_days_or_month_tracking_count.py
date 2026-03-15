@@ -7,10 +7,9 @@ from tracking_information.models import Tracking_info
 
 """ Fetches the counts for tracking generated in the last 7 days """
 
-
 class ActivityChart(object):
     """  Fetches the counts for tracking generated in the last 7 days and month """
-    today = datetime.today()
+
     def _get_query_set(self, user_id: int) -> List: 
         # fetches the data from the database
         try:
@@ -26,10 +25,12 @@ class ActivityChart(object):
         Return:
             Dictionary
         """
+    
+
         last_seven = {}
 
         query_set = self._get_query_set(user)
-        today = self.today
+        today = datetime.today()
         count = query_set.filter(date_of_purchase=today).count()
         last_seven[today.strftime("%a")] = count
 
@@ -39,10 +40,10 @@ class ActivityChart(object):
             date = today - day_date
             count = query_set.filter(date_of_purchase=date).count()
             last_seven[date.strftime("%a")] = count
-        last_seven["Thur"] = last_seven["Thu"]
+        last_seven["Thur"] = last_seven.pop("Thu", 0)
         custom_order = ["Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun"]
-        sorted_last_seven = {day: last_seven[day] for day in custom_order}
-
+        sorted_last_seven = {day: last_seven.get(day, 0) for day in custom_order}
+        print(sorted_last_seven)
         return sorted_last_seven
 
     def last_month_count(self, user: User) -> List:
@@ -52,11 +53,13 @@ class ActivityChart(object):
         Return:
             A dictionary of weeks with counts of tracking generated that week
         """
+        today = datetime.today()
         query_set = self._get_query_set(user.id)
         
-        week1 = query_set.filter(date_of_purchase__range=(self.today - timedelta(days=28), self.today - timedelta(days=23))).count()
-        week2 = query_set.filter(date_of_purchase__range=(self.today - timedelta(days=22), self.today - timedelta(days=16))).count()
-        week3 = query_set.filter(date_of_purchase__range=(self.today - timedelta(days=15), self.today - timedelta(days=9))).count()        
-        week4 = query_set.filter(date_of_purchase__range=(self.today - timedelta(days=8), self.today)).count()
+        week1 = query_set.filter(date_of_purchase__range=(today - timedelta(days=28), today - timedelta(days=23))).count()
+        week2 = query_set.filter(date_of_purchase__range=(today - timedelta(days=22), today - timedelta(days=16))).count()
+        week3 = query_set.filter(date_of_purchase__range=(today - timedelta(days=15), today - timedelta(days=9))).count()        
+        week4 = query_set.filter(date_of_purchase__range=(today - timedelta(days=8), today)).count()
         weekly_count = {'Week One': week1, 'Week Two': week2, 'Week Three': week3, 'Week Four': week4}
+        print(weekly_count)
         return weekly_count

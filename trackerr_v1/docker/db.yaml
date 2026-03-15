@@ -2,8 +2,8 @@ version: "3.9"
 services:
     postgres:
         image: postgres
-        environment:
-            PASSWORD: "${PASSWORD}"
+        env_file:
+          - .env
         volumes:
             - /root/trackerr_app/Trackerr1.1/pgdata:/var/lib/postgresql/data
         networks:
@@ -12,3 +12,17 @@ services:
         image: redis
         networks:
             - connect
+    nginx:
+      image: nginx:latest
+      ports:
+        - "80:80"
+        - "443:443"
+      volumes:
+        - static_files:/static
+        - media_files:/media
+        - /etc/nginx/conf.d/default.conf:/etc/nginx/conf.d/default.conf
+        - /etc/letsencrypt/:/etc/letsencrypt/
+      depends_on:
+        - trackerr
+      networks:
+        - connect

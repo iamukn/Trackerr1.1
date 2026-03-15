@@ -31,7 +31,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 'password': openapi.Schema(type=openapi.TYPE_STRING, title='Password', minLength=1),
                 },
             example={
-                'email': 'testuser@gmail.com',
+                'email': 'n.u.kingsley@gmail.com',
                 'password': 'password'
                 },
             required=['email', 'password']
@@ -56,6 +56,12 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                             type=openapi.TYPE_STRING,
                             title='id',
                             description='unique ID of the logged in user'
+                            ),
+                        'account_type': openapi.Schema(
+                            type=openapi.TYPE_STRING,
+                            enum=['admin', 'business', 'rider'],
+                            title='account type',
+                            description='specifies the type of account type which can be either admin, business or rider',
                             )
                         },
                     example={
@@ -96,12 +102,16 @@ class CustomTokenObtainPairView(TokenObtainPairView):
               Sends a login notification email to the user asynchronously if login is successful.
         """
         # converts the email to lowercase
-        request.data['email'] = request.data['email'].lower()
+        data = request.data.copy()
+        
+        if 'email' in data:
+            data['email'] = data['email'].lower()
+
+        request.__full_data = data
         response = super().post(request, *args, **kwargs)
         if response.status_code == 200:
             email = request.data.get('email').lower()
             name = User.objects.get(email=email).name
-            # celery email sender
+            # sends a login email to the user
             email = send_login_email.apply_async(args=[name, email], retry=False)   
-
             return response
