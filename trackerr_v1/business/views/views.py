@@ -571,7 +571,7 @@ class Business_ownerRoute(APIView):
                 datetime_obj = data['user']['updated_on']
                 formatted_date = datetime_obj.strftime("%b %d, %Y")
                 data['user']['updated_on'] = formatted_date
-            cache.set(f'business_owner_{id}_data', data, timeout=600)
+            cache.set(f'business_owner_{id}_data', data, timeout=60)
             return Response(data, status=status.HTTP_200_OK)
         return Response({'error': 'user not found'}, status=status.HTTP_404_NOT_FOUND)
 
