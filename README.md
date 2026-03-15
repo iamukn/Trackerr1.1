@@ -1,3 +1,14 @@
+# Trackerr v1.1 Backend
+
+A Django-based backend for the Trackerr application, handling APIs, Celery tasks, and real-time channels.
+
+---
+
+## Important Dependency
+
+Before installing the Python requirements, make sure to install the following system packages:
+
+```bash
 sudo apt install -y libpq-dev gcc python3-dev
 
 
