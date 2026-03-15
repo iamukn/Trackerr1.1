@@ -17,16 +17,16 @@ sudo apt install -y libpq-dev gcc python3-dev
 ```bash
 git clone <your-repo-url>
 cd trackerr_v1/
-
+```
 ## Create a virtual environment
 ```bash
 python3 -m venv venv
 source venv/bin/activate
-
+```
 ## Install dependencies
 ```bash
 pip install -r requirements.txt
-
+```
 
 ## Add all environmental variables with the keys below
 SECRET_KEY
@@ -53,19 +53,20 @@ TRACKERR_CDN_URL
 ```bash
 python manage.py makemigrations
 python manage.py migrate
-
+```
 ## Start the server
 # Start Django development server
+```bash
 python manage.py runserver 0.0.0.0:8000
-
+```
 # Start Celery worker
 ```bash 
 celery -A trackerr_v1 worker --concurrency=1 --loglevel=INFO
-
+```
 # Start Celery Beat for periodic tasks
 ```bash
 celery -A trackerr_v1 beat --loglevel=INFO
-
+```
 ## Notes
 
 - Ensure Postgres and Redis are running before starting the app.
