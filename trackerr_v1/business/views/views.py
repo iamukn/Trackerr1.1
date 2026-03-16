@@ -341,10 +341,10 @@ class Business_ownerRegistration(APIView):
                 else:
                     address = verify_address(address=data.get('address', '').capitalize())
                 # added the country
-                data['country'] = address.get('country', '')
+#                data['country'] = address.get('country', '')
                 
-                if data['country']:
-                    data['country']=data['country'].lower()
+#                if data['country']:
+#                    data['country']=data['country'].lower()
 
                 
                 # handle errors from address field

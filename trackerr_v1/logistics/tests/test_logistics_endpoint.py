@@ -16,7 +16,8 @@ class TestLogisticsEndpoint(APITestCase):
             phone_number='7037******',
             address='Lagos',
             account_type='Business',
-            password='johndoe123'
+            password='johndoe123',
+            country='ghana'
                 )
         self.user.save()
 

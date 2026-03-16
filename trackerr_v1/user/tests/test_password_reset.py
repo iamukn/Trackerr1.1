@@ -25,6 +25,7 @@ class TestPasswordRecoveryEmailandChange(APITestCase):
             email = 'officialtrackerr@gmail.com',
             phone_number='9023456789',
             address='Ikeja, Lagos',
+            country='nigeria',
             password='password',
             account_type='business'
                 )

@@ -22,6 +22,7 @@ class UserTests(APITestCase):
             password='password',
             address='hello',
             account_type='business',
+            country='nigeria'
                 )
         self.token = AccessToken.for_user(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION="Bearer %s"%self.token)
