@@ -34,6 +34,14 @@ class UpdateTracking(APIView):
 
                 # get the data and update it
                 data = request.data
+                if 'declined' in data:
+                    data.pop('declined')
+                    rider = Logistics_partner.objects.select_for_update().get(user=request.user)
+                    rider_serializer = Logistics_partnerSerializer(rider, data={'total_declined_orders': rider.total_declined_orders + 1}, partial=True)
+
+                    if rider_serializer.is_valid():
+                        cache.delete(f'rider_{rider.id}_data')
+                        rider_serializer.save()
                 # handle pending
                 if data.get('status') == 'pending':
                     serializer = Tracking_infoSerializer(obj, data=data, partial=True)
@@ -68,8 +76,10 @@ class UpdateTracking(APIView):
                             if rider_serializer.is_valid():
                                 rider_serializer.save()
                         serializer.save()
-                        # delete cache
-                        cache.delete(f'tracking_{num}_data')
+
+                        if request.user.account_type == 'business':
+                            cache.delete(f'business_owner_{request.user.id}_generated_tracking')
+                        cache.delete(f'tracking_{num.upper()}_data')
 
                         # Send Emails
                         tracking_status = data.get('status')

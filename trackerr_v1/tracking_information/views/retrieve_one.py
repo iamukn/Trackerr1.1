@@ -80,5 +80,5 @@ class RetrieveOne(APIView):
         data.pop('owner')
         data['shipping_address'] = data.get('shipping_address').title()
         data['country'] = data.get('country').title()
-        cache.set(f'tracking_{num}_data', data, timeout=60)
+        cache.set(f'tracking_{num.upper()}_data', data, timeout=60)
         return Response(data, status=status.HTTP_200_OK)

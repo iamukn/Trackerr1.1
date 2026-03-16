@@ -116,10 +116,10 @@ class Rider_history(APIView):
     # Retrieve all tracking for a user
     def get(self, request, *args, **kwargs):
         rider = request.user.logistics_partner
-        if cache.has_key(f'rider_orders:{rider.logistics_owner_uuid}'):
-            return Response(cache.get(f'rider_orders:{rider.logistics_owner_uuid}'), status=status.HTTP_200_OK)
+        #if cache.has_key(f'rider_orders:{rider.logistics_owner_uuid}'):
+        #    return Response(cache.get(f'rider_orders:{rider.logistics_owner_uuid}'), status=status.HTTP_200_OK)
         trackings = Tracking_info.objects.filter(rider=rider)
         trackings_serializer = Tracking_infoSerializer(trackings, many=True)
         # set cache
-        cache.set(f'rider_orders:{rider.logistics_owner_uuid}', trackings_serializer.data, timeout=500)
+        #cache.set(f'rider_orders:{rider.logistics_owner_uuid}', trackings_serializer.data, timeout=500)
         return Response(trackings_serializer.data, status=status.HTTP_200_OK)

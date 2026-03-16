@@ -194,7 +194,7 @@ class RetrieveAllView(APIView):
 
             #else:
             all_tracking = Tracking_info.objects.filter(owner=user).order_by('-id')
-            cache.set(f'business_owner_{user.id}_generated_tracking', all_tracking, timeout=60)
+            cache.set(f'business_owner_{user.id}_generated_tracking', all_tracking, timeout=1200)
             # Apply pagination
             paginator = self.CustomPaginator()
             paginated_queryset = paginator.paginate_queryset(all_tracking, request)
