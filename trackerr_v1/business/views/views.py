@@ -339,17 +339,18 @@ class Business_ownerRegistration(APIView):
                     print('cached data')
                     address = cached_addr
                 else:
-                    address = verify_address(address=data.get('address', '').capitalize())
+                    #address = verify_address(address=data.get('address', '').capitalize())
                 # added the country
-                data['country'] = address.get('country', '')
+#                data['country'] = address.get('country', '')
                 
-                if data['country']:
-                    data['country']=data['country'].lower()
+#                if data['country']:
+#                    data['country']=data['country'].lower()
+                    ...
 
                 
                 # handle errors from address field
-                if 'error' in address:
-                    return Response({'error': 'address cannot be found on the map, please enter a valid address'}, status=status.HTTP_404_NOT_FOUND)
+#                if 'error' in address:
+#                    return Response({'error': 'address cannot be found on the map, please enter a valid address'}, status=status.HTTP_404_NOT_FOUND)
 
                 user = UsersSerializer(data=request.data, context={'request': request})
                 
@@ -368,8 +369,8 @@ class Business_ownerRegistration(APIView):
                 business_data = {
                     'business_name': request.data.get('business_name'),
                     'service': request.data.get('service'),
-                    'latitude': address.get('latitude'),
-                    'longitude': address.get('longitude'),
+                    #'latitude': address.get('latitude'),
+                    #'longitude': address.get('longitude'),
                     'business_owner_uuid': str(new_uuid),
                     'profile_pic_key': user_s3_key
                         }
@@ -790,26 +791,6 @@ class Business_ownerRoute(APIView):
             user = business.user
 
             data = request.data.copy()
-            if data.get('address') and not user.address == data.get('address').lower():
-                # verify shipping address
-                # get the lat and lng
-                # update the record
-                #address = verify_shipping_address.apply_async(kwargs={'address': data.get('address', '').capitalize()}).get(timeout=30)
-                cached_addr = cache.get(f'addr_info:{data.get("address").capitalize()}')
-                if cached_addr:
-                    print('Cached')
-                    address = cached_addr
-                else:
-                    print('Not cached')
-                    address = verify_address(address=data.get('address').capitalize())
-                if 'error' in address:
-                    return Response(address, status=status.HTTP_400_BAD_REQUEST)
-                data['latitude'] = address.get('latitude')
-                data['longitude'] = address.get('longitude')
-                data['country'] = address.get('country')
-
-                if data['country']:
-                    data['country'] = data['country'].lower()
 
             if 'password' in data:
                 data.pop('password')

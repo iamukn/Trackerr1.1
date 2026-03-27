@@ -27,13 +27,13 @@ class BusinessTest(APITestCase):
         self.token = AccessToken.for_user(user=self.user)
         self.client.credentials(HTTP_AUTHORIZATION="Bearer %s"%self.token)
         self.business = Business_owner.objects.create(user=self.user, business_name='haplotype')
-        self.data = {'name':'richard','email':'rere@gmail.com', 'password':'password11', 'phone_number':'0901588', 'address':'Abuja','account_type': 'business', 'business_name':'dabidab'}
+        self.data = {'name':'richard','email':'rere@gmail.com', 'country': 'nigeria', 'password':'password11', 'phone_number':'0901588', 'address':'Abuja','account_type': 'business', 'business_name':'dabidab'}
         self.return_value = {'address': '36b authority avenue', 'city': 'Lagos', 'country': 'Nigeria', 'latitude': 6.54219, 'longitude': 3.22122} 
 
     @patch('business.signals.send_reg_email.apply_async')
-    @patch('business.views.views.verify_address')
-    def test_create_a_business_onwer(self,mock_verify, mock_email):
-        mock_verify.return_value = self.return_value
+    #@patch('business.views.views.verify_address')
+    def test_create_a_business_onwer(self, mock_email):
+        #mock_verify.return_value = self.return_value
         mock_email.return_value = 'Registration email sent'
 
         url = reverse('business-owners-signup')
@@ -43,7 +43,7 @@ class BusinessTest(APITestCase):
         res = self.client.post(url, data=data, format='json')
         # mock email and verify function
         mock_email.assert_called_once()
-        mock_verify.assert_called_once()
+        #mock_verify.assert_called_once()
         
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
 
