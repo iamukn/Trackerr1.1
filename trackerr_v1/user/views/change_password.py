@@ -166,6 +166,7 @@ class UpdatePassword(Recover_password):
                         send_update_email.delay(email=user.email, name=user.name)
                         return Response({"message":"password updated successfully"}, status=status.HTTP_200_OK)
                     except Exception as e:
+                        print(e)
                         logger.error(f"Failed to enqueue email task: {str(e)}")
             return Response({"error": "incorrect or expired otp"}, status=status.HTTP_400_BAD_REQUEST)
         return Response({"error": f"otp does not exist"}, status=status.HTTP_404_NOT_FOUND)

@@ -7,6 +7,7 @@ from logistics.models import Logistics_partner
 from logistics.serializer import Logistics_partnerSerializer
 from user.models import User
 from django.core.cache import cache
+from django.http import Http404
 
 
 class Business_Riders(APIView):
@@ -30,6 +31,8 @@ class Business_Riders(APIView):
             return Response({'msg': riders_serializer.data}, status=status.HTTP_200_OK)
         except User.business_owner.RelatedObjectDoesNotExist:
             return Response({'msg': {'you are not authorized to view this resource'}}, status=status.HTTP_401_UNAUTHORIZED)
+        except Http404:
+            print('Wahala')
         except Exception as e:
             raise(e)
             return Response({'msg': {'internal server error'}}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

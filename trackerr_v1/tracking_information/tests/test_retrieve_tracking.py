@@ -100,4 +100,4 @@ class TestRetrieveAllTracking(APITestCase):
         res1 = self.client.get(url1, params)
         # asserting the status and the content type
         self.assertTrue(res1.status_code == status.HTTP_200_OK)
-        self.assertTrue(type(res1.data) == ReturnList)
+        self.assertIsInstance(res1.data, ReturnList)
