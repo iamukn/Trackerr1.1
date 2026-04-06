@@ -16,6 +16,7 @@ urlpatterns = [
     path('api/v1/', include('business.urls')),
     path('api/v1/', include('logistics.routes')),
     path('api/v1/', include('tracking_information.urls')),
+    path('api/v1/payments/', include('wallet.urls')),
     path('api/v1/auth/token/', TokenObtain.as_view(), name='token_obtain_pair'),
     path('api/v1/auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/v1/auth/token/blacklist/', TokenBlacklistView.as_view(), name='token_blacklist'),
