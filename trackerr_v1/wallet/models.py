@@ -35,3 +35,28 @@ class Wallet(models.Model):
     def __str__(self):
         return f"{self.owner.name} - {self.balance}{self.currency} Wallet"
 
+
+class Payment(models.Model):
+
+
+    STATUS_CHOICES = [
+            ( 'pending', 'Pending' ),
+            ('success', 'Success')
+            ]
+    email = models.EmailField(null=False, blank=False)
+    amount = models.DecimalField(max_digits=12, decimal_places=2,
+            null=False, blank=False, 
+            default=0.00)
+    currency = models.CharField(max_length=5, null=False, blank=False, default='NGN')
+    authorization_url = models.CharField(max_length=500, null=False, blank=False)
+    reference_number = models.CharField(max_length=100, null=True, blank=True)
+    status = models.CharField(max_length=12, choices=STATUS_CHOICES, null=False, blank=False, default='pending')
+    payment_channel = models.CharField(max_length=25, null=True, blank=True)
+    ip_address = models.CharField(max_length=25, null=True, blank=True)
+    created_at = models.DateTimeField(null=True, blank=True)
+    paid_at = models.DateTimeField(null=True, blank=True)
+    idempotency_key = models.UUIDField(null=True, blank=True, unique=True)
+
+
+    def __str__(self):
+        return f'{self.email}: {self.amount}{self.currency}'
