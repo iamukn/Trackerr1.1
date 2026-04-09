@@ -1,5 +1,5 @@
 from django.urls import path
-from wallet.routes.payment import PaymentWebhook, PaymentDeposit
+from wallet.routes.api.v1.payment import PaymentWebhook, PaymentDeposit
 
 urlpatterns = [
     path('initialize', PaymentDeposit.as_view(), name='initialize-deposit'),
