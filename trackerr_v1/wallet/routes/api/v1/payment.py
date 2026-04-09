@@ -11,6 +11,8 @@ from wallet.utils.verify import validate_idempotency_key
 from decimal import Decimal
 from user.models import User
 from django.db import transaction
+from wallet.utils.convert_amount import actual_amount_paid
+from business.views.business_owner_permission import IsBusinessOwner
 
 
 
@@ -18,7 +20,7 @@ class PaymentDeposit(APIView):
     """
       Handles Deposit for business owners
     """
-    permission_classes = [AllowAny,]
+    permission_classes = [IsBusinessOwner,]
 
 
     def post(self, request, *args, **kwargs):
@@ -49,11 +51,12 @@ class PaymentDeposit(APIView):
 
             if key_exist:
                 return Response({'msg': 'success', 'authorization_url': key_exist}, status=status.HTTP_200_OK)
-            payment_initialized = initialize_payment(email, amount, 'NGN')
+            payment_initialized = initialize_payment(email=email, amount=amount, country=request.user.country)
             
             data = {
                 'email' : email.lower(),
                 'amount': amount,
+                'vat': float(payment_initialized.get('vat')),
                 'reference_number': payment_initialized.get('data').get('reference'),
                 'authorization_url': payment_initialized.get('data').get('authorization_url'),
                 'idempotency_key': idempotency_key
@@ -66,6 +69,7 @@ class PaymentDeposit(APIView):
                 return Response({'msg': 'success', 'autorization_url': payment_initialized.get('data').get('authorization_url')}, status=status.HTTP_200_OK)
             return Response({'msg': 'error', 'details': payment_serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
+            raise(e)
             return Response({'msg': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -84,11 +88,12 @@ class PaymentWebhook(APIView):
         wallet = Wallet.objects.select_for_update().get(owner=owner)
         return wallet
 
-    def update_balance(self, wallet, amount):
+    def update_balance(self, wallet, amount, vat):
         if amount > 0:
-            amount = Decimal(str(amount)) / 100
+            amount = Decimal(str(amount))
+            actual_amount = actual_amount_paid(amount=amount, vat=vat, country=wallet.owner.country)
             current_bal = Decimal(str(wallet.balance))
-            new_amount = current_bal + amount
+            new_amount = current_bal + actual_amount
             wallet.balance = new_amount
             wallet.save()
 
@@ -113,7 +118,7 @@ class PaymentWebhook(APIView):
                     owner_email = base_data.get('customer').get('email')
                     owner = self.get_wallet(owner_email)
 
-                    update_wallet = self.update_balance(owner, base_data.get('amount'))
+                    update_wallet = self.update_balance(wallet=owner, amount=base_data.get('amount'), vat=payment_obj.vat)
 
                     if payment_obj:
 

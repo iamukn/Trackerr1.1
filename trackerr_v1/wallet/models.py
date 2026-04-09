@@ -47,6 +47,7 @@ class Payment(models.Model):
     amount = models.DecimalField(max_digits=12, decimal_places=2,
             null=False, blank=False, 
             default=0.00)
+    vat = models.FloatField(null=False, blank=False, default=0.0)
     currency = models.CharField(max_length=5, null=False, blank=False, default='NGN')
     authorization_url = models.CharField(max_length=500, null=False, blank=False)
     reference_number = models.CharField(max_length=100, null=True, blank=True)
