@@ -15,7 +15,7 @@ from pathlib import Path
 from datetime import timedelta
 import os
 import dj_database_url
-
+from corsheaders.defaults import default_headers
 
 #env = environ.Env(
 #    DEBUG=(bool, False)
@@ -37,6 +37,10 @@ SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(env('DEBUG'))
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    "idempotency-key",
+]
 
 ALLOWED_HOSTS = []
 ALLOWED_HOST_IP = env('ALLOWED_HOST_IP').split(',')

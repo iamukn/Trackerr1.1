@@ -24,7 +24,7 @@ class PaymentDeposit(APIView):
 
 
     def post(self, request, *args, **kwargs):
-        email = request.data.get('email')
+        email = request.user.email
         amount = request.data.get('amount')
         idempotency_key = request.headers.get('Idempotency-Key')
 
