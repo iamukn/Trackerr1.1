@@ -9,6 +9,7 @@ from .views import (logistics_users_count,
                     get_hours_today,
                     broadcast_riders_location as broadcast,
                     finish_signup,
+                    update_push_token,
                     )
 from tracking_information.views import fetch_deliveries
 
@@ -24,4 +25,5 @@ urlpatterns = [
     path('logistics/rider/deliveries/', fetch_deliveries.GetDeliveries.as_view(), name='deliveries'),
     path('logistics/riders/get-hours/', get_hours_today.GetHoursToday.as_view(), name='get-hours'),
     path('rider/deliveries/', rider.Rider_history.as_view(), name='rider_orders'),
+    path('riders/update_push_token/', update_push_token.UpdatePushNotificationToken.as_view(), name='update-push-token'),
         ]

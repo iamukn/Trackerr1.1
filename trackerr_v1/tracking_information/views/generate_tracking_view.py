@@ -249,7 +249,7 @@ class GenerateView(APIView):
                     cache.delete(f'business_owner_{user.id}_generated_tracking')
                     data.pop('owner')
                     # send confirmation email
-                    send_tracking_updates.apply_async(kwargs={
+                    payload = {
                         "email": request.data.get('customer_email'),
                         "customer_name": request.data.get('customer_name').title(),
                         "parcel_number": data.get('parcel_number'),
@@ -258,8 +258,9 @@ class GenerateView(APIView):
                         "items": data.get('product_name'),
                         "eta": data.get('delivery_date'),
                         "status": data.get('status')
-                        })
-                    
+                            }
+                    send_tracking_updates.apply_async(kwargs=payload)
+                 
                     return Response(data, status=status.HTTP_201_CREATED)
                 logger.error(ser.errors)
                 return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)

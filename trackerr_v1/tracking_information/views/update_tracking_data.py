@@ -16,6 +16,7 @@ from shared.celery_tasks.utils_tasks.send_tracking_email import send_tracking_up
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.core.cache import cache
+from shared.celery_tasks.utils_tasks.send_reg_email import expo_notification
 
 class UpdateTracking(APIView):
     permission_classes = [IsBusinessOrLogistics, ]
@@ -69,13 +70,23 @@ class UpdateTracking(APIView):
                     serializer = Tracking_infoSerializer(obj, data=data, partial=True)
                     tracking_status = data.get('status')
                     if serializer.is_valid():
+                        rider_expo_token = ''
                         if 'rider_uuid' in data:
                             #rider = get_object_or_404(Logistics_partner, logistics_owner_uuid=data.get('rider_uuid'))
                             rider = Logistics_partner.objects.select_for_update().get(logistics_owner_uuid=data.get('rider_uuid'))
                             rider_serializer = Logistics_partnerSerializer(rider, data={ "total_assigned_orders" : int(rider.total_assigned_orders + 1)}, partial=True)
+                            rider_expo_token = rider.expo_notif_token
                             if rider_serializer.is_valid():
+                                
                                 rider_serializer.save()
                         serializer.save()
+                        # Send Push Notification
+                        track_data = serializer.data
+                        expo_notification.apply_async(
+                            kwargs={'customer_name':track_data.get('customer_name'),
+                            'expo_token': rider_expo_token , 'parcel_number': track_data.get('parcel_number'),
+                            'delivery_address': track_data.get('shipping_address')}
+                            )
 
                         if request.user.account_type == 'business':
                             cache.delete(f'business_owner_{request.user.id}_generated_tracking')
