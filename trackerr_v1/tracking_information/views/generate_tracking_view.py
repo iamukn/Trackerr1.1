@@ -237,8 +237,8 @@ class GenerateView(APIView):
                     "customer_name":  request.data.get('customer_name').lower(),
                     "quantity": request.data.get('quantity'),
                     "delivery_date": request.data.get('delivery_date'),
-                    "business_owner_lat": request.user.business_owner.latitude,
-                    "business_owner_lng": request.user.business_owner.longitude,
+                    #"business_owner_lat": request.user.business_owner.latitude,
+                    #"business_owner_lng": request.user.business_owner.longitude,
                     "customer_phone": request.data.get('phone')
                         }
                 ser = Tracking_infoSerializer(data=data)

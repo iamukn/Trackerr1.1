@@ -58,5 +58,4 @@ def expo_notification(self, expo_token, customer_name, parcel_number, delivery_a
 
 
     res = requests.post(expo_url, json=payload)
-    print(res.json())
     return customer_name
