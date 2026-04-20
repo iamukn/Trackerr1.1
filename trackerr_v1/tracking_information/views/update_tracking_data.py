@@ -82,11 +82,13 @@ class UpdateTracking(APIView):
                         serializer.save()
                         # Send Push Notification
                         track_data = serializer.data
-                        expo_notification.apply_async(
-                            kwargs={'customer_name':track_data.get('customer_name'),
-                            'expo_token': rider_expo_token , 'parcel_number': track_data.get('parcel_number'),
-                            'delivery_address': track_data.get('shipping_address')}
-                            )
+                        tracking_status = data.get('status') 
+                        if tracking_status == 'assigned': 
+                            expo_notification.apply_async(
+                                kwargs={'customer_name':track_data.get('customer_name'),
+                                'expo_token': rider_expo_token , 'parcel_number': track_data.get('parcel_number'),
+                                'delivery_address': track_data.get('shipping_address')}
+                                )
 
                         if request.user.account_type == 'business':
                             cache.delete(f'business_owner_{request.user.id}_generated_tracking')
