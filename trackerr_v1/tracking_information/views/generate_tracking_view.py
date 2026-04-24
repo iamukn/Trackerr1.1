@@ -4,7 +4,7 @@ from drf_yasg import openapi
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from tracking_information.utils.tracking_class import Track_gen
+#from tracking_information.utils.tracking_class import Track_gen
 from tracking_information.serializer import Tracking_infoSerializer
 from tracking_information.models import Tracking_info
 #from shared.celery_tasks.tracking_info_tasks.verify_address_task import verify_shipping_address
@@ -29,7 +29,7 @@ class GenerateView(APIView):
 
     def __init__(self):
         
-        self.Track_gen = Track_gen() 
+#        self.Track_gen = Track_gen() 
     
     # swagger generator
     @swagger_auto_schema(
@@ -230,7 +230,7 @@ class GenerateView(APIView):
                     "destination_lng": address.get('longitude'),
                     "vendor": request.user.business_owner.business_name,
                     "owner": request.user.id,
-                    "parcel_number": self.Track_gen.generate_tracking(vendor=request.user.name),
+                    #"parcel_number": self.Track_gen.generate_tracking(vendor=request.user.name),
                     "country": address.get('country').capitalize(),
                     "product_name": request.data.get('product').lower(),
                     "customer_email": request.data.get('customer_email').lower(),

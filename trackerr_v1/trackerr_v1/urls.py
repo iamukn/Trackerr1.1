@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 """ handles routing for the trackerr backend """
 
-from authentication.views.auth import CustomTokenObtainPairView as TokenObtain
+from authentication.views.auth import CustomTokenObtainPairView as TokenObtain, Authenticate
 from rest_framework_simplejwt.views import TokenBlacklistView
 from django.contrib import admin
 from django.urls import path, include
@@ -19,6 +19,7 @@ urlpatterns = [
     path('api/v1/payments/', include('wallet.urls')),
     path('api/v1/auth/token/', TokenObtain.as_view(), name='token_obtain_pair'),
     path('api/v1/auth/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/v1/auth/authenticate/', Authenticate.as_view(), name='authenticate'),
     path('api/v1/auth/token/blacklist/', TokenBlacklistView.as_view(), name='token_blacklist'),
     path('api/v1/swagger<format>/', schema_view.without_ui(cache_timeout=0), name='schema-json'),
     path('api/v1/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),

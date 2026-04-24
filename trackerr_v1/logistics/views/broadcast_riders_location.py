@@ -15,12 +15,13 @@ class BroadcastLocation(APIView):
     def post(self, request, *args, **kwargs):
         # gets the rider uuid and the cordinates sent from the rider app
         rider_uuid = request.user.logistics_partner.logistics_owner_uuid
-        lat = request.data['lat']
-        lng = request.data['lng']
+        lat = request.data.get('lat')
+        lng = request.data.get('lng')
 
         channel_layer = get_channel_layer()
 
-        print('Arrived: ', lat, lng)
+        if not lat or not lng:
+            print('No lat or lng')
 
         # Broadcast to relevant WebSocket groups
         async_to_sync(channel_layer.group_send)(

@@ -12,7 +12,7 @@ def get_current_time_str():
     return timezone.now().strftime('%H:%Mhrs')
 
 class Tracking_info(models.Model):
-    parcel_number = models.CharField(max_length=15, unique=True, null=False, blank=False)
+    parcel_number = models.CharField(max_length=15, unique=True, null=True, blank=True)
     date_of_purchase = models.DateField(auto_now_add=date.today, null=False, blank=False)
     time_of_purchase = models.CharField(default=get_current_time_str, null=False, blank=False)
     #time_of_purchase = models.TimeField(auto_now_add=True)

@@ -4,6 +4,8 @@ from rest_framework.serializers import ModelSerializer
 from tracking_information.models import Tracking_info, GeoLocationData
 from tracking_information.utils.distance import calc_distance
 from tracking_information.utils.calc_eta import calculate_eta as calc_eta
+from tracking_information.utils.track_gen import tracking_number_generate
+from django.db import IntegrityError
 
 """ A serializer class for the tracking_information """
 
@@ -13,6 +15,17 @@ class Tracking_infoSerializer(ModelSerializer):
         model = Tracking_info
         fields = '__all__'
 
+
+
+    def create(self, validated_data):
+        max_attempt = 5
+        for attempt in range(max_attempt):
+            validated_data['parcel_number'] = tracking_number_generate()
+            try:
+                return super().create(validated_data)
+            except IntegrityError:
+                if attempt == max_attempts - 1:
+                    raise IntegrityError
 
     def to_representation(self, instance):
 
