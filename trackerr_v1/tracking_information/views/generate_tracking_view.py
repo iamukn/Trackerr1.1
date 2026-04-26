@@ -27,9 +27,9 @@ class GenerateView(APIView):
     permission_classes = [IsBusinessOwner,]
     
 
-    def __init__(self):
-        
-#        self.Track_gen = Track_gen() 
+    def __init__(self):   
+    #self.Track_gen = Track_gen()
+        ...
     
     # swagger generator
     @swagger_auto_schema(

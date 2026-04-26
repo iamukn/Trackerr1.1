@@ -47,6 +47,6 @@ def tracking_number_generate() -> str:
             
     parcel_number = f'{parcel_number}{num}'
     # add to cache
-    cache.set('last_tracking_sequence', num)
+    cache.set('last_tracking_sequence', num, timeout=None)
 
     return parcel_number
