@@ -4,10 +4,10 @@ from decimal import Decimal
 def calc_vat(amount, country):
     amount = amount / 100
     
-    if not country == 'nigeria':
+    if country == 'ghana':
         # 3.9% charge for other countries as vat
-        vat = (Decimal(amount) * Decimal("0.045"))
-        vat += Decimal(100)
+        vat = (Decimal(amount) * Decimal("0.02"))
+
 
     else:
         if amount >= 2500:

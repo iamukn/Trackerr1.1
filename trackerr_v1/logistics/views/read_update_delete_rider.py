@@ -27,6 +27,11 @@ class Rider(APIView):
 
     def get(self, request, id,  *args, **kwargs):
 
+
+        cached_rider = cache.get(f'rider_{id}_data')
+        if cached_rider:
+            return Response({'msg': cached_rider}, status=status.HTTP_200_OK)
+
         rider = self.get_queryset(model=Logistics_partner, pk=id)
 
         if request.user.account_type == 'logistics' and not id == request.user.logistics_partner.id:

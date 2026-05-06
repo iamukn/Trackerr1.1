@@ -11,16 +11,9 @@ def actual_amount_paid(amount, vat, country):
     if country not in ['ghana', 'nigeria']:
         return 0
 
-    # convert from kobo to naira
+    # convert from kobo to naira or to cedis
     amount = amount / 100
 
     # deduct the vat  from the amount
     amount = Decimal(amount) - Decimal(vat)
-
-    # convert to ghana currency
-    if country == 'ghana':
-        # 4/9/2026 1 GHS = 123.3 NGN 
-        rate = 123.3
-        amount = amount / Decimal(rate)
-
     return amount

@@ -51,11 +51,14 @@ class PaymentDeposit(APIView):
 
             if key_exist:
                 return Response({'msg': 'success', 'authorization_url': key_exist}, status=status.HTTP_200_OK)
-            payment_initialized = initialize_payment(email=email, amount=amount, country=request.user.country)
+            # initialize payment
+            currency = 'NGN' if request.user.country == 'nigeria' else 'GHS'
+            payment_initialized = initialize_payment(email=email, amount=amount, country=request.user.country, currency=currency)
             
             data = {
                 'email' : email.lower(),
                 'amount': amount,
+                'currency': currency,
                 'vat': float(payment_initialized.get('vat')),
                 'reference_number': payment_initialized.get('data').get('reference'),
                 'authorization_url': payment_initialized.get('data').get('authorization_url'),
