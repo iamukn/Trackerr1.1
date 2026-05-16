@@ -475,3 +475,5 @@ tracking_information.views.generate_tracking_view : generate_tracking_view.py :g
 tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 265: :ERROR 40: {'quantity': [ErrorDetail(string='This field may not be null.', code='null')]} : 04/29/2026 05:13:00 PM
 tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 265: :ERROR 40: {'quantity': [ErrorDetail(string='This field may not be null.', code='null')]} : 04/29/2026 05:14:09 PM
 tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 265: :ERROR 40: {'quantity': [ErrorDetail(string='This field may not be null.', code='null')]} : 05/06/2026 10:59:52 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 272: :ERROR 40: 'ConnectionError' object has no attribute 'get' : 05/16/2026 07:06:04 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 272: :ERROR 40: 'ConnectionError' object has no attribute 'get' : 05/16/2026 07:21:32 PM

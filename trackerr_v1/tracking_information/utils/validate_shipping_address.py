@@ -99,7 +99,7 @@ def verify_address(address:str) -> Dict:
             print('data for ', f'addr_info:{old_addr.lower()}', 'saved and cache as', data)
         # cache it
         print(f"Cache set for addr_info:{old_addr}")
-        cache.set(f'addr_info:{old_addr}', data, timeout=None)
+        cache.set(f'addr_info:{old_addr.lower()}', data, timeout=None)
         return data
     
 
