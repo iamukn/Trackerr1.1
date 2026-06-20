@@ -24,12 +24,14 @@ class BroadcastLocation(APIView):
             print('No lat or lng')
 
         # Broadcast to relevant WebSocket groups
+        broadcast = {
+            "type": "rider_location_update",
+            "lat": lat,
+            "lng": lng
+                }
         async_to_sync(channel_layer.group_send)(
             f"rider_{rider_uuid}",
-            {
-                "type": "rider_location_update",
-                "lat": lat,
-                "lng": lng
-            }
+            broadcast
         )
+        print(f'location broadcasted as: {broadcast}')
         return Response({"status": "ok"}, status=status.HTTP_200_OK)
