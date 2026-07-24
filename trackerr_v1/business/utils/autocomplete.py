@@ -25,7 +25,7 @@ def mapbox_autocomplete(country_code: str, q: str) -> list:
 
 
 
-def googlemaps_autocomplete(address, country, session_token='4567w65wtyw') -> list:
+def googlemaps_autocomplete(address, country, session_token) -> list:
 
     suggestions = []
 
@@ -35,6 +35,8 @@ def googlemaps_autocomplete(address, country, session_token='4567w65wtyw') -> li
     url = "https://places.googleapis.com/v1/places:autocomplete"
 
     country_code = 'ng' if country == 'nigeria' else 'gh'
+    
+    print(country_code)
 
     data = {
         "input": address,

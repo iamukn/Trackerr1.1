@@ -55,7 +55,9 @@ class Autocomplete(APIView):
             return Response(cached_data, status=status.HTTP_200_OK)
 
         #suggestions = mapbox_autocomplete(country_code=countryCode, q=q)
-        suggestions = googlemaps_autocomplete(address=q, country=country)
+        session_token = requests.query_params.get('sessionToken')
+        
+        suggestions = googlemaps_autocomplete(address=q, country=country, session_token=session_token)
 
         if len(suggestions) > 0:
             cache.set(
