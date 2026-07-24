@@ -6,7 +6,7 @@ from rest_framework import status
 import os
 from requests import get, post
 from django.core.cache import cache
-
+from business.utils.autocomplete import mapbox_autocomplete, googlemaps_autocomplete
 
 # auto complete call and polyline fetch route
 
@@ -40,9 +40,11 @@ class Autocomplete(APIView):
     permission_classes = [IsBusinessOwner,]
 
     def get(self, requests, *arg, **kwargs):
-        countryCode = 'NGA' if requests.user.country == 'nigeria' else 'GHA' if requests.user.country == 'ghana' else ''
+
+        country = requests.user.country.lower()
+        countryCode = 'NGA' if country == 'nigeria' else 'GHA' if country == 'ghana' else ''
         q = requests.query_params.get('q')
-        country = countryCode
+    
         HERES_API_KEY = os.getenv('HERES_API_KEY')
 
         cache_key = f"autocomplete:{q.lower()}"
@@ -52,18 +54,13 @@ class Autocomplete(APIView):
         if cached_data:
             return Response(cached_data, status=status.HTTP_200_OK)
 
-        url = f'https://autocomplete.search.hereapi.com/v1/autocomplete?q={q}&apiKey={HERES_API_KEY}&limit=10&in=countryCode:{countryCode}'
+        #suggestions = mapbox_autocomplete(country_code=countryCode, q=q)
+        suggestions = googlemaps_autocomplete(address=q, country=country)
 
-        res = get(url)
-        
-        if res.status_code == 200:
-            data = res.json()
-            suggestions = data.get('items')
-
+        if len(suggestions) > 0:
             cache.set(
                 cache_key,
                 suggestions,
                 timeout=60 * 60 * 24 # 24 hours caching
                 )
-            return Response(suggestions, status=status.HTTP_200_OK)
-        return Response(status=res.status_code)
+        return Response(suggestions, status=status.HTTP_200_OK)

@@ -92,6 +92,8 @@ def verify_address(address:str) -> Dict:
             'latitude' : location.get('lat', ''),
             'longitude' : location.get('lng', ''),
                 }
+
+        print('From google', data)
         # save to the database
         serializer = GeoLocationSerializer(data=data)
         if serializer.is_valid():
