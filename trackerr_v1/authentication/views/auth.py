@@ -112,9 +112,11 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         response = super().post(request, *args, **kwargs)
         if response.status_code == 200:
             email = request.data.get('email').lower()
-            name = User.objects.get(email=email).name
+            user = User.objects.get(email=email)
+            name = user.name
+            country = user.country
             # sends a login email to the user
-            email = send_login_email.apply_async(args=[name, email], retry=False)   
+            email = send_login_email.apply_async(args=[name, email, country], retry=False)   
             return response
 
 
