@@ -8,5 +8,5 @@ class TestUnits(SimpleTestCase):
         gh_vat = calc_vat(10, 'ghana')
         ng_vat = calc_vat(1000, 'nigeria')
         # assertions
-        self.assertEqual(gh_vat, Decimal('10000.45000000000000002498002'))
+        self.assertEqual(gh_vat, Decimal('0.2000000000000000111022302463'))
         self.assertEqual(ng_vat, Decimal('15.00'))

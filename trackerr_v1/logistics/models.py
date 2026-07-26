@@ -16,7 +16,7 @@ class Logistics_partner(models.Model):
     lat = models.CharField(max_length=55, null=True, blank=True)
     lng = models.CharField(max_length=55, null=True, blank=True)
     identity_card_type = models.CharField(max_length=120, null=True, blank=True)
-    id_number = models.CharField(max_length=50, null=True, blank=True, unique=True)
+    id_number = models.CharField(max_length=50, null=True, blank=True, unique=False)
     plate_number = models.CharField(max_length=50, unique=True, null=True, blank=True)
     owner = models.IntegerField(blank=True, null=True)
     nationality = models.CharField(max_length=50, null=True, blank=True)
@@ -35,6 +35,15 @@ class Logistics_partner(models.Model):
     expo_notif_token = models.CharField(max_length=255, null=True, blank=True)
     total_declined_orders = models.IntegerField(null=False, blank=False, default=0)
     updated_on = models.DateTimeField(auto_now=True)
+
+
+    class Meta:
+        indexes = [
+            models.Index(
+                fields=["id_number", "identity_card_type"],
+                name="rider_id_card_idx",
+            ),
+        ]
 
 
     # add rider uuid here

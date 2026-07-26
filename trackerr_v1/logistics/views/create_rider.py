@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.parsers import JSONParser, FormParser, MultiPartParser
 from logistics.serializer import  Logistics_partnerSerializer
+from logistics.models import Logistics_partner
 from user.serializers import UsersSerializer
 from user.models import User
 from django.db import transaction
@@ -38,9 +39,6 @@ class RegisterRider(APIView):
             profile_pic_key = f'riders_dp/{rider_uuid}.{file_extension}'
             data['profile_pic_key'] = profile_pic_key
 
- #       if not 'vehicle_image' in data:
- #           return Response({'msg': 'vehicle image is required'}, status=status.HTTP_400_BAD_REQUEST)
-
         if 'vehicle_image' in data:
             vehicle_image = data.pop('vehicle_image')[0]
             file_extension = vehicle_image.content_type.split('/')[-1]
@@ -49,9 +47,6 @@ class RegisterRider(APIView):
 
             vehicle_image_key = f'vehicle_image/{rider_uuid}.{file_extension}'
             data['vehicle_image_key'] = vehicle_image_key
-
-
-
 
         if not 'account_type' in data:
             return Response({'msg': {'account type is required'}}, status=status.HTTP_400_BAD_REQUEST)
@@ -63,11 +58,26 @@ class RegisterRider(APIView):
         try:
             with transaction.atomic():
 
+
+                # check if a user with the same ID info from the same country already exist
+                id_num = data.get('id_number')
+                id_type = data.get('identity_card_type')
+
+                user_with_id_exists = Logistics_partner.objects.filter(
+                    identity_card_type=id_type,
+                    id_number=id_num
+                        )
+
+                if user_with_id_exists and user_with_id_exists[0].user.country.lower() == request.user.country.lower():
+                    return Response({'msg': {'id_error': 'user with this ID exist!'}}, status=status.HTTP_400_BAD_REQUEST)
+
                 password = generate_password()
 
                 data['password'] = password
                 # country of rider should come from the business owners country
                 data['country'] = request.user.country.lower()
+
+
 
                 new_user =  UsersSerializer(data=data)
 
@@ -88,14 +98,16 @@ class RegisterRider(APIView):
                     # delete old cache
                     cache.delete(f'business_owner_riders:{vendor.business_owner_uuid}')
 
-                    print(new_rider.instance.profile_pic_key)
+                    print('New Rider Created:',new_rider.instance)
                     
                     return Response({'msg': 'rider added successfully!'}, status=status.HTTP_201_CREATED)
                 elif not new_user.is_valid():
                     error = new_user.errors
+                    print('Rider User not valid:', error)
                     return Response({'msg': error}, status=status.HTTP_400_BAD_REQUEST)
                 elif not new_rider.is_valid():
                     error = new_rider.errors
+                    print('Rider not valid:', error)
                     return Response({'msg': error}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             print(e)
