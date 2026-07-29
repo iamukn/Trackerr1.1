@@ -12,7 +12,7 @@ def send_reg_email(self, email, username, account_type, password=""):
 
     subject = 'Welcome to Trackerr!!'
 
-    message = f'Hello {username}, your {account_type} account has been successfully created and you are set to start generating and tracking your parcels in realtime;)' if account_type == 'business' \
+    message = f'Hello {username}, \n\n Your {account_type} account has been successfully created and you are set to start shipping parcels in realtime;)' if account_type == 'business' \
             else"""
                 Hi {username},
                 
@@ -24,7 +24,7 @@ def send_reg_email(self, email, username, account_type, password=""):
                 
                 Regards,
                 Trackerr Team
-            """.format(username=username, email=email[0], password=password, account_type=account_type)
+            """.format(username=username.title(), email=email[0], password=password, account_type=account_type)
     from_email = settings.EMAIL_HOST_USER
     recipient_email = email
 

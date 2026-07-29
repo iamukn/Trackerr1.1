@@ -33,7 +33,7 @@ def send_update_email(self, name, email):
         subject = "PASSWORD UPDATED SUCCESSFULLY!"
         sender = settings.EMAIL_HOST_USER
         to = [email,]
-        message = "Dear %s \n you just changed your account password on %s."% (name, datetime.now().strftime('%d-%m-%Y at %H:%M:%S PM'))
+        message = "Dear %s \n\n You just changed your account password on %s."% (name.title(), login_time.strftime("%I:%M %p"))
         send_mail(subject=subject, message=message, from_email=sender,recipient_list=to, fail_silently=False)
         return f'password update email sent to {t0[0]}'
     except Exception as e:

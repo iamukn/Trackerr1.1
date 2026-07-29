@@ -189,7 +189,15 @@ class RetrieveAllView(APIView):
     def get(self, request, *args, **kwargs):
         try:
             query_status = request.query_params.get('status')
+            multiquery_search = request.query_params.get('contains')
+
             user = request.user
+
+            # fetch data based on query_status and multiquery_search
+            if query_status and multiquery_search:
+                filtered = Tracking_info.objects.filter(owner=user, status=query_status, parcel_number__icontains=multiquery_search).order_by('-id')
+                serializer = Tracking_infoSerializer(filtered, many=True)
+                return Response({'msg': serializer.data}, status=status.HTTP_200_OK)
     
             # fetch data based on the query_status provided
             if query_status:
@@ -197,7 +205,6 @@ class RetrieveAllView(APIView):
                 serializer = Tracking_infoSerializer(filtered_tracking, many=True)
                 return Response({'msg': serializer.data}, status=status.HTTP_200_OK)
 
-            multiquery_search = request.query_params.get('contains')
 
             if multiquery_search:
                 filtered_tracking = Tracking_info.objects.filter(owner=user, parcel_number__icontains=multiquery_search.lower()).order_by('-id')

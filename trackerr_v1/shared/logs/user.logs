@@ -9634,3 +9634,59 @@ user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Ot
 user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to Rena with balance 500.00 NGN : 07/26/2026 01:53:26 PM
 user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 07/26/2026 01:53:26 PM
 user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to Rena with balance 500.00 NGN : 07/26/2026 01:53:26 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Doe : 07/29/2026 12:59:24 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 07/29/2026 12:59:24 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 07/29/2026 12:59:29 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 07/29/2026 12:59:29 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 07/29/2026 12:59:29 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 07/29/2026 12:59:29 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 07/29/2026 12:59:29 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 07/29/2026 12:59:29 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 07/29/2026 12:59:29 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 07/29/2026 12:59:29 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 07/29/2026 12:59:29 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 07/29/2026 12:59:29 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 07/29/2026 12:59:30 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 07/29/2026 12:59:30 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to richard : 07/29/2026 12:59:31 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to richard with balance 500.00 NGN : 07/29/2026 12:59:31 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 07/29/2026 12:59:31 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 07/29/2026 12:59:31 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 07/29/2026 12:59:31 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 07/29/2026 12:59:31 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 07/29/2026 12:59:31 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to Jane Doe with balance 13.00 GHS : 07/29/2026 12:59:31 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to John Doe : 07/29/2026 12:59:32 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to John Doe with balance 13.00 GHS : 07/29/2026 12:59:32 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to John Doe : 07/29/2026 12:59:32 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to John Doe with balance 13.00 GHS : 07/29/2026 12:59:32 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 07/29/2026 12:59:32 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to Jane Doe with balance 500.00 NGN : 07/29/2026 12:59:32 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 07/29/2026 12:59:33 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to Jane Doe with balance 500.00 NGN : 07/29/2026 12:59:33 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 07/29/2026 12:59:33 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to Jane Doe with balance 500.00 NGN : 07/29/2026 12:59:33 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 07/29/2026 12:59:34 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to Jane Doe with balance 500.00 NGN : 07/29/2026 12:59:34 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 07/29/2026 12:59:34 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to Jane Doe with balance 500.00 NGN : 07/29/2026 12:59:34 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 07/29/2026 12:59:35 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to Jane Doe with balance 500.00 NGN : 07/29/2026 12:59:35 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 07/29/2026 12:59:35 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to Jane Doe with balance 500.00 NGN : 07/29/2026 12:59:35 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 07/29/2026 12:59:36 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to Jane Doe with balance 500.00 NGN : 07/29/2026 12:59:36 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 07/29/2026 12:59:37 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to Jane Doe with balance 500.00 NGN : 07/29/2026 12:59:37 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 07/29/2026 12:59:40 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to Jane Doe with balance 500.00 NGN : 07/29/2026 12:59:40 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Jane Doe : 07/29/2026 12:59:47 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to Jane Doe with balance 500.00 NGN : 07/29/2026 12:59:47 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to John Doe : 07/29/2026 12:59:47 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 49: :ERROR 40: 'NoneType' object has no attribute 'lower' : 07/29/2026 12:59:47 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 07/29/2026 12:59:47 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to Rena with balance 500.00 NGN : 07/29/2026 12:59:47 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 07/29/2026 12:59:48 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to Rena with balance 500.00 NGN : 07/29/2026 12:59:48 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to Rena : 07/29/2026 12:59:48 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to Rena with balance 500.00 NGN : 07/29/2026 12:59:48 PM

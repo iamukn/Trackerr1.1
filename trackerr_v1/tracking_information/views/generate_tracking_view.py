@@ -218,8 +218,6 @@ class GenerateView(APIView):
             try:
                 # get user
                 user = request.user.business_owner
-                # deduct balance from the user
-                deduct_wallet(user=request.user)
                
                 address = verify_address(address=request.data.get('shipping_address').capitalize())
                 #parcel_number = self.Track_gen.generate_tracking(vendor=request.user.name)
@@ -243,6 +241,8 @@ class GenerateView(APIView):
                         }
                 ser = Tracking_infoSerializer(data=data)
                 if ser.is_valid():
+                    # deduct from the wallet
+                    deduct_wallet(user=request.user)
                     ser.save()
                     data = ser.data
                     # remove old cache
