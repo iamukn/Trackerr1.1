@@ -209,7 +209,6 @@ class RetrieveAllView(APIView):
             if multiquery_search:
                 filtered_tracking = Tracking_info.objects.filter(owner=user, parcel_number__icontains=multiquery_search.lower()).order_by('-id')
                 serializer = Tracking_infoSerializer(filtered_tracking, many=True)
-                print(serializer.data)
                 return Response({'msg': serializer.data}, status=status.HTTP_200_OK)
 
 

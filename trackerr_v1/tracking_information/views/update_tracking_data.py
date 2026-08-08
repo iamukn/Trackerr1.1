@@ -17,6 +17,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.core.cache import cache
 from shared.celery_tasks.utils_tasks.send_reg_email import expo_notification
+from shared.celery_tasks.utils_tasks import send_sms 
 
 class UpdateTracking(APIView):
     permission_classes = [IsBusinessOrLogistics, ]
@@ -106,9 +107,27 @@ class UpdateTracking(APIView):
                                     rider_serializer = Logistics_partnerSerializer(rider, data={ "total_delivery" : int(rider.total_delivery + 1)}, partial=True)
                                     if rider_serializer.is_valid():
                                         rider_serializer.save()
-                            if data.get('status').lower() in ['assigned', 'delivered', 'returned', 'cancelled', 'canceled' ]:
-                                t_data = serializer.data
 
+                            t_data = serializer.data
+                            if data.get('status').lower() in ['in transit', 'delivered', 'returned']:
+                                # send text message
+
+                                sms_payload = {
+                                    'parcel_number': t_data.get('parcel_number'),
+                                    'name': t_data.get('customer_name').capitalize(),
+                                    'status': t_data.get('status'),
+                                    'vendor': t_data.get('vendor'),
+                                    'country': request.user.country,
+                                    'phone': t_data.get('customer_phone')
+                                        }
+
+                                # send sms
+                                send_sms.send_tracking_update_sms.apply_async(
+                                    kwargs={**sms_payload}
+                                        )
+
+                            if data.get('status').lower() in ['assigned', 'delivered', 'returned', 'cancelled', 'canceled' ]:
+                                # send emails
                                 if data.get('status').lower() == 'assigned':
 
                                     send_tracking_updates.apply_async(

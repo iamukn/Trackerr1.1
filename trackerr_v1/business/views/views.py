@@ -338,19 +338,6 @@ class Business_ownerRegistration(APIView):
                 if cached_addr:
                     print('cached data')
                     address = cached_addr
-                else:
-                    #address = verify_address(address=data.get('address', '').capitalize())
-                # added the country
-#                data['country'] = address.get('country', '')
-                
-#                if data['country']:
-#                    data['country']=data['country'].lower()
-                    ...
-
-                
-                # handle errors from address field
-#                if 'error' in address:
-#                    return Response({'error': 'address cannot be found on the map, please enter a valid address'}, status=status.HTTP_404_NOT_FOUND)
 
                 user = UsersSerializer(data=request.data, context={'request': request})
                 
@@ -366,11 +353,12 @@ class Business_ownerRegistration(APIView):
                     user_s3_key = f"profile-pics/{new_uuid}.{content_type}"
 
                     
+                terms = True if data.get('terms_and_condition') == 'true' else False 
+
                 business_data = {
-                    'business_name': request.data.get('business_name'),
-                    'service': request.data.get('service'),
-                    #'latitude': address.get('latitude'),
-                    #'longitude': address.get('longitude'),
+                    'business_name': data.get('business_name'),
+                    'service': data.get('service'),
+                    'terms_and_condition': data.get('terms_and_condition'),
                     'business_owner_uuid': str(new_uuid),
                     'profile_pic_key': user_s3_key
                         }
