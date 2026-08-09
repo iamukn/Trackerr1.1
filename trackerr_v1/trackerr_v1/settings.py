@@ -167,16 +167,25 @@ SWAGGER_SETTINGS = {
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+TRACKERR_ENV = env('TRACKERR_ENV')
+
 DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mydb',
-        'USER': 'eyen',
-        'PASSWORD': env('PASSWORD'),
+        'NAME': env('POSTGRES_NAME'),
+        'USER': env('POSTGRES_USER'),
+        'PASSWORD': env('POSTGRES_PASSWORD'),
         'HOST': env('POSTGRES_HOST'),
         'PORT': 5432,
+        "OPTIONS": {
+            "sslmode": "require"
+        },
     }
 }
+
+
+if TRACKERR_ENV == 'development':
+    DATABASES['default']['OPTIONS']['options'] = "endpoint=ep-bold-pond-ayic9o1b"
 
 #database_url= env('RENDER_PG_URL')
 #DATABASES['default'] = dj_database_url.parse(database_url, conn_max_age=600, ssl_require=True)

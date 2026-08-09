@@ -48,13 +48,15 @@ class Tracking_info(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=['owner']),
-            models.Index(fields=['date_of_purchase']),
-            models.Index(fields=['customer_email']),
-            models.Index(fields=['status']),
-            models.Index(fields=['owner', 'date_of_purchase']),
+            models.Index(
+                fields=['owner', 'status', '-id'],
+                name='tracking_owner_status_id_idx'
+            ),
+            models.Index(
+                fields=['owner', '-id'],
+                name='tracking_owner_id_idx'
+            ),
         ]
-
 
 class GeoLocationData(models.Model):
     raw_address = models.CharField(max_length=400, null=False, blank=False, unique=True, default='')
