@@ -218,8 +218,8 @@ class GenerateView(APIView):
             try:
                 # get user
                 user = request.user.business_owner
-               
-                address = verify_address(address=request.data.get('shipping_address').capitalize())
+                placeId = request.data.get('placeId') 
+                address = verify_address(address=request.data.get('shipping_address').capitalize(), placeId=placeId)
                 #parcel_number = self.Track_gen.generate_tracking(vendor=request.user.name)
                 # retrieves all the data from the requuest, generate a tracking number and return to user
                 data = {
@@ -266,8 +266,7 @@ class GenerateView(APIView):
                 return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
 
             except ValidationError as e:
-                print('error:', e.message)
-                return Response({"error": e.message}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error": e.message, "msg": "insufficient fund, please top-up wallet to generate a shipping label"}, status=status.HTTP_400_BAD_REQUEST)
             except Exception as e:
                 logger.error(e)
                 return Response({"error":e}, status=status.HTTP_400_BAD_REQUEST)
