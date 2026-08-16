@@ -492,3 +492,5 @@ tracking_information.views.generate_tracking_view : generate_tracking_view.py :g
 tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 273: :ERROR 40: 'NoneType' object has no attribute 'capitalize' : 08/11/2026 04:44:26 PM
 tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 274: :ERROR 40: 'NoneType' object has no attribute 'capitalize' : 08/11/2026 04:46:21 PM
 tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 272: :ERROR 40: verify_address() got an unexpected keyword argument 'placedId' : 08/11/2026 08:53:22 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 265: :ERROR 40: {'quantity': [ErrorDetail(string='This field may not be null.', code='null')]} : 08/11/2026 09:46:01 PM
+tracking_information.views.generate_tracking_view : generate_tracking_view.py :generate_tracking_view : post: 265: :ERROR 40: {'quantity': [ErrorDetail(string='This field may not be null.', code='null')]} : 08/15/2026 02:18:51 PM

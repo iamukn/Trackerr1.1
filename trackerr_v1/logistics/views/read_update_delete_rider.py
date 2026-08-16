@@ -28,9 +28,9 @@ class Rider(APIView):
     def get(self, request, id,  *args, **kwargs):
 
 
-        cached_rider = cache.get(f'rider_{id}_data')
-        if cached_rider:
-            return Response({'msg': cached_rider}, status=status.HTTP_200_OK)
+#        cached_rider = cache.get(f'rider_{id}_data')
+#        if cached_rider:
+#            return Response({'msg': cached_rider}, status=status.HTTP_200_OK)
 
         rider = self.get_queryset(model=Logistics_partner, pk=id)
 
@@ -46,7 +46,7 @@ class Rider(APIView):
         data = rider_serializer.data
         data['user']['avatar'] = f"{environ.get('TRACKERR_CDN_URL')}/{data.get('profile_pic_key')}"
 
-        cache.set(f'rider_{id}_data', data, timeout=300)
+#        cache.set(f'rider_{id}_data', data, timeout=300)
         return Response({'msg': rider_serializer.data}, status=status.HTTP_200_OK)
 
     def patch(self, request, id,  *args, **kwargs):

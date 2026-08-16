@@ -56,11 +56,8 @@ class UpdateTracking(APIView):
                 
                 if old_addr and address:
                     if not address.lower() == obj.shipping_address.lower():
-                        # get the address coordinate
-                        # add the coordinate to destination_lat and destination_lng
-                        # add the full address to shipping_address
-                        #address = validate.apply_async(kwargs={'address': address}).get()
-                        address = verify_address(address=address.capitalize())
+                        placeId = data.get('placeId') 
+                        address = verify_address(address=address.capitalize(), placeId=placeId)
                         data['country'] = address.get('country').lower()
                         data['shipping_address'] = old_addr.lower()
                         data['destination_lat'] = str(address.get('latitude')).lower()
@@ -122,9 +119,9 @@ class UpdateTracking(APIView):
                                         }
 
                                 # send sms
-                                send_sms.send_tracking_update_sms.apply_async(
-                                    kwargs={**sms_payload}
-                                        )
+                                #send_sms.send_tracking_update_sms.apply_async(
+                                #    kwargs={**sms_payload}
+                                #        )
 
                             if data.get('status').lower() in ['assigned', 'delivered', 'returned', 'cancelled', 'canceled' ]:
                                 # send emails
