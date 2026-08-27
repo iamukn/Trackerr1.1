@@ -185,9 +185,6 @@ DATABASES = {
 }
 
 
-if TRACKERR_ENV == 'development':
-    DATABASES['default']['OPTIONS']['options'] = "endpoint=ep-bold-pond-ayic9o1b"
-
 #database_url= env('RENDER_PG_URL')
 #DATABASES['default'] = dj_database_url.parse(database_url, conn_max_age=600, ssl_require=True)
 

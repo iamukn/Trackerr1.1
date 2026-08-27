@@ -23,6 +23,7 @@ class BroadcastLocation(APIView):
         lat = request.data.get('lat')
         lng = request.data.get('lng')
 
+
         if lat == old_lat and lng == old_lng:
             return Response({"status": "ok"}, status=status.HTTP_200_OK)
 
