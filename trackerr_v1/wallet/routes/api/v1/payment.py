@@ -107,7 +107,8 @@ class PaymentWebhook(APIView):
         if data:
             base_data = data.get('data')
             # do nothing if it's a test domain
-            if not base_data.get('domain') == 'test':
+            if base_data.get('domain') == 'test':
+                print('this is a test data::: ', base_data)
                 return Response(status=status.HTTP_204_NO_CONTENT)
 
             # get payment object using reference
