@@ -14,10 +14,11 @@ from shared.celery_tasks.business_owners_task.upload_dp import upload_dp
 from logistics.utils.generate_password import generate_password
 import uuid
 from django.core.cache import cache
+from business.views.business_owner_permission import IsBusinessOwner
 
 
 class RegisterRider(APIView):
-    permission_classes = [AllowAny, ]
+    permission_classes = [IsBusinessOwner, ]
     parser_classes = (MultiPartParser,  FormParser, JSONParser,)
 
     def post(self, request,  *args, **kwargs):

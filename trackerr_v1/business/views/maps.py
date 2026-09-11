@@ -25,6 +25,7 @@ class Polyline(APIView):
         cached_polyline = cache.get(cache_key)
         # if the polyline already exists, serve it
         if cached_polyline:
+            print('line: ', cached_polyline)
             return Response(cached_polyline, status=status.HTTP_200_OK)
 
         url = f'https://api.mapbox.com/directions/v5/mapbox/driving/{rider_lng},{rider_lat};{dest_lng},{dest_lat}?geometries=geojson&access_token={MAPBOX_TOKEN}'
@@ -33,6 +34,7 @@ class Polyline(APIView):
             data = res.json()
             # set as cached
             cache.set(cache_key, data, timeout=60 * 60 * 24 * 7)
+            print('line: ', data)
             return Response(data, status=status.HTTP_200_OK)
         return Response(status=res.status_code)
 

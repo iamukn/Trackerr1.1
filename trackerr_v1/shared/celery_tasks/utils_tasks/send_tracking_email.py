@@ -1,139 +1,251 @@
-#!/usr/bin/python3
 from django.conf import settings
-from django.core.mail import send_mail
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 from celery import shared_task
 
+
+@shared_task(bind=True, name="tracking_updates_email")
+def send_tracking_updates_email(
+    self,
+    email,
+    customer_name,
+    parcel_number,
+    status,
+    vendor="",
+    delivery_address="",
+    eta="",
+    items="",
+    rider_name="",
+    rider_phone="",
+    is_subscribed=False,
+):
+    """
+    Send Trackerr parcel tracking notification email.
+    """
+
+    if is_subscribed:
+        return "Customer is subscribed; notification email skipped"
+
+    customer_name = customer_name.split(" ")[0].capitalize()
+    parcel_number = parcel_number.upper()
+
+    # Handle tracking activation separately
+    if isinstance(status, bool):
+
+        if status is not True:
+            return "Tracking activation email skipped"
+
+        subject = "Yay! You can now track your delivery 🚚"
+        template_status = "tracking_activated"
+
+    else:
+        status = status.lower().strip()
+
+        status_config = {
+            "pending": {
+                "subject": f"Your parcel has been confirmed — Tracking #{parcel_number}",
+            },
+            "assigned": {
+                "subject": "Your parcel is now with a rider 🚴",
+            },
+            "delivered": {
+                "subject": "Your parcel has been delivered ✅",
+            },
+            "returned": {
+                "subject": "Your parcel has been returned 🔄",
+            },
+            "cancelled": {
+                "subject": "Your parcel delivery has been cancelled",
+            },
+            "canceled": {
+                "subject": "Your parcel delivery has been cancelled",
+            },
+        }
+
+        if status not in status_config:
+            return f"Unsupported tracking status: {status}"
+
+        subject = status_config[status]["subject"]
+
+        # Normalize American/British spelling internally
+        template_status = (
+            "cancelled"
+            if status in ["cancelled", "canceled"]
+            else status
+        )
+
+    tracking_url = (
+        f"https://trackerr.africa/track/{parcel_number}/"
+    )
+
+    context = {
+        "subject": subject,
+        "customer_name": customer_name,
+        "parcel_number": parcel_number,
+        "status": template_status,
+        "vendor": vendor.title() if vendor else "",
+        "delivery_address": delivery_address.title() if delivery_address else "",
+        "eta": eta,
+        "items": items.title() if items else "",
+        "rider_name": rider_name.title() if rider_name else "",
+        "rider_phone": rider_phone,
+        "tracking_url": tracking_url,
+    }
+
+    # Render HTML email
+    html_content = render_to_string(
+        "emails/tracking_update.html",
+        context,
+    )
+
+    # Plain-text equivalent
+    if template_status == "pending":
+
+        text_content = f"""
+Hi {customer_name},
+
+Your order has been successfully confirmed! 🎉
+
+Here are your delivery details:
+
+Tracking Number: {parcel_number}
+Vendor: {context["vendor"]}
+Delivery Address: {context["delivery_address"]}
+Items: {context["items"]}
+Expected Delivery Date: {eta}
+Current Status: {template_status.capitalize()}
+
+You can track your parcel in real time using the link below:
+
+{tracking_url}
+
+Thanks for choosing Trackerr.
+
+Trackerr
+Reliable deliveries. Real-time tracking. Peace of mind.
 """
-   Send Tracking Updates Notification email
+
+    elif template_status == "assigned":
+
+        text_content = f"""
+Hi {customer_name},
+
+Good news! Your parcel #{parcel_number} has been assigned to a rider and is now on its way for delivery.
+
+Rider Name: {context["rider_name"]}
+Rider Phone: {rider_phone}
+
+You can track your parcel in real time once tracking has been activated by the rider.
+
+Track your parcel:
+{tracking_url}
+
+Thanks for choosing Trackerr.
+
+Trackerr
+Reliable deliveries. Real-time tracking. Peace of mind.
 """
 
-@shared_task(bind=True, name='tracking_updates_email')
-def send_tracking_updates_email(self, email, customer_name, parcel_number,
-                                status, vendor="", delivery_address="", eta="", items="", rider_name="", 
-                                rider_phone="", is_subscribed=False
-                                ):
+    elif template_status == "tracking_activated":
 
-    subject = ''
-    if not is_subscribed:
-        # handles updates emails based on status
-        customer_name = customer_name.split(' ')[0]
+        text_content = f"""
+Hi {customer_name},
 
-        if not type(status) == bool:
-            if status.lower() == 'pending':
-                subject = f'Your parcel has been confirmed — Tracking #{parcel_number}'
+Yay! Your parcel #{parcel_number} from {context["vendor"]} is now on its way.
 
-                message = """
-                        Hi {},
+You can now track your delivery in real time as the rider makes their way to you.
 
-                        Your order has been successfully confirmed! 🎉
+Tracking Link:
+{tracking_url}
 
-                        Here are your delivery details:
-                        - Tracking Number: {}
-                        - Vendor: {}
-                        - Delivery Address: {}
-                        - Items: {} etc...
-                        - Expected Delivery Date: {}
-                        - Current Status: {}
+Thanks for choosing Trackerr.
 
-                        You can track your parcel in real time using the link below:
-                        https://thisiswherethetrackinglinkwillgo.com/{}/
+Trackerr
+Reliable deliveries. Real-time tracking. Peace of mind.
+"""
 
-                """.format(customer_name.capitalize(), parcel_number.upper(), 
-                            vendor.title(), delivery_address.title(), items.title(), eta,
-                            status.capitalize(), parcel_number
-                            )
+    elif template_status == "delivered":
 
+        text_content = f"""
+Hi {customer_name},
 
-            elif status.lower() == 'assigned':
-                subject = 'Your parcel is now with a rider 🚴'
-                message = """
-                    Hi {},
+Your parcel #{parcel_number} has been successfully delivered. We hope you had a great experience.
 
-                    Good news! Your parcel #{} has been assigned to a rider and is now on its way for delivery.
+If you did not receive your parcel, please contact {context["vendor"]} as soon as possible.
 
-                    - Rider Name: {}
-                    - Rider Phone: {}
+Thank you for choosing Trackerr.
 
-                    You can track your parcel in real time here:
-                    Link: https://trackparcelhere.com/{}/
+Trackerr
+Reliable deliveries. Real-time tracking. Peace of mind.
+"""
 
-                    If you can't track your parcel real-time, don't worry, the rider will activate your tracking once he's on his way to you and you'll be notified.
+    elif template_status == "returned":
 
-                    Trackerr
-                    Reliable deliveries. Real-time tracking. Peace of mind.
+        text_content = f"""
+Hi {customer_name},
 
-                """.format(customer_name.capitalize(),parcel_number.upper(), rider_name.title(), rider_phone, parcel_number.upper(),)
+We're sorry! Your parcel #{parcel_number} from {context["vendor"]} has been returned to the vendor.
 
-            elif status.lower() == 'delivered':
-                subject = 'Your parcel has been delivered ✅'
-                message = """
-                    Hi {},
+You may contact your vendor for further details or arrange a redelivery.
 
-                    Your parcel #{} has been successfully delivered. We hope you had a great experience.
-                    If you didn’t receive it, please contact the shipper '{}' as soon as possible!
+Thanks for choosing Trackerr.
 
-                    Thank you for choosing Trackerr!
+Trackerr
+Reliable deliveries. Real-time tracking. Peace of mind.
+"""
 
-                    Trackerr,
-                    Reliable deliveries. Real-time tracking. Peace of mind.
+    elif template_status == "cancelled":
 
-                """.format(customer_name.capitalize(), parcel_number.upper(), vendor.title())
+        text_content = f"""
+Hi {customer_name},
 
-            elif status.lower() == 'returned':
-                subject = 'Your parcel has been returned 🔄'
-                message = """
-                    Hi {},
+The delivery for your parcel #{parcel_number} from {context["vendor"]} has been cancelled.
 
-                    We’re sorry! Your parcel Tracking #{} from {} has been returned to the vendor.
-                    You may contact your vendor for further details or arrange a redelivery.
+Please contact the vendor for more information.
 
-                    Trackerr,
-                    Reliable deliveries. Real-time tracking. Peace of mind.
-                """.format(customer_name.capitalize(), parcel_number.upper(), vendor.title() )
+We apologize for the inconvenience.
 
-            elif status.lower() in ['cancelled', 'canceled']:
-                subject = 'Your parcel delivery has been canceled'
-                message = """
-                    Hi {},
+Trackerr
+Reliable deliveries. Real-time tracking. Peace of mind.
+"""
 
-                    The delivery for your parcel #{} from {} has been canceled.
-                    Kindly contact the vendor for more information.
+    else:
+        text_content = f"""
+Hi {customer_name},
 
-                    We apologize for the inconvenience.
-                    
-                    Trackerr
-                    Reliable deliveries. Real-time tracking. Peace of mind.
+There is an update regarding your parcel #{parcel_number}.
 
-                """.format(customer_name.capitalize(), parcel_number.upper(), vendor.title())
+Current Status: {template_status.capitalize()}
 
-        elif type(status) == bool and status == True:
-            subject = 'Yay! You can now track your delivery'
-            message = """
-                Hi {},
-                
-                You can now track order  #{} from {} in realtime as the rider is on his way to your destination!
-                
-                Tracking Link: https://trackparcelhere.com/{}/
-                
-                Trackerr
-                Reliable deliveries. Real-time tracking. Peace of mind.
-            """.format(customer_name.capitalize(), parcel_number.upper(), vendor.title(), parcel_number.upper())
+Track your parcel:
+{tracking_url}
 
-        from_email = settings.EMAIL_HOST_USER
-        recipient_email = [email,]
+Thanks for choosing Trackerr.
 
-        try:
-            from_header = "Order Confirmation" if status == 'pending' else "Trackerr Delivery"
-            send_mail(
-                subject=subject,
-                message=message,
-                from_email=from_header,
-                recipient_list=recipient_email,
-                fail_silently = False,
-                    )
-            if type(status) == bool:
-                return "tracking activated status notification email sent"
-            return f"{status.title()} status notification email sent"
-        except Exception as e:
-            raise e
-            return f"unable to send {status} updates email"
+Trackerr
+Reliable deliveries. Real-time tracking. Peace of mind.
+"""
+
+    try:
+
+        email_message = EmailMultiAlternatives(
+            subject=subject,
+            body=text_content,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[email],
+        )
+
+        email_message.attach_alternative(
+            html_content,
+            "text/html",
+        )
+
+        email_message.send(fail_silently=False)
+
+        if isinstance(status, bool):
+            return "tracking activated status notification email sent"
+
+        return f"{template_status.title()} status notification email sent"
+
+    except Exception as e:
+        raise e
