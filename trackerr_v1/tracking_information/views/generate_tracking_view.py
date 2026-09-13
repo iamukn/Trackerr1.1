@@ -223,7 +223,7 @@ class GenerateView(APIView):
                 #parcel_number = self.Track_gen.generate_tracking(vendor=request.user.name)
                 # retrieves all the data from the requuest, generate a tracking number and return to user
                 data = {
-                    "shipping_address": address.get('address').capitalize(),
+                    "shipping_address": request.data.get('shipping_address').capitalize(),
                     "destination_lat": address.get('latitude'),
                     "destination_lng": address.get('longitude'),
                     "vendor": request.user.business_owner.business_name,
