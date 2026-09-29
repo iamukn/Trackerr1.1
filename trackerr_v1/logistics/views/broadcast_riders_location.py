@@ -39,7 +39,7 @@ MAX_BATCH_SIZE = 50
 # MAP MATCHING CONFIGURATION
 # ---------------------------------------------------------
 
-MAP_MATCHING_BATCH_SIZE = 5
+MAP_MATCHING_BATCH_SIZE = 2
 MAPBOX_ACCESS_TOKEN = os.environ.get("MAPBOX_ACCESS_TOKEN", None)
 MAP_MATCHING_URL = "https://api.mapbox.com/matching/v5/mapbox/driving/{coordinates}"
 MATCH_BUFFER_TTL = 60  # seconds

@@ -28,7 +28,7 @@ class TestRetrieveAllTracking(APITestCase):
                 )
         self.business = Business_owner.objects.create(user=self.user, business_name='Hue Logistics')
 #        self.wallet = Wallet.objects.create(owner=self.user, balance=150.00, currency='NGN')
-        self.data = {'product': 'Medicine','shipping_address':'Authority avenue ikotun lagos','customer_name': 'Uwebs','customer_email':'JohnDoe@gmail.com', 'country': 'Nigeria', 'quantity': 2, 'delivery_date': '2024-12-12'}
+        self.data = {'product': 'Medicine','shipping_address':'Authority Ave, Alimosho, Nigeria','customer_name': 'Uwebs','customer_email':'JohnDoe@gmail.com', 'country': 'Nigeria', 'quantity': 2, 'delivery_date': '2024-12-12'}
         self.token = AccessToken.for_user(self.user)
         self.client.credentials(HTTP_AUTHORIZATION="Bearer %s"% self.token)
         self.return_value = {'address': 'Authority Ave, Alimosho, Nigeria', 'customer_email':self.data['customer_email'],'customer_name': 'Uwebs','city': 'Lagos', 'country': 'Nigeria', 'latitude': 6.54219, 'longitude': 3.22122}
@@ -55,7 +55,7 @@ class TestRetrieveAllTracking(APITestCase):
         self.assertTrue(res1.status_code == 201)
         self.assertTrue(res.status_code == 200)
         self.assertTrue('next' in res.data)
-        self.assertEqual(res.data['results'][0].get('shipping_address'), 'Authority Ave, Alimosho, Nigeria'.capitalize())
+        self.assertEqual(res.data['results'][0].get('shipping_address'), self.return_value.get('address').capitalize())
 
     @patch('tracking_information.views.generate_tracking_view.deduct_wallet')
     #@patch('tracking_information.views.generate_tracking_view.Track_gen')

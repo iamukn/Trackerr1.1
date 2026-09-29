@@ -18,6 +18,7 @@ from django.db import transaction
 from django.core.cache import cache
 from shared.celery_tasks.utils_tasks.send_reg_email import expo_notification
 from shared.celery_tasks.utils_tasks import send_sms 
+from shared.celery_tasks.utils_tasks.send_whatsapp_msg import send_whatsapp_update
 
 class UpdateTracking(APIView):
     permission_classes = [IsBusinessOrLogistics, ]
@@ -81,6 +82,7 @@ class UpdateTracking(APIView):
                         # Send Push Notification
                         track_data = serializer.data
                         tracking_status = data.get('status') 
+
                         if tracking_status == 'assigned': 
                             expo_notification.apply_async(
                                 kwargs={'customer_name':track_data.get('customer_name'),
@@ -106,10 +108,10 @@ class UpdateTracking(APIView):
                                         rider_serializer.save()
 
                             t_data = serializer.data
-                            if data.get('status').lower() in ['in transit', 'delivered', 'returned']:
+                            if data.get('status').lower() in ['in transit', 'delivered', 'returned', 'assigned']:
                                 # send text message
 
-                                sms_payload = {
+                                base_payload = {
                                     'parcel_number': t_data.get('parcel_number'),
                                     'name': t_data.get('customer_name').capitalize(),
                                     'status': t_data.get('status'),
@@ -118,10 +120,22 @@ class UpdateTracking(APIView):
                                     'phone': t_data.get('customer_phone')
                                         }
 
-                                # send sms
+                                sms_payload = base_payload.copy()
+
+                                # send sms  and whatsapp
+
                                 #send_sms.send_tracking_update_sms.apply_async(
                                 #    kwargs={**sms_payload}
                                 #        )
+                                # whatsapp
+                                whatsapp_payload = base_payload.copy()
+                                whatsapp_payload['rider_name'] = t_data.get('rider_name')
+                                whatsapp_payload['rider_phone'] = t_data.get('rider_phone')
+                                whatsapp_payload['customer_name'] = t_data.get('customer_name')
+
+                                send_whatsapp_update.apply_async(
+                                    kwargs=whatsapp_payload
+                                        )
 
                             if data.get('status').lower() in ['assigned', 'delivered', 'returned', 'cancelled', 'canceled' ]:
                                 # send emails

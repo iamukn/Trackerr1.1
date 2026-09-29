@@ -14,6 +14,7 @@ def send_tracking_updates_email(self, email, customer_name, parcel_number,
                                 ):
 
     subject = ''
+    message = ''
     if not is_subscribed:
         # handles updates emails based on status
         customer_name = customer_name.split(' ')[0]

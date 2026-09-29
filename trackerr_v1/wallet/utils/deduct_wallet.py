@@ -8,10 +8,10 @@ def deduct_wallet(user):
     country = user.country
     if country.lower() == 'nigeria':
         # deduct 200 naira from Nigerian accounts
-        amount = 300
+        amount = 200
     elif country.lower() == 'ghana':
         # deduct 4 cedis from Ghanian accounts
-        amount = Decimal('1.5')
+        amount = Decimal('1.7')
 
     balance = wallet.balance
 

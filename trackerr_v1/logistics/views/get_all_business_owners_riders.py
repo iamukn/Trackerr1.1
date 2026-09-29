@@ -32,7 +32,7 @@ class Business_Riders(APIView):
         except User.business_owner.RelatedObjectDoesNotExist:
             return Response({'msg': {'you are not authorized to view this resource'}}, status=status.HTTP_401_UNAUTHORIZED)
         except Http404:
-            print('Wahala')
+            return Response({'msg': 'riders not found'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             raise(e)
             return Response({'msg': {'internal server error'}}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

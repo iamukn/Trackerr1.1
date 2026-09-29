@@ -32,13 +32,13 @@ def create_otp_model_for_user(sender, instance, created, **Kwargs):
             if country.lower()  == 'ghana':
                 wallet = Wallet(
                         owner = user,
-                        balance = Decimal('13.00'),
+                        balance = Decimal('10.00'),
                         currency = 'GHS'
                         )
             elif country.lower()  == 'nigeria':
                 wallet = Wallet(
                         owner = user,
-                        balance = Decimal('500.00'),
+                        balance = Decimal('1100.00'),
                         currency = 'NGN'
                         )
             wallet.save()

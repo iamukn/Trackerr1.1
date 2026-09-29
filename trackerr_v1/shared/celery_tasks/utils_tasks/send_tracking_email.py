@@ -48,6 +48,9 @@ def send_tracking_updates_email(
             "assigned": {
                 "subject": "Your parcel is now with a rider 🚴",
             },
+            "in transit": {
+                "subject": "Your parcel is on its way 🚴",
+                },
             "delivered": {
                 "subject": "Your parcel has been delivered ✅",
             },
@@ -75,7 +78,7 @@ def send_tracking_updates_email(
         )
 
     tracking_url = (
-        f"https://trackerr.africa/track/{parcel_number}/"
+        f"https://trackerrgo.com/tracking/{parcel_number}/"
     )
 
     context = {
@@ -119,9 +122,9 @@ You can track your parcel in real time using the link below:
 
 {tracking_url}
 
-Thanks for choosing Trackerr.
+Thanks for choosing TrackerrGo.
 
-Trackerr
+TrackerrGo
 Reliable deliveries. Real-time tracking. Peace of mind.
 """
 
@@ -140,13 +143,13 @@ You can track your parcel in real time once tracking has been activated by the r
 Track your parcel:
 {tracking_url}
 
-Thanks for choosing Trackerr.
+Thanks for choosing TrackerrGo.
 
-Trackerr
+TrackerrGo
 Reliable deliveries. Real-time tracking. Peace of mind.
 """
 
-    elif template_status == "tracking_activated":
+    elif template_status == "in transit":
 
         text_content = f"""
 Hi {customer_name},
@@ -158,9 +161,9 @@ You can now track your delivery in real time as the rider makes their way to you
 Tracking Link:
 {tracking_url}
 
-Thanks for choosing Trackerr.
+Thanks for choosing TrackerrGo.
 
-Trackerr
+TrackerrGo
 Reliable deliveries. Real-time tracking. Peace of mind.
 """
 
@@ -173,9 +176,9 @@ Your parcel #{parcel_number} has been successfully delivered. We hope you had a 
 
 If you did not receive your parcel, please contact {context["vendor"]} as soon as possible.
 
-Thank you for choosing Trackerr.
+Thank you for choosing TrackerrGo.
 
-Trackerr
+TrackerrGo
 Reliable deliveries. Real-time tracking. Peace of mind.
 """
 
@@ -188,9 +191,9 @@ We're sorry! Your parcel #{parcel_number} from {context["vendor"]} has been retu
 
 You may contact your vendor for further details or arrange a redelivery.
 
-Thanks for choosing Trackerr.
+Thanks for choosing TrackerrGo.
 
-Trackerr
+TrackerrGo
 Reliable deliveries. Real-time tracking. Peace of mind.
 """
 
@@ -205,7 +208,7 @@ Please contact the vendor for more information.
 
 We apologize for the inconvenience.
 
-Trackerr
+TrackerrGo
 Reliable deliveries. Real-time tracking. Peace of mind.
 """
 
@@ -220,18 +223,17 @@ Current Status: {template_status.capitalize()}
 Track your parcel:
 {tracking_url}
 
-Thanks for choosing Trackerr.
+Thanks for choosing TrackerrGo.
 
-Trackerr
+TrackerrGo
 Reliable deliveries. Real-time tracking. Peace of mind.
 """
 
     try:
-
         email_message = EmailMultiAlternatives(
             subject=subject,
             body=text_content,
-            from_email=settings.DEFAULT_FROM_EMAIL,
+            from_email=settings.EMAIL_SENDER,
             to=[email],
         )
 
