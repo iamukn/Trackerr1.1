@@ -10252,3 +10252,25 @@ user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Ot
 user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to jj with balance 1100.00 NGN : 09/29/2026 11:10:54 AM
 user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to jj : 09/29/2026 11:12:34 AM
 user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to jj with balance 1100.00 NGN : 09/29/2026 11:12:34 AM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to ukaegbs : 10/06/2026 11:26:32 AM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to ukaegbs with balance 1100.00 NGN : 10/06/2026 11:26:32 AM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to uweba : 10/06/2026 11:33:10 AM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to uweba with balance 1100.00 NGN : 10/06/2026 11:33:10 AM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to rider1 : 10/06/2026 11:36:11 AM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to rider1 with balance 1100.00 NGN : 10/06/2026 11:36:11 AM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to tra : 10/06/2026 11:41:30 AM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to tra with balance 1100.00 NGN : 10/06/2026 11:41:30 AM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to jello : 10/06/2026 11:46:38 AM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to jello with balance 1100.00 NGN : 10/06/2026 11:46:38 AM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to jj : 10/06/2026 11:50:03 AM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to jj with balance 1100.00 NGN : 10/06/2026 11:50:03 AM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to jj : 10/06/2026 12:07:03 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to jj with balance 1100.00 NGN : 10/06/2026 12:07:03 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to jjd : 10/06/2026 12:27:25 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to jjd with balance 1100.00 NGN : 10/06/2026 12:27:25 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to john : 10/06/2026 12:32:43 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to john with balance 1100.00 NGN : 10/06/2026 12:32:43 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to jhy : 10/06/2026 12:37:19 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to jhy with balance 1100.00 NGN : 10/06/2026 12:37:19 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 27: :INFO 20: Otp created and assigned to jhu : 10/06/2026 12:49:35 PM
+user.signals : signals.py :signals : create_otp_model_for_user: 45: :INFO 20: Wallet created and assigned to jhu with balance 1100.00 NGN : 10/06/2026 12:49:35 PM

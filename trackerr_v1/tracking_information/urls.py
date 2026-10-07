@@ -10,12 +10,14 @@ from .views import (
         get_activity_chart,
         fetch_tracking_info_using_customer_email,
         update_tracking_data,
-        start_tracking
+        start_tracking,
+        verify_delivery_token
         )
 
 """ tracking routes """
 
 urlpatterns = [
+    path('tracking/verify-token/', verify_delivery_token.VerifyDeliveryToken.as_view(), name='verify-delivery-token'),
     path('trackings/status-count/', retrieve_status_count.RetrieveStatusCount.as_view(), name='status-count'),
     path('trackings/history/', fetch_tracking_info_using_customer_email.Customer_history.as_view(), name='history'),
     path('trackings/generate-tracking/', generate_tracking_view.GenerateView.as_view(), name='generate-tracking'),

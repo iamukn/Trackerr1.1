@@ -9,7 +9,7 @@ def send_welcome_email(to, username, account_type, password=''):
     context = {
         "user_name": username.title(),
         "login_url": "https://trackerrgo.com/login/",
-        "android_url": "https://trackerrgo.com/login/",
+        "android_url": "https://play.google.com/store/apps/details?id=com.trackerr.trackerrgo",
         "to": to[0],
         "account_type": account_type,
         "password": password

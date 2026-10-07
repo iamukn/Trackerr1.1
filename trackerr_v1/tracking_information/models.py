@@ -41,6 +41,7 @@ class Tracking_info(models.Model):
     status = models.CharField(max_length=15, null=True, blank=True, default="pending")
     track_now = models.BooleanField(default=False, null=False, blank=False)
     vendor = models.CharField(max_length=255, null=False, blank=False)
+    delivery_otp = models.CharField(max_length=6, null=True, blank=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
     
     def __str__(self):

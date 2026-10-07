@@ -12,6 +12,7 @@ from logistics.models import Logistics_partner
 from logistics.serializer import Logistics_partnerSerializer
 #from shared.celery_tasks.tracking_info_tasks.verify_address_task import verify_shipping_address as validate
 from tracking_information.utils.validate_shipping_address import verify_address
+from tracking_information.utils.get_nearby_deliveries import get_nearby_deliveries
 from shared.celery_tasks.utils_tasks.send_tracking_email import send_tracking_updates_email as send_tracking_updates
 from django.core.exceptions import ValidationError
 from django.db import transaction
@@ -66,8 +67,12 @@ class UpdateTracking(APIView):
 
                 # initiate an atomic transaction
                 try:
-                    serializer = Tracking_infoSerializer(obj, data=data, partial=True)
+                    import random
                     tracking_status = data.get('status')
+                    delivery_otp = random.randint(10000, 90000)
+                    data = {**data, "delivery_otp": str(delivery_otp)} if tracking_status.lower() == 'in transit' else data
+                    serializer = Tracking_infoSerializer(obj, data=data, partial=True)
+                
                     if serializer.is_valid():
                         rider_expo_token = ''
                         if 'rider_uuid' in data:
@@ -108,6 +113,7 @@ class UpdateTracking(APIView):
                                         rider_serializer.save()
 
                             t_data = serializer.data
+                            print(t_data, delivery_otp)
                             if data.get('status').lower() in ['in transit', 'delivered', 'returned', 'assigned']:
                                 # send text message
 
@@ -127,15 +133,22 @@ class UpdateTracking(APIView):
                                 #send_sms.send_tracking_update_sms.apply_async(
                                 #    kwargs={**sms_payload}
                                 #        )
+
+                                # send otp for parcel collection via sms
+                                if tracking_status.lower() == 'in transit':
+                                    print('Sending Otp:::', delivery_otp)
+                                    #send_sms.send_delivery_otp.apply_async(
+                                    #    kwargs={**sms_payload,"otp": delivery_otp}   
+                                    #    )
                                 # whatsapp
                                 whatsapp_payload = base_payload.copy()
                                 whatsapp_payload['rider_name'] = t_data.get('rider_name')
                                 whatsapp_payload['rider_phone'] = t_data.get('rider_phone')
                                 whatsapp_payload['customer_name'] = t_data.get('customer_name')
 
-                                send_whatsapp_update.apply_async(
-                                    kwargs=whatsapp_payload
-                                        )
+                                #send_whatsapp_update.apply_async(
+                                #    kwargs=whatsapp_payload
+                                #        )
 
                             if data.get('status').lower() in ['assigned', 'delivered', 'returned', 'cancelled', 'canceled' ]:
                                 # send emails
@@ -186,7 +199,10 @@ class UpdateTracking(APIView):
                                             )
                                 else:
                                     print('Status is not one of the required statuses')
-                                    ...
+                        if request.user.account_type == 'logistics' and data.get('status').lower() == 'in transit':
+                            nearby = get_nearby_deliveries(parcel_data=t_data, rider=request.user.logistics_partner)
+                            print('nearby:::', nearby)
+                            return Response({'nearby_deliveries': nearby}, status=status.HTTP_200_OK)
                         return Response(status=status.HTTP_204_NO_CONTENT)
                     return Response({'msg': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
