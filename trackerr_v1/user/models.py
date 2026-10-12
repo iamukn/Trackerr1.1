@@ -25,9 +25,15 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     is_verified = models.BooleanField(default=False)
+    phone_verified = models.BooleanField(default=False)
+    email_verified = models.BooleanField(default=False)
+    phone_verify_hash = models.CharField(max_length=75, null=True, blank=True)
+    email_verify_hash = models.CharField(max_length=75, null=True, blank=True)
     wants_marketing_emails = models.BooleanField(null=False, blank=False, default=True)
+    referral_code = models.CharField(max_length=12, null=True, blank=True)
 
     updated_on = models.DateTimeField(null=True, blank=True)
 

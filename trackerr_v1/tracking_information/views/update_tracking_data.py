@@ -69,7 +69,7 @@ class UpdateTracking(APIView):
                 try:
                     import random
                     tracking_status = data.get('status')
-                    delivery_otp = random.randint(10000, 90000)
+                    delivery_otp = random.randint(100000, 999999)
                     data = {**data, "delivery_otp": str(delivery_otp)} if tracking_status.lower() == 'in transit' else data
                     serializer = Tracking_infoSerializer(obj, data=data, partial=True)
                 
@@ -85,7 +85,10 @@ class UpdateTracking(APIView):
                                 rider_serializer.save()
                         serializer.save()
                         # Send Push Notification
+                        if 'delivery_otp' in serializer.data:
+                            serializer.data.pop('delivery_otp')
                         track_data = serializer.data
+
                         tracking_status = data.get('status') 
 
                         if tracking_status == 'assigned': 
@@ -136,19 +139,19 @@ class UpdateTracking(APIView):
 
                                 # send otp for parcel collection via sms
                                 if tracking_status.lower() == 'in transit':
-                                    print('Sending Otp:::', delivery_otp)
-                                    #send_sms.send_delivery_otp.apply_async(
-                                    #    kwargs={**sms_payload,"otp": delivery_otp}   
-                                    #    )
+                                    #print('Sending Otp:::', delivery_otp)
+                                    send_sms.send_delivery_otp.apply_async(
+                                        kwargs={**sms_payload,"otp": delivery_otp}   
+                                        )
                                 # whatsapp
                                 whatsapp_payload = base_payload.copy()
                                 whatsapp_payload['rider_name'] = t_data.get('rider_name')
                                 whatsapp_payload['rider_phone'] = t_data.get('rider_phone')
                                 whatsapp_payload['customer_name'] = t_data.get('customer_name')
 
-                                #send_whatsapp_update.apply_async(
-                                #    kwargs=whatsapp_payload
-                                #        )
+                                send_whatsapp_update.apply_async(
+                                    kwargs=whatsapp_payload
+                                        )
 
                             if data.get('status').lower() in ['assigned', 'delivered', 'returned', 'cancelled', 'canceled' ]:
                                 # send emails

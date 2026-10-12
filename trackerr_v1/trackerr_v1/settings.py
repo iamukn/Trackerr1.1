@@ -94,6 +94,7 @@ INSTALLED_APPS = [
     "business",
     "logistics",
     "wallet",
+    "affiliate",
     "rest_framework",
     "authentication",
     "tracking_information",

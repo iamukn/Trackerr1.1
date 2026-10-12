@@ -13,7 +13,7 @@ class Tracking_infoSerializer(ModelSerializer):
     
     class Meta:
         model = Tracking_info
-        exclude = ['delivery_otp']
+        fields = '__all__'
 
 
 

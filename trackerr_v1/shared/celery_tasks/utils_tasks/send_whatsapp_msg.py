@@ -10,6 +10,12 @@ from notifications.serializers import WhatsappNotificationSerializer
 
 def whatsapp_update(phone:str , country: str, **kwargs: dict) -> bool:
 
+    status = kwargs.get('status')
+    
+    if status.lower() == 'delivered':
+        # don't send a whatsapp message for delivered 
+        return
+
     url = "https://graph.facebook.com/v25.0/1305695025955311/messages"
     WHATSAPP_API_KEY = os.environ.get('WHATSAPP_API_KEY')
     headers = {
@@ -19,7 +25,6 @@ def whatsapp_update(phone:str , country: str, **kwargs: dict) -> bool:
     
     country_code = "234" if country.lower() == "nigeria" else "233"
 
-    status = kwargs.get('status')
     customer_name = kwargs.get('customer_name').title()
     vendor_name = kwargs.get('vendor').title()
     rider_name = kwargs.get('rider_name').title()
@@ -27,7 +32,7 @@ def whatsapp_update(phone:str , country: str, **kwargs: dict) -> bool:
     order_num = kwargs.get('parcel_number').upper()
 
     assigned_utility_name = "order_notification"
-    in_transit_utility_name = "order_enroute"
+    in_transit_utility_name = "order_in_transit"
     delivered_utility_name = "order_delivered"
     returned_utility_name = "order_returned"
 

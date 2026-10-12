@@ -3,11 +3,14 @@ from .views import (
     views,
     users_count,
     password_recovery,
-    change_password
+    change_password,
+    account_verification as verify
 )
 
 
 urlpatterns = [
+    path('users/send-verification-code/', verify.SendVerificationCode.as_view(), name='send-verification-code'),
+    path('users/account-verify/', verify.VerifyAccount.as_view(), name='account-verify'),
     path('users/update-password/', change_password.UpdatePassword.as_view(), name='update-password'),
     path('users/', views.UsersView.as_view(), name='users'),
     path('users/<int:pk>/', views.UserView.as_view(), name='user'),
