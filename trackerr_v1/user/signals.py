@@ -43,7 +43,7 @@ def create_otp_model_for_user(sender, instance, created, **Kwargs):
                         )
             wallet.save()
             logger.info('Wallet created and assigned to {} with balance {} {}'.format(wallet.owner.name, wallet.balance, wallet.currency))
-            print('Wallet created and assigned to {} with balance {} {}'.format(wallet.owner.name, wallet.balance, wallet.currency))
+            #print('Wallet created and assigned to {} with balance {} {}'.format(wallet.owner.name, wallet.balance, wallet.currency))
         except Exception as e:
             # Write a logging for this incase an exception occurs
             logger.error(e)

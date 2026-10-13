@@ -15,7 +15,7 @@ def send_email(self,email, subject, message):
         "fail_silently": False,
             }
     try:
-        send_mail(**data)
+        print(send_mail(**data))
         return "Email sent:"
     except Exception as e:
         return "Error sending {} email".format(subject.lower())

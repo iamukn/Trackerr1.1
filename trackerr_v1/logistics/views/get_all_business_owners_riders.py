@@ -24,7 +24,8 @@ class Business_Riders(APIView):
 #            if cache.has_key(f'business_owner_riders:{vendor.id}'):
 #                print('Gotten from cache')
 #                return Response({'msg': cache.get(f'business_owner_riders:{vendor.id}')}, status=status.HTTP_200_OK)
-            riders = self.get_queryset(model=Logistics_partner, owner=vendor.business_owner.id)
+            #riders = self.get_queryset(model=Logistics_partner, owner=vendor.business_owner.id)
+            riders = Logistics_partner.objects.filter(owner=vendor.business_owner.id, user__is_active=True)
             riders_serializer = Logistics_partnerSerializer(riders, many=True)
 #            cache.set(f'business_owner_riders:{vendor.id}', riders_serializer.data, timeout=6000)
 #            print('Not from cache')

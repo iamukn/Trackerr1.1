@@ -125,8 +125,8 @@ class Rider(APIView):
         try:
             rider = self.get_queryset(model=Logistics_partner, pk=id)
 
-            if rider:
-                user = rider.user
+            #if rider:
+            #    user = rider.user
 
             if request.user.account_type == 'logistics' and not id == request.user.logistics_partner.id:
                 return Response({'msg': 'you are not unauthorized to delete this user'}, status=status.HTTP_401_UNAUTHORIZED)
@@ -139,10 +139,22 @@ class Rider(APIView):
             owner = request.user
             if not owner.account_type == 'business':
                 return Response({'msg': 'you cannot delete a rider'}, status=status.HTTP_400_BAD_REQUEST)
-            rider = rider.user.delete()
-            # cache the resource
-            cache.delete('business_owner_riders:{owner.id}')
-            cache.delete(f'rider_{id}_data')
+            
+            from django.utils import timezone
+            now = timezone.now()
+            
+            if rider:
+                user = rider.user
+                user.is_active = False
+                user.email = f'deleted_{user.email}'
+                user.is_deleted = True
+                user.deleted_at = now
+
+                user.save()
+                #user.delete()
+                # cache the resource
+                cache.delete('business_owner_riders:{owner.id}')
+                cache.delete(f'rider_{id}_data')
             return Response({'msg': f'rider: {user.name} deleted successfully'}, status=status.HTTP_200_OK)
 
         except Exception as e:

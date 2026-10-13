@@ -122,7 +122,6 @@ class Login(APIView):
                     token = create_affiliate_session(affiliate)
                     res = Response({'access': token}, status=status.HTTP_200_OK) if token else Response({'msg': 'an internal error occurred!'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
                     return res
-                return Response('OK', status=status.HTTP_200_OK)
             return Response({'msg': 'invalid otp, please generate a new otp'}, status=status.HTTP_400_BAD_REQUEST)
         return Response({'msg': 'email does not exist!'}, status=status.HTTP_404_NOT_FOUND)
 

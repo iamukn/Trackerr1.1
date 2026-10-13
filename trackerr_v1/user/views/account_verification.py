@@ -83,7 +83,17 @@ class VerifyAccount(APIView):
         # verify against stored hash
         stored_phone_hash = user.phone_verify_hash
         stored_email_hash = user.email_verify_hash
+
     
+        if not stored_phone_hash and not stored_email_hash:
+            return Response({'msg': 'Email and phone otp are invalid'}, status=status.HTTP_400_BAD_REQUEST)
+
+        elif not stored_email_hash:
+            return Response({'msg': 'Email otp is invalid'}, status=status.HTTP_400_BAD_REQUEST)
+
+        elif not stored_phone_hash:
+            return Response({'msg': 'Phone otp is invalid'}, status=status.HTTP_400_BAD_REQUEST)
+
         email_hash_verified = verify_otp_hash(email, email_otp, stored_email_hash)
         phone_hash_verified = verify_otp_hash(email, phone_otp, stored_phone_hash)
 

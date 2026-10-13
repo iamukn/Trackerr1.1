@@ -329,30 +329,26 @@ class Business_ownerRegistration(APIView):
                 data = request.data
                 avatar = data.get('avatar')
 
-                if avatar:
-                    data.pop('avatar')
+                referral_code = data.get('referral_code')
 
-                # check cache for already geocoded added or code a new address
-                cached_addr = cache.get(f'addr_info:{data.get("address").lower()}')
+                if referral_code:
                 
-                if cached_addr:
-                    print('cached data')
-                    address = cached_addr
+                    if len(referral_code) > 12:
+                        data.pop('referral_code')
+                    referral_code = referral_code.lower().strip()
 
-                user = UsersSerializer(data=request.data, context={'request': request})
-                
                 new_uuid = uuid4()
                 user_s3_key = ""
-                if avatar:
-                    content_type = str(avatar.content_type).split('/')[-1]
-                    print(content_type)
 
+                if avatar:
+                    data.pop('avatar')
+                    content_type = str(avatar.content_type).split('/')[-1]
                     if not content_type.lower() in ['jpg', 'jpeg', 'png']:
                         return Response({'error': "avatar must either be jpg, jpeg or png"}, status=status.HTTP_400_BAD_REQUEST)
-
                     user_s3_key = f"profile-pics/{new_uuid}.{content_type}"
-
-                    
+                
+                user = UsersSerializer(data=request.data, context={'request': request})
+                
                 terms = True if data.get('terms_and_condition') == 'true' else False 
 
                 business_data = {
@@ -377,7 +373,7 @@ class Business_ownerRegistration(APIView):
                     return Response(user.errors, status=status.HTTP_400_BAD_REQUEST)
             
                 elif business_owner.is_valid() and user.is_valid():
-                    print('Data: ', data)
+                    #print('Data: ', data)
                     if avatar:
                         upload_dp.delay(avatar.read(),user_s3_key)
                         user.save()
@@ -539,8 +535,9 @@ class Business_ownerRoute(APIView):
             avatar_key = data.pop('profile_pic_key')
 
             if name:
-                name = name.split(' ')[0].capitalize()
-                data['user']['name'] = name + '👌'
+                #name = name.split(' ')[0].capitalize()
+                name = name.capitalize()
+                data['user']['name'] = name
             data['user'].pop('created_on')
             # compute the avatar url using the key
             if avatar_key:
