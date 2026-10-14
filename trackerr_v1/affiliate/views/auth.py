@@ -120,6 +120,7 @@ class Login(APIView):
                 if is_verified:
                     # create a session token for him and return it
                     token = create_affiliate_session(affiliate)
+                    print(token)
                     res = Response({'access': token}, status=status.HTTP_200_OK) if token else Response({'msg': 'an internal error occurred!'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
                     return res
             return Response({'msg': 'invalid otp, please generate a new otp'}, status=status.HTTP_400_BAD_REQUEST)

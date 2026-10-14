@@ -337,6 +337,10 @@ class Business_ownerRegistration(APIView):
                         data.pop('referral_code')
                     referral_code = referral_code.lower().strip()
 
+                    data = data.dict()
+                    data['referral_code'] = referral_code
+
+
                 new_uuid = uuid4()
                 user_s3_key = ""
 

@@ -32,18 +32,33 @@ class GetAffiliate(APIView):
                                     "referral_code": openapi.Schema(type=openapi.TYPE_STRING, description='affiliate unique referral code'),
                                     "is_active": openapi.Schema(type=openapi.TYPE_BOOLEAN, description='true or false'),
                                     "total_coins_withdrawn":  openapi.Schema(type=openapi.TYPE_INTEGER, description='total coined withdrawn by an affiliate') 
-                                    })
+                                    }),
+                            "bank_details": openapi.Schema(type=openapi.TYPE_OBJECT,
+                                properties={
+                                    "bank_name": openapi.Schema(type=openapi.TYPE_STRING, description='bank name'),
+                                    "account_number": openapi.Schema(type=openapi.TYPE_STRING, description='account number'),
+                                    }
+                                )
                                 }
                                 )
                                 
                             }),
                 example={
-                    "email": "johndoe@example.com",
-                    "full_name": "Doe John",
-                    "referral_code": "XYYST6",
-                    "total_coins_withdrawn": 750,
-                    "is_active": True
-                    }
+                        'msg': {
+                            "affiliate": {
+                                "email": "johndoe@example.com",
+                                "full_name": "Doe John",
+                                "referral_code": "XYYST6",
+                                "total_coins_withdrawn": 750,
+                                "is_active": True
+                                },
+                            "bank_details": {
+                                "bank_name": "access bank",
+                                "account_number": "0892536383"
+                                }
+
+                        }
+                        }
                 ),
             '401': openapi.Response(
                 description='Error: Unauthorized',
@@ -80,4 +95,12 @@ class GetAffiliate(APIView):
         # remove fields for server only
         for key in ['id', 'created_at', 'updated_at']:
             data.pop(key)
-        return Response({'msg': { "affiliate" :data}}, status=status.HTTP_200_OK)
+
+        # bank info
+        user_account = user.account_details.last()
+        if user_account:
+            bank_details = {
+                "bank_name": str(user_account.bank_name).lower(),
+                "account_number": user_account.account_number,
+                    }
+            return Response({'msg': { "affiliate" :data, "bank_details": bank_details }}, status=status.HTTP_200_OK)
