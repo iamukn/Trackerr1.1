@@ -776,7 +776,7 @@ class Business_ownerRoute(APIView):
             return Response({'error': 'forbidded'}, status=status.HTTP_403_FORBIDDEN)
         
         with transaction.atomic():
-            business = Business_owner.objects.select_for_update().get(id=id)
+            business = Business_owner.objects.select_for_update().select_related('user').get(id=id)
             user = business.user
 
             data = request.data.copy()
@@ -789,7 +789,7 @@ class Business_ownerRoute(APIView):
             #avatar = data.pop('avatar')
             uuid = ''
             new_profile_pic_key = ''
-            if avatar and not isinstance(type(avatar[0]), str):
+            if avatar and not isinstance(avatar[0], str):
                 try:
                     if not str(user.business_owner.profile_pic_key) in str(avatar[0].name):
                         if str(user.business_owner.profile_pic_key).lower() == 'none':
@@ -808,6 +808,7 @@ class Business_ownerRoute(APIView):
                         update_avatar = upload_dp.delay(avatar[0].read(), new_profile_pic_key)
                         #update_avatar = upload_dp.delay(avatar[0].read(),user.business_owner.profile_pic_key)
                 except Exception as e:
+                    raise e
                     print(e)
 
             user_ser = UsersSerializer(user, data=data, partial=True)

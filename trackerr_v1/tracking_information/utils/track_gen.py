@@ -38,7 +38,11 @@ def tracking_number_generate() -> str:
         num = int(cache.get('last_tracking_sequence')) + 1
 
     else:
-        last_tracking_generated = Tracking_info.objects.all().last().parcel_number.split('TRK')
+        last_tracking_generated = Tracking_info.objects.last()
+        if last_tracking_generated:
+            last_tracking_generated = last_tracking_generated.parcel_number.split('TRK')
+        else:
+            last_tracking_generated = []
 
         if len(last_tracking_generated) <= 1 :
             num = int(205709996)
