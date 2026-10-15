@@ -16,7 +16,7 @@ class RetrieveAllView(APIView):
     permission_classes = [IsBusinessOwner,]
 
     def __init__(self):
-        
+
         #self.all_tracking = Tracking_info.objects.all()
         ...
 
@@ -24,14 +24,14 @@ class RetrieveAllView(APIView):
         page_size = 10  # Number of items per page
         page_size_query_param = 'page_size'  # Allow client to set page size
         max_page_size = 100  # Maximum allowed page size
-    
+
     @swagger_auto_schema(
         operation_summary='GET all trackings',
         operation_description='Endpoint that retrieves all tracking numbers and its information',
         tags=['trackings'],
         responses={
             '200': openapi.Response(
-                description='Retrieves all tracking information data', 
+                description='Retrieves all tracking information data',
                 schema=openapi.Schema(
                     type=openapi.TYPE_ARRAY,
                     items=openapi.Schema(
@@ -198,7 +198,7 @@ class RetrieveAllView(APIView):
                 filtered = Tracking_info.objects.filter(owner=user, status=query_status, parcel_number__icontains=multiquery_search).order_by('-id')
                 serializer = Tracking_infoSerializer(filtered, many=True)
                 return Response({'msg': serializer.data}, status=status.HTTP_200_OK)
-    
+
             # fetch data based on the query_status provided
             if query_status:
                 filtered_tracking = Tracking_info.objects.filter(owner=user, status=query_status).order_by('-id')
@@ -210,7 +210,6 @@ class RetrieveAllView(APIView):
                 filtered_tracking = Tracking_info.objects.filter(owner=user, parcel_number__icontains=multiquery_search.lower()).order_by('-id')
                 serializer = Tracking_infoSerializer(filtered_tracking, many=True)
                 return Response({'msg': serializer.data}, status=status.HTTP_200_OK)
-
 
             if cache.has_key(f'business_owner_{user.id}_generated_tracking'):
                 all_tracking = cache.get(f'business_owner_{user.id}_generated_tracking')

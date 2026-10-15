@@ -116,18 +116,17 @@ class Login(APIView):
                 stored_hash =  otp_model[0].otp_hash
 
                 is_verified = verify_otp_hash(email=email, otp=otp, stored_hash=stored_hash)
-                
+
                 if is_verified:
                     # create a session token for him and return it
                     token = create_affiliate_session(affiliate)
-                    print(token)
                     res = Response({'access': token}, status=status.HTTP_200_OK) if token else Response({'msg': 'an internal error occurred!'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
                     return res
             return Response({'msg': 'invalid otp, please generate a new otp'}, status=status.HTTP_400_BAD_REQUEST)
         return Response({'msg': 'email does not exist!'}, status=status.HTTP_404_NOT_FOUND)
 
 
-class Logout(APIView):    
+class Logout(APIView):
     authentication_classes = [AffiliateTokenAuthentication,]
     permission_classes = [IsAffiliate,]
 
@@ -193,7 +192,7 @@ class Logout(APIView):
 
         headers = request.headers
         affiliate = request.user
-        
+
         auth_token = headers.get('Authorization').split(' ')[-1].strip() if 'Authorization' in headers else False
 
         if auth_token:
