@@ -4,7 +4,7 @@ from drf_yasg import openapi
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from tracking_information.utils.tracking_class import Track_gen
+#from tracking_information.utils.tracking_class import Track_gen
 from tracking_information.serializer import Tracking_infoSerializer
 from tracking_information.models import Tracking_info
 #from shared.celery_tasks.tracking_info_tasks.verify_address_task import verify_shipping_address
@@ -27,9 +27,9 @@ class GenerateView(APIView):
     permission_classes = [IsBusinessOwner,]
     
 
-    def __init__(self):
-        
-        self.Track_gen = Track_gen() 
+    def __init__(self):   
+    #self.Track_gen = Track_gen()
+        ...
     
     # swagger generator
     @swagger_auto_schema(
@@ -218,38 +218,38 @@ class GenerateView(APIView):
             try:
                 # get user
                 user = request.user.business_owner
-                # deduct balance from the user
-                deduct_wallet(user=request.user)
-               
-                address = verify_address(address=request.data.get('shipping_address').capitalize())
+                placeId = request.data.get('placeId') 
+                address = verify_address(address=request.data.get('shipping_address').capitalize(), placeId=placeId)
                 #parcel_number = self.Track_gen.generate_tracking(vendor=request.user.name)
                 # retrieves all the data from the requuest, generate a tracking number and return to user
                 data = {
-                    "shipping_address": address.get('address').capitalize(),
+                    "shipping_address": request.data.get('shipping_address').capitalize(),
                     "destination_lat": address.get('latitude'),
                     "destination_lng": address.get('longitude'),
                     "vendor": request.user.business_owner.business_name,
                     "owner": request.user.id,
-                    "parcel_number": self.Track_gen.generate_tracking(vendor=request.user.name),
+                    #"parcel_number": self.Track_gen.generate_tracking(vendor=request.user.name),
                     "country": address.get('country').capitalize(),
                     "product_name": request.data.get('product').lower(),
                     "customer_email": request.data.get('customer_email').lower(),
                     "customer_name":  request.data.get('customer_name').lower(),
                     "quantity": request.data.get('quantity'),
                     "delivery_date": request.data.get('delivery_date'),
-                    "business_owner_lat": request.user.business_owner.latitude,
-                    "business_owner_lng": request.user.business_owner.longitude,
+                    #"business_owner_lat": request.user.business_owner.latitude,
+                    #"business_owner_lng": request.user.business_owner.longitude,
                     "customer_phone": request.data.get('phone')
                         }
                 ser = Tracking_infoSerializer(data=data)
                 if ser.is_valid():
+                    # deduct from the wallet
+                    deduct_wallet(user=request.user)
                     ser.save()
                     data = ser.data
                     # remove old cache
                     cache.delete(f'business_owner_{user.id}_generated_tracking')
                     data.pop('owner')
                     # send confirmation email
-                    send_tracking_updates.apply_async(kwargs={
+                    payload = {
                         "email": request.data.get('customer_email'),
                         "customer_name": request.data.get('customer_name').title(),
                         "parcel_number": data.get('parcel_number'),
@@ -258,15 +258,15 @@ class GenerateView(APIView):
                         "items": data.get('product_name'),
                         "eta": data.get('delivery_date'),
                         "status": data.get('status')
-                        })
-                    
+                            }
+                    send_tracking_updates.apply_async(kwargs=payload)
+                 
                     return Response(data, status=status.HTTP_201_CREATED)
                 logger.error(ser.errors)
                 return Response(ser.errors, status=status.HTTP_400_BAD_REQUEST)
 
             except ValidationError as e:
-                print('error:', e.message)
-                return Response({"error": e.message}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({"error": e.message, "msg": "insufficient fund, please top-up wallet to generate a shipping label"}, status=status.HTTP_400_BAD_REQUEST)
             except Exception as e:
                 logger.error(e)
                 return Response({"error":e}, status=status.HTTP_400_BAD_REQUEST)

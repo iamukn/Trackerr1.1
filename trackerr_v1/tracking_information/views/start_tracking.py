@@ -20,8 +20,15 @@ class StartTracking(APIView):
 
 
     def patch(self, request, *args, **kwargs):
-        parcel_number = request.data.get('parcel_number')
-        track_now = {"track_now": request.data.get('track_now')}
+        data = request.data
+        parcel_number = data.get('parcel_number')
+        track_now = {"track_now": data.get('track_now')}
+
+        rider_lat = data.get('rider_lat')
+        rider_lng = data.get('rider_lng')
+
+        track_now['business_owner_lat'] = rider_lat
+        track_now['business_owner_lng'] = rider_lng
         
         try:
             with transaction.atomic():

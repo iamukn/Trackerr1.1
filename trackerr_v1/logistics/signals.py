@@ -29,21 +29,3 @@ def send_welcome_email(sender, instance, password, **kwarg):
         )
     except Exception as e:
         logger.error(e)
-
-#@receiver(post_save, sender=Logistics_partner)
-
-#def send_welcome_email(sender, instance, created, **Kwargs):
-
-#    if created:# only send email for new users
-#        to = [instance.user.email,]
-#        username=instance.user.name
-#        account_type = instance.user.account_type
-#        password = getattr(instance.user, '_raw_password', None)
-#        try:
-            # send registration email
-#            send_reg_email.apply_async(
-#                args=[to, username, account_type, password]
-#                    )
-#        except Exception as e:
-            # Write a logging for this incase an exception occurs
-#            logger.error(e)

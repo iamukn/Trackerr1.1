@@ -5,6 +5,8 @@ from django.utils.translation import gettext_lazy as _
 from django.utils.timezone import now
 from datetime import timedelta
 from .manager import UserManager
+from django.db.models import Q
+
 """
 Custom user model to handle registration of both Business user and Logistics Partner
 """
@@ -15,8 +17,8 @@ class User(AbstractBaseUser, PermissionsMixin):
     and Logistics partner
     """
     name = models.CharField(max_length=500, null=False, blank=False, verbose_name=_('Name'))
-    email = models.EmailField(max_length=255, null=False, blank=False, unique=True, verbose_name=_('Email Address'))
-    phone_number = models.CharField(max_length=10, null=False, blank=False, unique=True, verbose_name=_('Phone'))
+    email = models.EmailField(max_length=255, null=False, unique=True, blank=False, verbose_name=_('Email Address'))
+    phone_number = models.CharField(max_length=11, null=False, blank=False, verbose_name=_('Phone'))
     address = models.CharField(max_length=500, null=False, blank=False, verbose_name=_('Address'))
     country = models.CharField(max_length=500, null=True, blank=True, verbose_name=_('Country'))
     account_type = models.CharField(max_length=15, null=False, blank=False, verbose_name=_('account_type'))
@@ -25,9 +27,17 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(auto_now_add=True)
     is_verified = models.BooleanField(default=False)
+    phone_verified = models.BooleanField(default=False)
+    email_verified = models.BooleanField(default=False)
+    phone_verify_hash = models.CharField(max_length=75, null=True, blank=True)
+    email_verify_hash = models.CharField(max_length=75, null=True, blank=True)
     wants_marketing_emails = models.BooleanField(null=False, blank=False, default=True)
+    referral_code = models.CharField(max_length=12, null=True, blank=True)
+    is_deleted = models.BooleanField(default=False)
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
     updated_on = models.DateTimeField(null=True, blank=True)
 
@@ -36,6 +46,14 @@ class User(AbstractBaseUser, PermissionsMixin):
     REQUIRED_FIELDS = ['name', 'phone_number', 'address', 'account_type']
 
     objects = UserManager()
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["phone_number"],
+                condition=Q(is_deleted=False),
+                name="unique_phone_for_non_deleted_users",
+            ),
+        ]
 
     def __str__(self):
         """ string representation of the

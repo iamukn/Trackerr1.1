@@ -71,4 +71,4 @@ class TestPasswordRecoveryEmailandChange(APITestCase):
         data = {'password1': 'password', 'password2': 'password', 'email': self.user.email, 'otp': self.otp}
         res = self.client.post(url, data=data)
         self.assertEquals(res.status_code, status.HTTP_200_OK)
-        mock_reg_email.assert_called_once_with(email=self.user.email, name=self.user.name)
+        mock_reg_email.assert_called_once_with(email=self.user.email, name=self.user.name, country=self.user.country)

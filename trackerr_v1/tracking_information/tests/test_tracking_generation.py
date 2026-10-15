@@ -42,33 +42,33 @@ class TestTrackingGenerationEndpoint(APITestCase):
 
 
     @patch('tracking_information.views.generate_tracking_view.deduct_wallet')
-    @patch('tracking_information.views.generate_tracking_view.Track_gen')
+    #@patch('tracking_information.views.generate_tracking_view.Track_gen')
     @patch('tracking_information.views.generate_tracking_view.verify_address')
-    def test_tracking_generation_by_business_owner(self, mock_verify, mock_track_gen, mock_wallet):
+    def test_tracking_generation_by_business_owner(self, mock_verify, mock_wallet):
         # test to ensure that business users only creates tracking
         url = reverse('generate-tracking')
         # mock the tracking generation method
-        mock_track_gen_instance = MagicMock(return_value=self.track_num)
+        #mock_track_gen_instance = MagicMock(return_value=self.track_num)
         # mock the generate_tracking method called by Track_gen 
-        mock_track_gen.return_value.generate_tracking = mock_track_gen_instance
+        #mock_track_gen.return_value.generate_tracking = mock_track_gen_instance
         mock_verify.return_value = self.return_value
         mock_wallet.return_value = 150.00
 
 
         res = self.client.post(url, data=self.data, format='json')
         # assert
-        mock_track_gen.assert_called_once()
+        #mock_track_gen.assert_called_once()
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertTrue(type(res.data), ReturnDict)
 
     @patch('tracking_information.views.generate_tracking_view.deduct_wallet')
     @patch('tracking_information.views.generate_tracking_view.verify_address')
-    @patch('tracking_information.views.generate_tracking_view.Track_gen')
-    def test_raises_a_404_for_missing_required_fields(self, mock_track_gen, mock_verify, mock_wallet):
+    #@patch('tracking_information.views.generate_tracking_view.Track_gen')
+    def test_raises_a_404_for_missing_required_fields(self, mock_verify, mock_wallet):
         # test to ensure that a 404 is raised if required fields aren't provided
-        mock_track_gen_instance = MagicMock()
-        mock_track_gen_instance.return_value = self.track_num
-        mock_track_gen.return_value.generate_tracking = mock_track_gen_instance
+        #mock_track_gen_instance = MagicMock()
+        #mock_track_gen_instance.return_value = self.track_num
+        #mock_track_gen.return_value.generate_tracking = mock_track_gen_instance
 
         mock_verify.return_value = self.return_value
         mock_wallet.return_value = 150.0
@@ -81,14 +81,14 @@ class TestTrackingGenerationEndpoint(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
     @patch('tracking_information.views.generate_tracking_view.deduct_wallet')
-    @patch('tracking_information.views.generate_tracking_view.Track_gen')
-    def test_raises_a_401_when_generating_tracking_by_a_non_business_owner(self, mock_track_gen, mock_wallet):
+    #@patch('tracking_information.views.generate_tracking_view.Track_gen')
+    def test_raises_a_401_when_generating_tracking_by_a_non_business_owner(self, mock_wallet):
         # method raises a 401 if a non business owner hits the generate tracking number endpoint
         #mocks the Track_gen and verify_address methods that yield dynamic data
-        mock_track_gen_instance = MagicMock(return_value=self.track_num)
+        #mock_track_gen_instance = MagicMock(return_value=self.track_num)
         #mock_verify_address_instance = MagicMock(return_value=self.return_value)
-        mock_track_gen_instance.generate_tracking_number.return_value = mock_track_gen_instance
-        mock_track_gen.return_value.generate_tracking = mock_track_gen_instance
+        #mock_track_gen_instance.generate_tracking_number.return_value = mock_track_gen_instance
+        #mock_track_gen.return_value.generate_tracking = mock_track_gen_instance
         mock_wallet.return_value = 150.0
         #mock_verify_address.return_value.get = mock_verify_address_instance
         # makes the api query
@@ -101,15 +101,15 @@ class TestTrackingGenerationEndpoint(APITestCase):
 
     @patch('tracking_information.views.generate_tracking_view.deduct_wallet')
     @patch('tracking_information.views.generate_tracking_view.verify_address')
-    @patch('tracking_information.views.generate_tracking_view.Track_gen')
-    def test_return_tracking_history_for_a_unique_email(self, mock_track_gen, mock_verify, mock_wallet ):
-        mock_track_gen_instance = MagicMock()
+    #@patch('tracking_information.views.generate_tracking_view.Track_gen')
+    def test_return_tracking_history_for_a_unique_email(self,mock_verify, mock_wallet ):
+        #mock_track_gen_instance = MagicMock()
         #mock_verify_address_instance = MagicMock()
-        mock_track_gen_instance.return_value = self.track_num
+        #mock_track_gen_instance.return_value = self.track_num
         #mock_verify_address_instance.return_value = self.return_value
         mock_wallet.return_value = 150.00
 
-        mock_track_gen.return_value.generate_tracking = mock_track_gen_instance
+        #mock_track_gen.return_value.generate_tracking = mock_track_gen_instance
         mock_verify.return_value = self.return_value
 
         url = reverse('generate-tracking')

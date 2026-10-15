@@ -44,11 +44,20 @@ class CompleteSignup(APIView):
                 user_serializer = UsersSerializer(user, data={'is_verified': True,
                     'avatar': f'{CDN_URL}/{str(avatar)}'}, partial=True)
 
-                if rider_serializer.is_valid() and user_serializer.is_valid():
+                rider_valid = rider_serializer.is_valid()
+                user_valid = user_serializer.is_valid()
+
+                if rider_valid and user_valid:
                     user_serializer.save()
                     rider_serializer.save()
                     return Response({"msg": "success"}, status=status.HTTP_200_OK)
-                return Response({'msg': "error"},status=status.HTTP_400_BAD_REQUEST)
+                # Collect errors from both serializers
+                errors = {}
+                if not rider_valid:
+                    errors['rider'] = rider_serializer.errors
+                if not user_valid:
+                    errors['user'] = user_serializer.errors
+                return Response({'msg': "failed", "errors": errors},status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             raise(e)
             return Response({'msg': "error", "details": str(e)},status=status.HTTP_500_INTERNAL_SERVER_ERROR)

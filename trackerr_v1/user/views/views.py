@@ -388,10 +388,18 @@ class UserView(UsersView):
         if not request.user:
             return Response({'detail': 'unauthorized'}, status=status.HTTP_401_UNAUTHORIZED)
 
+        from django.utils import timezone
         try:
+            now = timezone.now()
             #fetches the user from the Users model and deletes it
             user = User.objects.get(id=pk)
-            user.delete()
+            #print(f'set {user.name} as inactive')
+            user.is_active = False
+            user.is_deleted = True
+            user.email = f'deleted_{user.email}'
+            user.deleted_at = now
+            user.save()
+            #user.delete()
             
             #ADD A FUNCTIONALITY THAT EMAILS THE USER THAT THEIR ACCOUNT HAS JUST BEEN DELETED
             return Response({'status': 'user deleted sucessfully'}, status=status.HTTP_204_NO_CONTENT)

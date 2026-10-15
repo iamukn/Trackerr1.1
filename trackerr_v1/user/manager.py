@@ -21,6 +21,7 @@ class UserManager(BaseUserManager):
         if not name or not phone_number:
             raise ValueError(_('name or phone number is missing!'))
         
+        extra_fields['is_active'] = True
         groups_fields = extra_fields.pop('groups', None)
         permissions_field = extra_fields.pop('user_permissions', None)
         user = self.model(email=email, name=name, phone_number=phone_number, address=address, account_type=account_type, **extra_fields)

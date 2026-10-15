@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import views, business_owners_count, business_owner_balance, update_dp
+from .views import views, maps, business_owners_count, business_owner_balance, update_dp
 
 """ 
    Urls to handle requests for the Business owners
@@ -13,3 +13,11 @@ urlpatterns = [
     path('business-owners-count/',business_owners_count.Business_count.as_view(), name='business-counts' ),
     path('business-owner/balance/', business_owner_balance.Business_ownerBalance.as_view(), name='balance'),
         ]
+
+map_patterns = [
+    path('map/autocomplete', maps.Autocomplete.as_view(), name='autocomplete'),
+    path('map/polyline', maps.Polyline.as_view(), name='polyline'),
+        ]
+
+
+urlpatterns +=  map_patterns

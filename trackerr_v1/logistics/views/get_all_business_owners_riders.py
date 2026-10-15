@@ -24,7 +24,8 @@ class Business_Riders(APIView):
 #            if cache.has_key(f'business_owner_riders:{vendor.id}'):
 #                print('Gotten from cache')
 #                return Response({'msg': cache.get(f'business_owner_riders:{vendor.id}')}, status=status.HTTP_200_OK)
-            riders = self.get_queryset(model=Logistics_partner, owner=vendor.business_owner.id)
+            #riders = self.get_queryset(model=Logistics_partner, owner=vendor.business_owner.id)
+            riders = Logistics_partner.objects.filter(owner=vendor.business_owner.id, user__is_active=True)
             riders_serializer = Logistics_partnerSerializer(riders, many=True)
 #            cache.set(f'business_owner_riders:{vendor.id}', riders_serializer.data, timeout=6000)
 #            print('Not from cache')
@@ -32,7 +33,7 @@ class Business_Riders(APIView):
         except User.business_owner.RelatedObjectDoesNotExist:
             return Response({'msg': {'you are not authorized to view this resource'}}, status=status.HTTP_401_UNAUTHORIZED)
         except Http404:
-            print('Wahala')
+            return Response({'msg': 'riders not found'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             raise(e)
             return Response({'msg': {'internal server error'}}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

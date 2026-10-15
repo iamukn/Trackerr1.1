@@ -11,7 +11,7 @@ def send_recovery_email(self,email, new_password):
         "subject": "Password reset",
         "recipient_list": [email,],
         "message": "Your OTP is %(password)s" %{'password': new_password},
-        "from_email": settings.EMAIL_HOST_USER,
+        "from_email": settings.EMAIL_SENDER,
         "fail_silently": False,
             }
     try:

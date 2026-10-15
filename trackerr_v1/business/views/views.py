@@ -329,48 +329,36 @@ class Business_ownerRegistration(APIView):
                 data = request.data
                 avatar = data.get('avatar')
 
-                if avatar:
-                    data.pop('avatar')
+                referral_code = data.get('referral_code')
 
-                # check cache for already geocoded added or code a new address
-                cached_addr = cache.get(f'addr_info:{data.get("address").lower()}')
+                if referral_code:
                 
-                if cached_addr:
-                    print('cached data')
-                    address = cached_addr
-                else:
-                    #address = verify_address(address=data.get('address', '').capitalize())
-                # added the country
-#                data['country'] = address.get('country', '')
-                
-#                if data['country']:
-#                    data['country']=data['country'].lower()
-                    ...
+                    if len(referral_code) > 12:
+                        data.pop('referral_code')
+                    referral_code = referral_code.lower().strip()
 
-                
-                # handle errors from address field
-#                if 'error' in address:
-#                    return Response({'error': 'address cannot be found on the map, please enter a valid address'}, status=status.HTTP_404_NOT_FOUND)
+                    data = data.dict()
+                    data['referral_code'] = referral_code
 
-                user = UsersSerializer(data=request.data, context={'request': request})
-                
+
                 new_uuid = uuid4()
                 user_s3_key = ""
-                if avatar:
-                    content_type = str(avatar.content_type).split('/')[-1]
-                    print(content_type)
 
+                if avatar:
+                    data.pop('avatar')
+                    content_type = str(avatar.content_type).split('/')[-1]
                     if not content_type.lower() in ['jpg', 'jpeg', 'png']:
                         return Response({'error': "avatar must either be jpg, jpeg or png"}, status=status.HTTP_400_BAD_REQUEST)
-
                     user_s3_key = f"profile-pics/{new_uuid}.{content_type}"
+                
+                user = UsersSerializer(data=request.data, context={'request': request})
+                
+                terms = True if data.get('terms_and_condition') == 'true' else False 
 
-                    
                 business_data = {
-                    'business_name': request.data.get('business_name'),
-                    'service': request.data.get('service'),
-                    #'latitude': address.get('latitude'),
-                    #'longitude': address.get('longitude'),
+                    'business_name': data.get('business_name'),
+                    'service': data.get('service'),
+                    'terms_and_condition': data.get('terms_and_condition'),
                     'business_owner_uuid': str(new_uuid),
                     'profile_pic_key': user_s3_key
                         }
@@ -389,7 +377,7 @@ class Business_ownerRegistration(APIView):
                     return Response(user.errors, status=status.HTTP_400_BAD_REQUEST)
             
                 elif business_owner.is_valid() and user.is_valid():
-                    print('Data: ', data)
+                    #print('Data: ', data)
                     if avatar:
                         upload_dp.delay(avatar.read(),user_s3_key)
                         user.save()
@@ -551,8 +539,9 @@ class Business_ownerRoute(APIView):
             avatar_key = data.pop('profile_pic_key')
 
             if name:
-                name = name.split(' ')[0].capitalize()
-                data['user']['name'] = name + '👌'
+                #name = name.split(' ')[0].capitalize()
+                name = name.capitalize()
+                data['user']['name'] = name
             data['user'].pop('created_on')
             # compute the avatar url using the key
             if avatar_key:
@@ -787,7 +776,7 @@ class Business_ownerRoute(APIView):
             return Response({'error': 'forbidded'}, status=status.HTTP_403_FORBIDDEN)
         
         with transaction.atomic():
-            business = Business_owner.objects.select_for_update().get(id=id)
+            business = Business_owner.objects.select_for_update().select_related('user').get(id=id)
             user = business.user
 
             data = request.data.copy()
@@ -800,7 +789,7 @@ class Business_ownerRoute(APIView):
             #avatar = data.pop('avatar')
             uuid = ''
             new_profile_pic_key = ''
-            if avatar and not isinstance(type(avatar[0]), str):
+            if avatar and not isinstance(avatar[0], str):
                 try:
                     if not str(user.business_owner.profile_pic_key) in str(avatar[0].name):
                         if str(user.business_owner.profile_pic_key).lower() == 'none':
@@ -819,6 +808,7 @@ class Business_ownerRoute(APIView):
                         update_avatar = upload_dp.delay(avatar[0].read(), new_profile_pic_key)
                         #update_avatar = upload_dp.delay(avatar[0].read(),user.business_owner.profile_pic_key)
                 except Exception as e:
+                    raise e
                     print(e)
 
             user_ser = UsersSerializer(user, data=data, partial=True)

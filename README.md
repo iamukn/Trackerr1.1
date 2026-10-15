@@ -7,6 +7,7 @@ A Django-based backend for the Trackerr application, handling APIs, Celery tasks
 ## Important Dependency
 
 Before installing the Python requirements, make sure to install the following system packages:
+Also Note that this app depends on Python 3.8
 
 ```bash
 sudo apt install -y libpq-dev gcc python3-dev

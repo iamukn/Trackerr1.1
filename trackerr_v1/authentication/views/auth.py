@@ -10,6 +10,7 @@ from drf_yasg import openapi
 from authentication.logger_config import logger
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework_simplejwt.views import TokenObtainPairView
 import time
@@ -111,7 +112,17 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         response = super().post(request, *args, **kwargs)
         if response.status_code == 200:
             email = request.data.get('email').lower()
-            name = User.objects.get(email=email).name
+            user = User.objects.get(email=email)
+            name = user.name
+            country = user.country
             # sends a login email to the user
-            email = send_login_email.apply_async(args=[name, email], retry=False)   
+            email = send_login_email.apply_async(args=[name, email, country], retry=False)   
             return response
+
+
+class Authenticate(APIView):
+
+    permission_classes=[IsBusinessOrLogisticsOwner,]
+
+    def get(self, request):
+        return Response(status=status.HTTP_200_OK)

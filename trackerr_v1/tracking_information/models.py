@@ -12,7 +12,7 @@ def get_current_time_str():
     return timezone.now().strftime('%H:%Mhrs')
 
 class Tracking_info(models.Model):
-    parcel_number = models.CharField(max_length=15, unique=True, null=False, blank=False)
+    parcel_number = models.CharField(max_length=15, unique=True, null=True, blank=True)
     date_of_purchase = models.DateField(auto_now_add=date.today, null=False, blank=False)
     time_of_purchase = models.CharField(default=get_current_time_str, null=False, blank=False)
     #time_of_purchase = models.TimeField(auto_now_add=True)
@@ -41,6 +41,7 @@ class Tracking_info(models.Model):
     status = models.CharField(max_length=15, null=True, blank=True, default="pending")
     track_now = models.BooleanField(default=False, null=False, blank=False)
     vendor = models.CharField(max_length=255, null=False, blank=False)
+    delivery_otp = models.CharField(max_length=6, null=True, blank=True)
     owner = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
     
     def __str__(self):
@@ -48,13 +49,15 @@ class Tracking_info(models.Model):
 
     class Meta:
         indexes = [
-            models.Index(fields=['owner']),
-            models.Index(fields=['date_of_purchase']),
-            models.Index(fields=['customer_email']),
-            models.Index(fields=['status']),
-            models.Index(fields=['owner', 'date_of_purchase']),
+            models.Index(
+                fields=['owner', 'status', '-id'],
+                name='tracking_owner_status_id_idx'
+            ),
+            models.Index(
+                fields=['owner', '-id'],
+                name='tracking_owner_id_idx'
+            ),
         ]
-
 
 class GeoLocationData(models.Model):
     raw_address = models.CharField(max_length=400, null=False, blank=False, unique=True, default='')

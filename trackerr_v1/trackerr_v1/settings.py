@@ -15,7 +15,7 @@ from pathlib import Path
 from datetime import timedelta
 import os
 import dj_database_url
-
+from corsheaders.defaults import default_headers
 
 #env = environ.Env(
 #    DEBUG=(bool, False)
@@ -37,6 +37,10 @@ SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(env('DEBUG'))
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    "idempotency-key",
+]
 
 ALLOWED_HOSTS = []
 ALLOWED_HOST_IP = env('ALLOWED_HOST_IP').split(',')
@@ -70,9 +74,11 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=2),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=14),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=30),
     "ROTATE_REFRESH_TOKENS": True,
+    "BLACKLIST_AFTER_ROTATION": True,
+    'UPDATE_LAST_LOGIN': True,
 }
 
 INSTALLED_APPS = [
@@ -88,9 +94,11 @@ INSTALLED_APPS = [
     "business",
     "logistics",
     "wallet",
+    "affiliate",
     "rest_framework",
     "authentication",
     "tracking_information",
+    "notifications",
     "drf_yasg",
     "rest_framework_simplejwt.token_blacklist",
     "corsheaders",
@@ -128,7 +136,7 @@ ROOT_URLCONF = "trackerr_v1.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -162,16 +170,22 @@ SWAGGER_SETTINGS = {
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+TRACKERR_ENV = env('TRACKERR_ENV')
+
 DATABASES = {
     "default": {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'mydb',
-        'USER': 'eyen',
-        'PASSWORD': env('PASSWORD'),
+        'NAME': env('POSTGRES_NAME'),
+        'USER': env('POSTGRES_USER'),
+        'PASSWORD': env('POSTGRES_PASSWORD'),
         'HOST': env('POSTGRES_HOST'),
         'PORT': 5432,
+        "OPTIONS": {
+            "sslmode": "require"
+        },
     }
 }
+
 
 #database_url= env('RENDER_PG_URL')
 #DATABASES['default'] = dj_database_url.parse(database_url, conn_max_age=600, ssl_require=True)
@@ -230,12 +244,13 @@ CELERY_TASK_SERIALIZER = env('CELERY__TASK_SERIALIZER')
 
 # Email configurations
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = True
-EMAIL_PORT = 465 if EMAIL_USE_SSL else 587
+EMAIL_HOST = "smtp-relay.brevo.com" #'smtp.gmail.com'
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
+EMAIL_PORT = 587
 EMAIL_HOST_USER = env('EMAIL')
 EMAIL_HOST_PASSWORD = env('EMAIL_PASSWORD')
+EMAIL_SENDER= env('EMAIL_SENDER')
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

@@ -12,10 +12,14 @@ from logistics.models import Logistics_partner
 from logistics.serializer import Logistics_partnerSerializer
 #from shared.celery_tasks.tracking_info_tasks.verify_address_task import verify_shipping_address as validate
 from tracking_information.utils.validate_shipping_address import verify_address
+from tracking_information.utils.get_nearby_deliveries import get_nearby_deliveries
 from shared.celery_tasks.utils_tasks.send_tracking_email import send_tracking_updates_email as send_tracking_updates
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.core.cache import cache
+from shared.celery_tasks.utils_tasks.send_reg_email import expo_notification
+from shared.celery_tasks.utils_tasks import send_sms 
+from shared.celery_tasks.utils_tasks.send_whatsapp_msg import send_whatsapp_update
 
 class UpdateTracking(APIView):
     permission_classes = [IsBusinessOrLogistics, ]
@@ -54,11 +58,8 @@ class UpdateTracking(APIView):
                 
                 if old_addr and address:
                     if not address.lower() == obj.shipping_address.lower():
-                        # get the address coordinate
-                        # add the coordinate to destination_lat and destination_lng
-                        # add the full address to shipping_address
-                        #address = validate.apply_async(kwargs={'address': address}).get()
-                        address = verify_address(address=address.capitalize())
+                        placeId = data.get('placeId') 
+                        address = verify_address(address=address.capitalize(), placeId=placeId)
                         data['country'] = address.get('country').lower()
                         data['shipping_address'] = old_addr.lower()
                         data['destination_lat'] = str(address.get('latitude')).lower()
@@ -66,16 +67,36 @@ class UpdateTracking(APIView):
 
                 # initiate an atomic transaction
                 try:
-                    serializer = Tracking_infoSerializer(obj, data=data, partial=True)
+                    import random
                     tracking_status = data.get('status')
+                    delivery_otp = random.randint(100000, 999999)
+                    data = {**data, "delivery_otp": str(delivery_otp)} if tracking_status.lower() == 'in transit' else data
+                    serializer = Tracking_infoSerializer(obj, data=data, partial=True)
+                
                     if serializer.is_valid():
+                        rider_expo_token = ''
                         if 'rider_uuid' in data:
                             #rider = get_object_or_404(Logistics_partner, logistics_owner_uuid=data.get('rider_uuid'))
                             rider = Logistics_partner.objects.select_for_update().get(logistics_owner_uuid=data.get('rider_uuid'))
                             rider_serializer = Logistics_partnerSerializer(rider, data={ "total_assigned_orders" : int(rider.total_assigned_orders + 1)}, partial=True)
+                            rider_expo_token = rider.expo_notif_token
                             if rider_serializer.is_valid():
+                                
                                 rider_serializer.save()
                         serializer.save()
+                        # Send Push Notification
+                        if 'delivery_otp' in serializer.data:
+                            serializer.data.pop('delivery_otp')
+                        track_data = serializer.data
+
+                        tracking_status = data.get('status') 
+
+                        if tracking_status == 'assigned': 
+                            expo_notification.apply_async(
+                                kwargs={'customer_name':track_data.get('customer_name'),
+                                'expo_token': rider_expo_token , 'parcel_number': track_data.get('parcel_number'),
+                                'delivery_address': track_data.get('shipping_address')}
+                                )
 
                         if request.user.account_type == 'business':
                             cache.delete(f'business_owner_{request.user.id}_generated_tracking')
@@ -93,9 +114,47 @@ class UpdateTracking(APIView):
                                     rider_serializer = Logistics_partnerSerializer(rider, data={ "total_delivery" : int(rider.total_delivery + 1)}, partial=True)
                                     if rider_serializer.is_valid():
                                         rider_serializer.save()
-                            if data.get('status').lower() in ['assigned', 'delivered', 'returned', 'cancelled', 'canceled' ]:
-                                t_data = serializer.data
 
+                            t_data = serializer.data
+                            print(t_data, delivery_otp)
+                            if data.get('status').lower() in ['in transit', 'delivered', 'returned', 'assigned']:
+                                # send text message
+
+                                base_payload = {
+                                    'parcel_number': t_data.get('parcel_number'),
+                                    'name': t_data.get('customer_name').capitalize(),
+                                    'status': t_data.get('status'),
+                                    'vendor': t_data.get('vendor'),
+                                    'country': request.user.country,
+                                    'phone': t_data.get('customer_phone')
+                                        }
+
+                                sms_payload = base_payload.copy()
+
+                                # send sms  and whatsapp
+
+                                #send_sms.send_tracking_update_sms.apply_async(
+                                #    kwargs={**sms_payload}
+                                #        )
+
+                                # send otp for parcel collection via sms
+                                if tracking_status.lower() == 'in transit':
+                                    #print('Sending Otp:::', delivery_otp)
+                                    send_sms.send_delivery_otp.apply_async(
+                                        kwargs={**sms_payload,"otp": delivery_otp}   
+                                        )
+                                # whatsapp
+                                whatsapp_payload = base_payload.copy()
+                                whatsapp_payload['rider_name'] = t_data.get('rider_name')
+                                whatsapp_payload['rider_phone'] = t_data.get('rider_phone')
+                                whatsapp_payload['customer_name'] = t_data.get('customer_name')
+
+                                send_whatsapp_update.apply_async(
+                                    kwargs=whatsapp_payload
+                                        )
+
+                            if data.get('status').lower() in ['assigned', 'delivered', 'returned', 'cancelled', 'canceled' ]:
+                                # send emails
                                 if data.get('status').lower() == 'assigned':
 
                                     send_tracking_updates.apply_async(
@@ -143,7 +202,10 @@ class UpdateTracking(APIView):
                                             )
                                 else:
                                     print('Status is not one of the required statuses')
-                                    ...
+                        if request.user.account_type == 'logistics' and data.get('status').lower() == 'in transit':
+                            nearby = get_nearby_deliveries(parcel_data=t_data, rider=request.user.logistics_partner)
+                            print('nearby:::', nearby)
+                            return Response({'nearby_deliveries': nearby}, status=status.HTTP_200_OK)
                         return Response(status=status.HTTP_204_NO_CONTENT)
                     return Response({'msg': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
