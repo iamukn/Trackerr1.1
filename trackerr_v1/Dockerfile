@@ -1,4 +1,4 @@
-FROM python:3.8-slim AS builder
+FROM python:3.12-slim AS builder
 
 WORKDIR /app
 
@@ -15,7 +15,7 @@ RUN pip install --no-cache-dir \
     -r requirements.txt
 
 
-FROM python:3.8-slim
+FROM python:3.12-slim
 
 WORKDIR /app
 

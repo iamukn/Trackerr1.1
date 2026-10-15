@@ -1,6 +1,6 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from user.models import User 
+from user.models import User
 import uuid
 
 """
@@ -17,7 +17,7 @@ class Business_owner(models.Model):
     latitude = models.CharField(max_length=30, null=True, blank=True, verbose_name=_('latitude'))
     service = models.CharField(max_length=200, null=False, blank=False, verbose_name=_('services'), default='parcel delivery')
     business_name = models.CharField(max_length=500, null=False, blank=False, unique=True, verbose_name=_('business name'))
-    business_owner_uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    business_owner_uuid = models.UUIDField(default=uuid.uuid4, null=True, blank=True, editable=False, unique=True)
     profile_pic_key = models.CharField(max_length=200, null=True, blank=True)
     subscription_type = models.CharField(max_length=20, null=False, blank=False, default="payu")
     terms_and_condition = models.BooleanField(null=True, blank=True)
