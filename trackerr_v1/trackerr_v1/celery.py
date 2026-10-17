@@ -26,4 +26,7 @@ def debug_task(self):
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender: Celery, **kwargs):
     from shared.celery_tasks.scheduled_tasks.rider_tasks import handle_rider_status
+    from shared.celery_tasks.scheduled_tasks.payment_verify import verify_payment
+    sender.add_periodic_task(10.0, verify_payment.s(), name='verify pending payment')
+    # sets rider off when no updates is made
     sender.add_periodic_task(30.0, handle_rider_status.s(), name='check if a rider is still online every 30s')

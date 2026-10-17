@@ -31,7 +31,7 @@ class GetAffiliate(APIView):
                                     "full_name": openapi.Schema(type=openapi.TYPE_STRING, description='affiliate fullname'),
                                     "referral_code": openapi.Schema(type=openapi.TYPE_STRING, description='affiliate unique referral code'),
                                     "is_active": openapi.Schema(type=openapi.TYPE_BOOLEAN, description='true or false'),
-                                    "total_coins_withdrawn":  openapi.Schema(type=openapi.TYPE_INTEGER, description='total coined withdrawn by an affiliate') 
+                                    "total_coins_withdrawn":  openapi.Schema(type=openapi.TYPE_INTEGER, description='total coined withdrawn by an affiliate')
                                     }),
                             "bank_details": openapi.Schema(type=openapi.TYPE_OBJECT,
                                 properties={
@@ -41,7 +41,7 @@ class GetAffiliate(APIView):
                                 )
                                 }
                                 )
-                                
+
                             }),
                 example={
                         'msg': {
@@ -98,9 +98,13 @@ class GetAffiliate(APIView):
 
         # bank info
         user_account = user.account_details.last()
+        bank_details = {
+            "bank_name": "",
+            "account_number": ""
+                }
         if user_account:
             bank_details = {
                 "bank_name": str(user_account.bank_name).lower(),
                 "account_number": user_account.account_number,
                     }
-            return Response({'msg': { "affiliate" :data, "bank_details": bank_details }}, status=status.HTTP_200_OK)
+        return Response({'msg': { "affiliate" :data, "bank_details": bank_details }}, status=status.HTTP_200_OK)
