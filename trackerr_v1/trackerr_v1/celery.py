@@ -1,5 +1,6 @@
 import os
 from celery import Celery
+from celery.schedules import crontab
 
 # Set the default Django settings module for the 'celery' program.
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'trackerr_v1.settings')
@@ -26,7 +27,7 @@ def debug_task(self):
 @app.on_after_configure.connect
 def setup_periodic_tasks(sender: Celery, **kwargs):
     from shared.celery_tasks.scheduled_tasks.rider_tasks import handle_rider_status
-    from shared.celery_tasks.scheduled_tasks.payment_verify import verify_payment
-    sender.add_periodic_task(10.0, verify_payment.s(), name='verify pending payment')
+    from shared.celery_tasks.scheduled_tasks.payment_verify import pending_payment
+    sender.add_periodic_task(crontab(hour=0, minute=0), pending_payment.s(), name='verify pending payment')
     # sets rider off when no updates is made
-    sender.add_periodic_task(30.0, handle_rider_status.s(), name='check if a rider is still online every 30s')
+    #sender.add_periodic_task(30.0, handle_rider_status.s(), name='check if a rider is still online every 30s')

@@ -18,7 +18,7 @@ def handle_rider_state():
 
         time_diff = now - updated_on
         time_diff = int(time_diff.total_seconds())
-        
+
         if time_diff > 120:
             # uncomment the set_rider call below so that the heartbeat can function
             set_rider_offline(rider)

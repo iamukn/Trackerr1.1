@@ -42,11 +42,11 @@ class PaymentDeposit(APIView):
 
         if not amount:
             return Response({'msg': 'error', 'details': "amount is required"}, status=status.HTTP_400_BAD_REQUEST)
-        
+
 
         try:
             # confirm if idempotency key already exist and status is pending,
-            #if it does send the existing authorization url 
+            #if it does send the existing authorization url
             key_exist = validate_idempotency_key(idempotency_key)
 
             if key_exist:
@@ -54,7 +54,7 @@ class PaymentDeposit(APIView):
             # initialize payment
             currency = 'NGN' if request.user.country == 'nigeria' else 'GHS'
             payment_initialized = initialize_payment(email=email, amount=amount, country=request.user.country, currency=currency)
-            
+
             data = {
                 'email' : email.lower(),
                 'amount': amount,
@@ -106,9 +106,11 @@ class PaymentWebhook(APIView):
         data = request.data
         if data:
             base_data = data.get('data')
+            print(data)
+            print(base_data)
             # do nothing if it's a test domain
             if base_data.get('domain') == 'test':
-                print('this is a test data::: ', base_data)
+                #print('this is a test data::: ', base_data)
                 return Response(status=status.HTTP_204_NO_CONTENT)
 
             # get payment object using reference
