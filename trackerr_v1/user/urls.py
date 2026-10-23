@@ -10,6 +10,7 @@ from .views import (
 
 urlpatterns = [
     path('users/send-verification-code/', verify.SendVerificationCode.as_view(), name='send-verification-code'),
+    path('users/sms-webhook/', verify.SmsWebhook.as_view(), name='sms-webhook'),
     path('users/account-verify/', verify.VerifyAccount.as_view(), name='account-verify'),
     path('users/update-password/', change_password.UpdatePassword.as_view(), name='update-password'),
     path('users/', views.UsersView.as_view(), name='users'),

@@ -59,7 +59,7 @@ class SendVerificationCode(APIView):
                             message = f"TrackerrGo OTP: Your phone number verification code is {otp}"
 
                             send_sms.apply_async(
-                                kwargs={'country': country, 'phone': phone, 'message': message}
+                                    kwargs={'country': country, 'phone': phone, 'message': message, 'reason': 'verify otp'}
                                     )
                             return Response({'msg': 'sms sent successfully'}, status=status.HTTP_200_OK)
         except Exception as e:
@@ -75,7 +75,7 @@ class VerifyAccount(APIView):
 
         data = request.data
         user = request.user
-        
+
         email = user.email
         #get the phone and email code
         phone_otp = data.get('phoneCode')
@@ -84,7 +84,7 @@ class VerifyAccount(APIView):
         stored_phone_hash = user.phone_verify_hash
         stored_email_hash = user.email_verify_hash
 
-    
+
         if not stored_phone_hash and not stored_email_hash:
             return Response({'msg': 'Email and phone otp are invalid'}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -109,3 +109,27 @@ class VerifyAccount(APIView):
             if serializer.is_valid():
                 serializer.save()
             return Response({"msg": "account verification successful"},status=status.HTTP_200_OK)
+
+
+class SmsWebhook(APIView):
+
+    permission_classes = [AllowAny,]
+
+
+    def post(self, request):
+
+        data = request.data
+
+        message_id = data.get('message_id')
+        if message_id:
+
+            from user.models import SMSSent
+            from django.utils import timezone
+
+            sms = SMSSent.objects.filter(message_id=message_id).first()
+
+            if sms:
+                sms.status = 'delivered' if data.get('status').lower() == 'accepted' else data.get('status').lower()
+                sms.updated_at = timezone.now()
+                sms.save()
+        return Response(status=200)

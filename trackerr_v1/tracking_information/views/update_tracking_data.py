@@ -18,7 +18,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.core.cache import cache
 from shared.celery_tasks.utils_tasks.send_reg_email import expo_notification
-from shared.celery_tasks.utils_tasks import send_sms 
+from shared.celery_tasks.utils_tasks import send_sms
 from shared.celery_tasks.utils_tasks.send_whatsapp_msg import send_whatsapp_update
 
 class UpdateTracking(APIView):
@@ -28,12 +28,12 @@ class UpdateTracking(APIView):
         #obj = get_object_or_404(klass=Tracking_info, parcel_number=num.upper())
         obj = Tracking_info.objects.select_for_update().get(parcel_number=num.upper())
         return obj
-    
+
 
     def patch(self, request, num, *args, **kwargs):
         with transaction.atomic():
             obj = self.get_queryset(num=num)
-            
+
             if obj.owner == request.user or obj.rider.user == request.user:
 
                 # get the data and update it
@@ -52,13 +52,13 @@ class UpdateTracking(APIView):
                     if serializer.is_valid():
                         serializer.save()
                         return Response(status=status.HTTP_204_NO_CONTENT)
-                        
+
                 old_addr = data.get('shipping_address')
                 address = data.pop('shipping_address') if 'shipping_address' in data else ""
-                
+
                 if old_addr and address:
                     if not address.lower() == obj.shipping_address.lower():
-                        placeId = data.get('placeId') 
+                        placeId = data.get('placeId')
                         address = verify_address(address=address.capitalize(), placeId=placeId)
                         data['country'] = address.get('country').lower()
                         data['shipping_address'] = old_addr.lower()
@@ -70,9 +70,10 @@ class UpdateTracking(APIView):
                     import random
                     tracking_status = data.get('status')
                     delivery_otp = random.randint(100000, 999999)
-                    data = {**data, "delivery_otp": str(delivery_otp)} if tracking_status.lower() == 'in transit' else data
+                    if tracking_status:
+                        data = {**data, "delivery_otp": str(delivery_otp)} if tracking_status.lower() == 'in transit' else data
                     serializer = Tracking_infoSerializer(obj, data=data, partial=True)
-                
+
                     if serializer.is_valid():
                         rider_expo_token = ''
                         if 'rider_uuid' in data:
@@ -81,7 +82,7 @@ class UpdateTracking(APIView):
                             rider_serializer = Logistics_partnerSerializer(rider, data={ "total_assigned_orders" : int(rider.total_assigned_orders + 1)}, partial=True)
                             rider_expo_token = rider.expo_notif_token
                             if rider_serializer.is_valid():
-                                
+
                                 rider_serializer.save()
                         serializer.save()
                         # Send Push Notification
@@ -89,9 +90,9 @@ class UpdateTracking(APIView):
                             serializer.data.pop('delivery_otp')
                         track_data = serializer.data
 
-                        tracking_status = data.get('status') 
+                        tracking_status = data.get('status')
 
-                        if tracking_status == 'assigned': 
+                        if tracking_status == 'assigned':
                             expo_notification.apply_async(
                                 kwargs={'customer_name':track_data.get('customer_name'),
                                 'expo_token': rider_expo_token , 'parcel_number': track_data.get('parcel_number'),
@@ -141,7 +142,7 @@ class UpdateTracking(APIView):
                                 if tracking_status.lower() == 'in transit':
                                     #print('Sending Otp:::', delivery_otp)
                                     send_sms.send_delivery_otp.apply_async(
-                                        kwargs={**sms_payload,"otp": delivery_otp}   
+                                            kwargs={**sms_payload,"otp": delivery_otp, "reason": "delivery otp"}
                                         )
                                 # whatsapp
                                 whatsapp_payload = base_payload.copy()

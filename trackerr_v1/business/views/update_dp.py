@@ -11,7 +11,7 @@ from user.serializers import UsersSerializer
 from business.models import Business_owner
 from user.models import User
 from business.serializers import Business_ownerSerializer
-from shared.celery_tasks.business_owners_task.upload_dp import upload_dp 
+from shared.celery_tasks.business_owners_task.upload_dp import upload_dp
 from os import environ
 from uuid import uuid4
 
@@ -95,6 +95,7 @@ class UpdateDp(APIView):
             }
             )
     def patch(self, request, id,  *args, **kwargs):
+        print('This ran')
         try:
             with transaction.atomic():
                 #user = request.user
@@ -115,7 +116,7 @@ class UpdateDp(APIView):
                     uploaded_file_type = avatar.content_type.split('/')[-1]
                     if not uploaded_file_type.lower() in ['jpeg', 'png', 'jpg']:
                         return Response({'error': 'invalid file format'}, status=status.HTTP_400_BAD_REQUEST)
-                
+
                 # check if there's a profile pic key
                 if uuid:
                     # update the photo in aws
@@ -123,7 +124,7 @@ class UpdateDp(APIView):
                         return Response({'error': 'invalid file format'}, status=status.HTTP_400_BAD_REQUEST)
                     key = f"{uuid}.{uploaded_file_type}"
                     upload_dp.delay(file_obj=avatar.read(), key=key)
-                     
+
                     business_serializer = Business_ownerSerializer(business_owner_obj, data={'profile_pic_key': key}, partial=True)
                     user_serializer = UsersSerializer(user, data={'avatar': f'{CDN_URL}/{key}'}, partial=True)
                     if business_serializer.is_valid() and user_serializer.is_valid():

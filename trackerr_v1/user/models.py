@@ -81,7 +81,7 @@ class Otp(models.Model):
         # set the password
         self.hashed_otp = make_password(otp)
         self.otp_expiration = now() + timedelta(minutes=15)
-        
+
     def check_otp(self, otp):
         # check otp
         otp_expired = self.otp_expiration > now()
@@ -91,3 +91,19 @@ class Otp(models.Model):
     def reset_otp(self):
         self.hashed_otp = None
         return True
+
+class SMSSent(models.Model):
+    receiver_phone = models.CharField(max_length=15, null=False, blank=False)
+    status = models.CharField(max_length=10, null=False, blank=False)
+    reason = models.CharField(max_length=12, null=False, blank=False)
+    country = models.CharField(max_length=15, null=True, blank=True)
+    message = models.CharField(max_length=500, null=True, blank=True)
+    submission_id = models.CharField(max_length=75, null=True, blank=True)
+    message_id = models.CharField(max_length=75, null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(null=True, blank=True)
+
+
+    def __str__(self):
+
+        return f'Status:{self.status} - {self.reason} - {self.country}'
