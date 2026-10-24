@@ -140,10 +140,31 @@ class UpdateTracking(APIView):
 
                                 # send otp for parcel collection via sms
                                 if tracking_status.lower() == 'in transit':
-                                    #print('Sending Otp:::', delivery_otp)
+
                                     send_sms.send_delivery_otp.apply_async(
                                             kwargs={**sms_payload,"otp": delivery_otp, "reason": "delivery otp"}
                                         )
+
+                                    # Send delivery otp via email
+                                    from shared.celery_tasks.utils_tasks.reusable_email_sender import send_email
+                                    email_body = f"""
+                                        Dear {t_data.get('customer_name').split(' ')[0].title()},
+
+                                        Your parcel from {t_data.get('vendor')} is out for delivery.
+
+                                        Tracking Number: {t_data.get('parcel_number').upper()}
+                                        OTP: {delivery_otp}
+
+                                        Please provide this OTP to the rider upon delivery to confirm receipt of your parcel.
+
+                                        If you have any questions, please feel free to contact us via whatsapp.
+                                        Best regards,
+                                        TrackerrGo Team
+                                        """
+                                    send_email.apply_async(kwargs={'email': t_data.get('customer_email'),
+                                                                   'subject': f'Order {t_data.get("parcel_number").upper()}',
+                                                                   'message': email_body
+                                                                   })
                                 # whatsapp
                                 whatsapp_payload = base_payload.copy()
                                 whatsapp_payload['rider_name'] = t_data.get('rider_name')
