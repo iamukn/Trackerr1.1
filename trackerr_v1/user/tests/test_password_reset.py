@@ -16,7 +16,7 @@ class TestPasswordRecoveryEmailandChange(APITestCase):
 
     @patch('business.signals.send_reg_email')
     def setUp(self, mock_reg_email):#, mock_update):
-        # mock registration email 
+        # mock registration email
         mock_reg_email.return_value.apply_async= None
 
 
@@ -53,9 +53,9 @@ class TestPasswordRecoveryEmailandChange(APITestCase):
         res = self.client.post(url, data=data, format='json')
         print(res.json())
         self.assertTrue(res.status_code == 206)
- 
+
     @patch('user.views.change_password.send_update_email.delay')
-    @patch('user.views.password_recovery.password_gen') 
+    @patch('user.views.password_recovery.password_gen')
     def test_update_password(self, mock_otp, mock_reg_email):
         # reset the password
         mock_reg_email_instance = MagicMock(return_value=None)
@@ -70,5 +70,5 @@ class TestPasswordRecoveryEmailandChange(APITestCase):
         url = reverse('update-password')
         data = {'password1': 'password', 'password2': 'password', 'email': self.user.email, 'otp': self.otp}
         res = self.client.post(url, data=data)
-        self.assertEquals(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
         mock_reg_email.assert_called_once_with(email=self.user.email, name=self.user.name, country=self.user.country)

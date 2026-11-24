@@ -8,6 +8,7 @@ from wallet.payment_logic.payment_logic import initialize_payment
 from wallet.serializer import PaymentSerializer, WalletSerializer
 from wallet.models import Payment, Wallet
 from wallet.utils.verify import validate_idempotency_key
+from wallet.utils.restructure_transaction import restructure_transaction
 from decimal import Decimal
 from user.models import User
 from django.db import transaction
@@ -162,3 +163,16 @@ class PaymentWebhook(APIView):
                 raise e
                 return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+
+class GetAllPayment(APIView):
+
+    permission_classes = [IsBusinessOwner,]
+
+    def get(self, request, *args, **kwargs):
+
+        owner = request.user.email
+        all_transaction = Payment.objects.filter(status='success', email=owner)
+        data = []
+        if all_transaction:
+            data = restructure_transaction(all_transaction)
+        return Response(data, status=status.HTTP_200_OK)

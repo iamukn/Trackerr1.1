@@ -138,9 +138,11 @@ class Banks(APIView):
 
     def get(self, request):
 
-        banks = list_banks()
-
-        return Response({'banks': banks}, status=status.HTTP_200_OK)
+        try:
+            banks = list_banks()
+            return Response({'banks': banks}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': 'an error occurred'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
     def post(self, request):
 
@@ -172,6 +174,7 @@ class Banks(APIView):
                     name = res_data.get('data').get('account_name')
                     cache.set(cache_key, name, timeout=56000)
                     return Response({'name': name}, status=status.HTTP_200_OK)
+            print(res.json())
             return Response({'error': 'Invalid account details'}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({'error': 'an internal error occurred'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
