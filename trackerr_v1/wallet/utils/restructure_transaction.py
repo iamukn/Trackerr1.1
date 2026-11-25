@@ -7,6 +7,7 @@ def restructure_transaction(data):
         date_paid = payment.paid_at
         if date_paid:
             year = date_paid.year
+            month = payment.paid_at.strftime('%B').lower()
             payment_record = {
                 "amount": payment.amount,
                 "date_paid": payment.paid_at.strftime('%Y-%m-%d'),
@@ -15,9 +16,16 @@ def restructure_transaction(data):
                 "currency": payment.currency
                     }
             if yearly.get(year):
-                yearly[year].append(payment_record)
+                if yearly.get(year).get(month):
+                    yearly[year][month].append(payment_record)
+                else:
+                    yearly[year][month] = [payment_record]
+
             else:
-                yearly[year] = [
-                    payment_record
+                yearly[year] ={
+                        month:
+                        [
+                            payment_record
                         ]
+                        }
     return [yearly]

@@ -14,6 +14,7 @@ from user.models import User
 from django.db import transaction
 from wallet.utils.convert_amount import actual_amount_paid
 from business.views.business_owner_permission import IsBusinessOwner
+from django.core.cache import cache
 
 
 
@@ -171,8 +172,16 @@ class GetAllPayment(APIView):
     def get(self, request, *args, **kwargs):
 
         owner = request.user.email
+        key = f"{owner}_payment_record"
+
+        cached_data = cache.get(key)
+
+        if cached_data:
+            return Response(cached_data, status=status.HTTP_200_OK)
+
         all_transaction = Payment.objects.filter(status='success', email=owner)
         data = []
         if all_transaction:
             data = restructure_transaction(all_transaction)
+        cache.set(key, data, timeout=30)
         return Response(data, status=status.HTTP_200_OK)
